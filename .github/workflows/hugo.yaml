@@ -1,8 +1,8 @@
-name: Deploy Hugo site to Pages
-
+name: Deploy
 on:
   push:
-    branches: ["master"]  # 如果你的分支叫 master，就把这里改成 master
+    branches:
+      - master  # 确认你的分支叫 master
 
 permissions:
   contents: read
@@ -16,26 +16,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive # 这一行很重要，保证能拉取到主题文件
-      - - name: Setup Hugo
+          submodules: recursive
+      - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: 'latest'
           extended: true
-      - name: Build with Hugo
+      - name: Build
         run: hugo --minify
-      - name: Upload artifact
+      - name: Upload
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
-
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v4
