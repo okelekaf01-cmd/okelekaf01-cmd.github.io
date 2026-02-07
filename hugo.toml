@@ -1,3 +1,4 @@
 baseURL =  'https://okelekaf01-cmd.github.io/'
 languageCode = 'zh-cn'
 title = 'wwxdsg的个人博客'
+theme = 'PaperMod'
