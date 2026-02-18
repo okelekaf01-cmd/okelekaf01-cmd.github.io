@@ -2,3 +2,20 @@ baseURL =  'https://okelekaf01-cmd.github.io/'
 languageCode = 'zh-cn'
 title = 'wwxdsg的个人博客'
 theme = 'PaperMod'
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "主页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "projects"
+    name = "个人项目"
+    url = "/projects/"
+    weight = 2
+  [[menu.main]]
+    identifier = "posts"
+    name = "博客"
+    url = "/posts/"
+    weight = 3
