@@ -1,3 +1,13 @@
+---
+title: "预设代码、Skill 与 MCP"
+date: 2026-02-07T14:00:00+08:00
+draft: false
+tags: ["AI", "架构设计", "技术模式"]
+categories: ["技术文章"]
+author: "okelekaf01-cmd"
+description: "探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景"
+---
+
 预设代码、Skill 与 MCP
 
 > 本文以我的开源项目 OpsMind 为例，探讨 AI 应用开发中三种常见的技术模式：预设代码、Skill 和 MCP，分析它们的本质区别与适用场景。
