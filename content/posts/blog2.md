@@ -4,7 +4,7 @@ date: 2026-02-07T14:00:00+08:00
 draft: false
 tags: ["AI", "架构设计", "技术模式"]
 categories: ["技术文章"]
-author: "okelekaf01-cmd"
+author: wwxdsg
 description: "探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景"
 ---
 
@@ -490,14 +490,3 @@ AI 应用 → Skill（动态加载能力）→ MCP Client → MCP Server（调�
 
 ---
 
-## 参考资料
-
-- [MCP 官方文档](https://modelcontextprotocol.io/)
-- [Anthropic Skill 概念](https://docs.anthropic.com/)
-- [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling)
-
----
-
-> 作者：OpsMind 开发者  
-> 项目地址：[OpsMind](https://github.com/your-repo/opsmind)  
-> 发布日期：2025年2月
