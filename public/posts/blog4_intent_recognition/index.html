@@ -1,0 +1,754 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>wwxdsg的个人博客</title><meta name=keywords content><meta name=description content='深入解析 OpsMind 三维意图识别系统
+发布日期: 2026-02-27
+作者: wwxdsg
+标签: #意图识别 #LLM应用 #自然语言处理 #智能运营
+
+目录
+
+背景与动机
+系统架构概览
+三维分类体系详解
+LLM 在意图识别中的核心作用
+技术实现细节
+组件协同工作机制
+应用场景示例
+性能优化与最佳实践
+未来展望
+
+
+一、背景与动机
+1.1 问题背景
+在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：
+用户查询示例：
+├── "公司的请假流程是怎样的？"           → 知识库查询
+├── "分析本季度各产品线的毛利率构成"      → 数据分析
+├── "查看新用户注册到付费的转化漏斗"      → 数据分析
+└── "各部门薪资分布和离群值分析"         → 数据分析
+1.2 之前方案的局限
+
+  
+      
+          方案
+          局限性
+      
+  
+  
+      
+          关键词匹配
+          无法理解语义，&ldquo;不想要分析"会被误判为"分析&rdquo;
+      
+      
+          规则引擎
+          规则难以穷尽，维护成本高
+      
+      
+          简单分类
+          仅区分"查询"和"分析"，无法提供业务上下文
+      
+  
+
+1.3 我们的解决方案
+引入 LLM 驱动的三维意图识别系统，实现：
+
+✅ 语义级别的深度理解
+✅ 多维度精细分类
+✅ 业务上下文自动注入
+✅ 图表推荐智能引导
+
+
+二、系统架构概览
+2.1 整体架构图
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           用户查询输入                                   │
+│                    "分析本季度各产品线的毛利率构成"                        │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         意图识别路由器 (Router)                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                     LLM 分类引擎                                 │   │
+│  │    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │   │
+│  │    │   primary   │    │   domain    │    │   logic     │       │   │
+│  │    │  RAG/DATA   │ ×  │ 业务领域    │ ×  │ 分析逻辑    │       │   │
+│  │    └─────────────┘    └─────────────┘    └─────────────┘       │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              │                               │
+              ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────────────────────┐
+│      RAG Handler        │     │              DATA Handler               │
+│   ┌─────────────────┐   │     │  ┌─────────────────────────────────┐    │
+│   │  MaxKB 知识库   │   │     │  │         上下文注入              │    │
+│   │    查询引擎     │   │     │  │  • domain_context (业务背景)    │    │
+│   └─────────────────┘   │     │  │  • logic_context (图表推荐)     │    │
+└─────────────────────────┘     │  └─────────────────────────────────┘    │
+                                │              │                          │
+                                │              ▼                          │
+                                │  ┌─────────────────────────────────┐    │
+                                │  │       数据分析引擎              │    │
+                                │  │  • PandasAI 数据处理            │    │
+                                │  │  • Chart Recommender 图表推荐   │    │
+                                │  │  • Interactive Charts 可视化    │    │
+                                │  └─────────────────────────────────┘    │
+                                └─────────────────────────────────────────┘
+2.2 数据流图
+用户查询
+    │
+    ▼
+┌───────────────────┐
+│ classify_query()  │ ───── LLM 三维分类
+└─────────┬─────────┘
+          │
+          ▼
+┌───────────────────┐
+│  IntentResult     │ ───── 数据结构封装
+│  ├─ primary       │
+│  ├─ domain        │
+│  ├─ logic         │
+│  ├─ domain_context│
+│  └─ logic_context │
+└─────────┬─────────┘
+          │
+    ┌─────┴─────┐
+    ▼           ▼
+  RAG路径    DATA路径
+    │           │
+    ▼           ▼
+ 知识库查询   数据分析
+
+三、三维分类体系详解
+3.1 第一维：Primary（主类别）
+决定查询的基本处理路径：'><meta name=author content><link rel=canonical href=https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/><link crossorigin=anonymous href=/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as=style><link rel=icon href=https://okelekaf01-cmd.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://okelekaf01-cmd.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://okelekaf01-cmd.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://okelekaf01-cmd.github.io/apple-touch-icon.png><link rel=mask-icon href=https://okelekaf01-cmd.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/"><meta property="og:site_name" content="wwxdsg的个人博客"><meta property="og:title" content="wwxdsg的个人博客"><meta property="og:description" content='深入解析 OpsMind 三维意图识别系统 发布日期: 2026-02-27
+作者: wwxdsg 标签: #意图识别 #LLM应用 #自然语言处理 #智能运营
+目录 背景与动机 系统架构概览 三维分类体系详解 LLM 在意图识别中的核心作用 技术实现细节 组件协同工作机制 应用场景示例 性能优化与最佳实践 未来展望 一、背景与动机 1.1 问题背景 在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：
+用户查询示例：├── "公司的请假流程是怎样的？" → 知识库查询├── "分析本季度各产品线的毛利率构成" → 数据分析├── "查看新用户注册到付费的转化漏斗" → 数据分析└── "各部门薪资分布和离群值分析" → 数据分析 1.2 之前方案的局限 方案 局限性 关键词匹配 无法理解语义，“不想要分析"会被误判为"分析” 规则引擎 规则难以穷尽，维护成本高 简单分类 仅区分"查询"和"分析"，无法提供业务上下文 1.3 我们的解决方案 引入 LLM 驱动的三维意图识别系统，实现：
+✅ 语义级别的深度理解 ✅ 多维度精细分类 ✅ 业务上下文自动注入 ✅ 图表推荐智能引导 二、系统架构概览 2.1 整体架构图 ┌─────────────────────────────────────────────────────────────────────────┐│ 用户查询输入 ││ "分析本季度各产品线的毛利率构成" │└─────────────────────────────┬───────────────────────────────────────────┘│▼┌─────────────────────────────────────────────────────────────────────────┐│ 意图识别路由器 (Router) ││ ┌─────────────────────────────────────────────────────────────────┐ ││ │ LLM 分类引擎 │ ││ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ ││ │ │ primary │ │ domain │ │ logic │ │ ││ │ │ RAG/DATA │ × │ 业务领域 │ × │ 分析逻辑 │ │ ││ │ └─────────────┘ └─────────────┘ └─────────────┘ │ ││ └─────────────────────────────────────────────────────────────────┘ │└─────────────────────────────┬───────────────────────────────────────────┘│┌───────────────┴───────────────┐│ │▼ ▼┌─────────────────────────┐ ┌─────────────────────────────────────────┐│ RAG Handler │ │ DATA Handler ││ ┌─────────────────┐ │ │ ┌─────────────────────────────────┐ ││ │ MaxKB 知识库 │ │ │ │ 上下文注入 │ ││ │ 查询引擎 │ │ │ │ • domain_context (业务背景) │ ││ └─────────────────┘ │ │ │ • logic_context (图表推荐) │ │└─────────────────────────┘ │ └─────────────────────────────────┘ ││ │ ││ ▼ ││ ┌─────────────────────────────────┐ ││ │ 数据分析引擎 │ ││ │ • PandasAI 数据处理 │ ││ │ • Chart Recommender 图表推荐 │ ││ │ • Interactive Charts 可视化 │ ││ └─────────────────────────────────┘ │└─────────────────────────────────────────┘ 2.2 数据流图 用户查询│▼┌───────────────────┐│ classify_query() │ ───── LLM 三维分类└─────────┬─────────┘│▼┌───────────────────┐│ IntentResult │ ───── 数据结构封装│ ├─ primary ││ ├─ domain ││ ├─ logic ││ ├─ domain_context││ └─ logic_context │└─────────┬─────────┘│┌─────┴─────┐▼ ▼RAG路径 DATA路径│ │▼ ▼知识库查询 数据分析 三、三维分类体系详解 3.1 第一维：Primary（主类别） 决定查询的基本处理路径：'><meta property="og:locale" content="zh-cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta name=twitter:card content="summary"><meta name=twitter:title content><meta name=twitter:description content='深入解析 OpsMind 三维意图识别系统
+发布日期: 2026-02-27
+作者: wwxdsg
+标签: #意图识别 #LLM应用 #自然语言处理 #智能运营
+
+目录
+
+背景与动机
+系统架构概览
+三维分类体系详解
+LLM 在意图识别中的核心作用
+技术实现细节
+组件协同工作机制
+应用场景示例
+性能优化与最佳实践
+未来展望
+
+
+一、背景与动机
+1.1 问题背景
+在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：
+用户查询示例：
+├── "公司的请假流程是怎样的？"           → 知识库查询
+├── "分析本季度各产品线的毛利率构成"      → 数据分析
+├── "查看新用户注册到付费的转化漏斗"      → 数据分析
+└── "各部门薪资分布和离群值分析"         → 数据分析
+1.2 之前方案的局限
+
+  
+      
+          方案
+          局限性
+      
+  
+  
+      
+          关键词匹配
+          无法理解语义，&ldquo;不想要分析"会被误判为"分析&rdquo;
+      
+      
+          规则引擎
+          规则难以穷尽，维护成本高
+      
+      
+          简单分类
+          仅区分"查询"和"分析"，无法提供业务上下文
+      
+  
+
+1.3 我们的解决方案
+引入 LLM 驱动的三维意图识别系统，实现：
+
+✅ 语义级别的深度理解
+✅ 多维度精细分类
+✅ 业务上下文自动注入
+✅ 图表推荐智能引导
+
+
+二、系统架构概览
+2.1 整体架构图
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           用户查询输入                                   │
+│                    "分析本季度各产品线的毛利率构成"                        │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         意图识别路由器 (Router)                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                     LLM 分类引擎                                 │   │
+│  │    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │   │
+│  │    │   primary   │    │   domain    │    │   logic     │       │   │
+│  │    │  RAG/DATA   │ ×  │ 业务领域    │ ×  │ 分析逻辑    │       │   │
+│  │    └─────────────┘    └─────────────┘    └─────────────┘       │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              │                               │
+              ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────────────────────┐
+│      RAG Handler        │     │              DATA Handler               │
+│   ┌─────────────────┐   │     │  ┌─────────────────────────────────┐    │
+│   │  MaxKB 知识库   │   │     │  │         上下文注入              │    │
+│   │    查询引擎     │   │     │  │  • domain_context (业务背景)    │    │
+│   └─────────────────┘   │     │  │  • logic_context (图表推荐)     │    │
+└─────────────────────────┘     │  └─────────────────────────────────┘    │
+                                │              │                          │
+                                │              ▼                          │
+                                │  ┌─────────────────────────────────┐    │
+                                │  │       数据分析引擎              │    │
+                                │  │  • PandasAI 数据处理            │    │
+                                │  │  • Chart Recommender 图表推荐   │    │
+                                │  │  • Interactive Charts 可视化    │    │
+                                │  └─────────────────────────────────┘    │
+                                └─────────────────────────────────────────┘
+2.2 数据流图
+用户查询
+    │
+    ▼
+┌───────────────────┐
+│ classify_query()  │ ───── LLM 三维分类
+└─────────┬─────────┘
+          │
+          ▼
+┌───────────────────┐
+│  IntentResult     │ ───── 数据结构封装
+│  ├─ primary       │
+│  ├─ domain        │
+│  ├─ logic         │
+│  ├─ domain_context│
+│  └─ logic_context │
+└─────────┬─────────┘
+          │
+    ┌─────┴─────┐
+    ▼           ▼
+  RAG路径    DATA路径
+    │           │
+    ▼           ▼
+ 知识库查询   数据分析
+
+三、三维分类体系详解
+3.1 第一维：Primary（主类别）
+决定查询的基本处理路径：'><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://okelekaf01-cmd.github.io/posts/"},{"@type":"ListItem","position":2,"name":"","item":"https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"","name":"","description":"深入解析 OpsMind 三维意图识别系统 发布日期: 2026-02-27\n作者: wwxdsg 标签: #意图识别 #LLM应用 #自然语言处理 #智能运营\n目录 背景与动机 系统架构概览 三维分类体系详解 LLM 在意图识别中的核心作用 技术实现细节 组件协同工作机制 应用场景示例 性能优化与最佳实践 未来展望 一、背景与动机 1.1 问题背景 在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：\n用户查询示例：\r├── \u0026#34;公司的请假流程是怎样的？\u0026#34; → 知识库查询\r├── \u0026#34;分析本季度各产品线的毛利率构成\u0026#34; → 数据分析\r├── \u0026#34;查看新用户注册到付费的转化漏斗\u0026#34; → 数据分析\r└── \u0026#34;各部门薪资分布和离群值分析\u0026#34; → 数据分析 1.2 之前方案的局限 方案 局限性 关键词匹配 无法理解语义，\u0026ldquo;不想要分析\u0026quot;会被误判为\u0026quot;分析\u0026rdquo; 规则引擎 规则难以穷尽，维护成本高 简单分类 仅区分\u0026quot;查询\u0026quot;和\u0026quot;分析\u0026quot;，无法提供业务上下文 1.3 我们的解决方案 引入 LLM 驱动的三维意图识别系统，实现：\n✅ 语义级别的深度理解 ✅ 多维度精细分类 ✅ 业务上下文自动注入 ✅ 图表推荐智能引导 二、系统架构概览 2.1 整体架构图 ┌─────────────────────────────────────────────────────────────────────────┐\r│ 用户查询输入 │\r│ \u0026#34;分析本季度各产品线的毛利率构成\u0026#34; │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ 意图识别路由器 (Router) │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ LLM 分类引擎 │ │\r│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ │\r│ │ │ primary │ │ domain │ │ logic │ │ │\r│ │ │ RAG/DATA │ × │ 业务领域 │ × │ 分析逻辑 │ │ │\r│ │ └─────────────┘ └─────────────┘ └─────────────┘ │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r┌───────────────┴───────────────┐\r│ │\r▼ ▼\r┌─────────────────────────┐ ┌─────────────────────────────────────────┐\r│ RAG Handler │ │ DATA Handler │\r│ ┌─────────────────┐ │ │ ┌─────────────────────────────────┐ │\r│ │ MaxKB 知识库 │ │ │ │ 上下文注入 │ │\r│ │ 查询引擎 │ │ │ │ • domain_context (业务背景) │ │\r│ └─────────────────┘ │ │ │ • logic_context (图表推荐) │ │\r└─────────────────────────┘ │ └─────────────────────────────────┘ │\r│ │ │\r│ ▼ │\r│ ┌─────────────────────────────────┐ │\r│ │ 数据分析引擎 │ │\r│ │ • PandasAI 数据处理 │ │\r│ │ • Chart Recommender 图表推荐 │ │\r│ │ • Interactive Charts 可视化 │ │\r│ └─────────────────────────────────┘ │\r└─────────────────────────────────────────┘ 2.2 数据流图 用户查询\r│\r▼\r┌───────────────────┐\r│ classify_query() │ ───── LLM 三维分类\r└─────────┬─────────┘\r│\r▼\r┌───────────────────┐\r│ IntentResult │ ───── 数据结构封装\r│ ├─ primary │\r│ ├─ domain │\r│ ├─ logic │\r│ ├─ domain_context│\r│ └─ logic_context │\r└─────────┬─────────┘\r│\r┌─────┴─────┐\r▼ ▼\rRAG路径 DATA路径\r│ │\r▼ ▼\r知识库查询 数据分析 三、三维分类体系详解 3.1 第一维：Primary（主类别） 决定查询的基本处理路径：\n","keywords":[],"articleBody":"深入解析 OpsMind 三维意图识别系统 发布日期: 2026-02-27\n作者: wwxdsg 标签: #意图识别 #LLM应用 #自然语言处理 #智能运营\n目录 背景与动机 系统架构概览 三维分类体系详解 LLM 在意图识别中的核心作用 技术实现细节 组件协同工作机制 应用场景示例 性能优化与最佳实践 未来展望 一、背景与动机 1.1 问题背景 在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：\n用户查询示例：\r├── \"公司的请假流程是怎样的？\" → 知识库查询\r├── \"分析本季度各产品线的毛利率构成\" → 数据分析\r├── \"查看新用户注册到付费的转化漏斗\" → 数据分析\r└── \"各部门薪资分布和离群值分析\" → 数据分析 1.2 之前方案的局限 方案 局限性 关键词匹配 无法理解语义，“不想要分析\"会被误判为\"分析” 规则引擎 规则难以穷尽，维护成本高 简单分类 仅区分\"查询\"和\"分析\"，无法提供业务上下文 1.3 我们的解决方案 引入 LLM 驱动的三维意图识别系统，实现：\n✅ 语义级别的深度理解 ✅ 多维度精细分类 ✅ 业务上下文自动注入 ✅ 图表推荐智能引导 二、系统架构概览 2.1 整体架构图 ┌─────────────────────────────────────────────────────────────────────────┐\r│ 用户查询输入 │\r│ \"分析本季度各产品线的毛利率构成\" │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ 意图识别路由器 (Router) │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ LLM 分类引擎 │ │\r│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ │\r│ │ │ primary │ │ domain │ │ logic │ │ │\r│ │ │ RAG/DATA │ × │ 业务领域 │ × │ 分析逻辑 │ │ │\r│ │ └─────────────┘ └─────────────┘ └─────────────┘ │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r┌───────────────┴───────────────┐\r│ │\r▼ ▼\r┌─────────────────────────┐ ┌─────────────────────────────────────────┐\r│ RAG Handler │ │ DATA Handler │\r│ ┌─────────────────┐ │ │ ┌─────────────────────────────────┐ │\r│ │ MaxKB 知识库 │ │ │ │ 上下文注入 │ │\r│ │ 查询引擎 │ │ │ │ • domain_context (业务背景) │ │\r│ └─────────────────┘ │ │ │ • logic_context (图表推荐) │ │\r└─────────────────────────┘ │ └─────────────────────────────────┘ │\r│ │ │\r│ ▼ │\r│ ┌─────────────────────────────────┐ │\r│ │ 数据分析引擎 │ │\r│ │ • PandasAI 数据处理 │ │\r│ │ • Chart Recommender 图表推荐 │ │\r│ │ • Interactive Charts 可视化 │ │\r│ └─────────────────────────────────┘ │\r└─────────────────────────────────────────┘ 2.2 数据流图 用户查询\r│\r▼\r┌───────────────────┐\r│ classify_query() │ ───── LLM 三维分类\r└─────────┬─────────┘\r│\r▼\r┌───────────────────┐\r│ IntentResult │ ───── 数据结构封装\r│ ├─ primary │\r│ ├─ domain │\r│ ├─ logic │\r│ ├─ domain_context│\r│ └─ logic_context │\r└─────────┬─────────┘\r│\r┌─────┴─────┐\r▼ ▼\rRAG路径 DATA路径\r│ │\r▼ ▼\r知识库查询 数据分析 三、三维分类体系详解 3.1 第一维：Primary（主类别） 决定查询的基本处理路径：\n类别 说明 典型查询 RAG 知识库检索类问题 “请假流程是什么？\"、“公司保密制度” DATA 数据分析类任务 “统计本月销售额”、“分析用户留存趋势” class PrimaryType(str, Enum): RAG = \"RAG\" # 知识库查询 DATA = \"DATA\" # 数据分析 3.2 第二维：Domain（业务领域） 识别查询所属的业务领域，为分析提供业务上下文：\n┌─────────────────────────────────────────────────────────────────┐\r│ 业务领域矩阵 │\r├─────────────┬───────────────────────────────────────────────────┤\r│ FINANCE │ 财务领域：钱的来源、去向与盈亏 │\r│ │ 关键词：收入、成本、利润、预算、现金流、毛利 │\r│ │ 业务常识：借贷平衡、毛利=收入-成本、净利润率 │\r├─────────────┼───────────────────────────────────────────────────┤\r│ GROWTH │ 增长领域：用户转化、留存与价值 │\r│ │ 关键词：转化率、留存率、DAU/MAU、LTV、漏斗 │\r│ │ 业务常识：漏斗阶段顺序、留存衰减律、DAU/MAU比值 │\r├─────────────┼───────────────────────────────────────────────────┤\r│ HR │ 人力领域：人员分布、效能与成本 │\r│ │ 关键词：员工、薪资、考勤、招聘、离职、绩效 │\r│ │ 业务常识：职级金字塔、薪酬分位数、离职预警 │\r├─────────────┼───────────────────────────────────────────────────┤\r│ GOVT │ 政务领域：事项进度、公平性与覆盖率 │\r│ │ 关键词：政务、审批、办事、投诉、公共服务 │\r│ │ 业务常识：行政区划映射、办件时效、人均资源均衡 │\r└─────────────┴───────────────────────────────────────────────────┘ 3.3 第三维：Logic（分析逻辑） 识别用户期望的分析方式，直接指导图表推荐：\n┌────────────────────────────────────────────────────────────────────────┐\r│ 分析逻辑模式 │\r├──────────────┬────────────────────────┬────────────────────────────────┤\r│ 模式 │ 分析目标 │ 推荐图表 │\r├──────────────┼────────────────────────┼────────────────────────────────┤\r│ ACHIEVING │ 进度与达成 │ 子弹图、仪表盘、分组柱状图 │\r│ │ 实际 vs 目标对比 │ │\r├──────────────┼────────────────────────┼────────────────────────────────┤\r│ COMPOSITION │ 结构与演变 │ 瀑布图、旭日图、堆叠柱状图 │\r│ │ 部分构成整体 │ │\r├──────────────┼────────────────────────┼────────────────────────────────┤\r│ FLOW │ 流转与损耗 │ 桑基图、漏斗图、路径图 │\r│ │ 状态间转移 │ │\r├──────────────┼────────────────────────┼────────────────────────────────┤\r│ DISTRIBUTION │ 分布与集中 │ 箱线图、小提琴图、直方图 │\r│ │ 区间/离群点 │ │\r├──────────────┼────────────────────────┼────────────────────────────────┤\r│ TREND │ 趋势与波动 │ 折线图、面积图、堆叠面积图 │\r│ │ 时间维度变化 │ │\r├──────────────┼────────────────────────┼────────────────────────────────┤\r│ CORRELATION │ 关联与对比 │ 散点图、热力矩阵、雷达图 │\r│ │ 变量间关系 │ │\r└──────────────┴────────────────────────┴────────────────────────────────┘ 3.4 三维组合示例 用户查询 Primary Domain Logic 推荐图表 “本季度毛利率构成分析” DATA FINANCE COMPOSITION 瀑布图、堆叠柱状图 “预算执行率完成情况” DATA FINANCE ACHIEVING 子弹图、仪表盘 “用户转化漏斗分析” DATA GROWTH FLOW 漏斗图、桑基图 “薪资分布和离群值” DATA HR DISTRIBUTION 箱线图、小提琴图 “政务办件完成率对比” DATA GOVT ACHIEVING 分组柱状图 四、LLM 在意图识别中的核心作用 4.1 LLM 的三大核心能力 ┌─────────────────────────────────────────────────────────────────────────┐\r│ LLM 核心能力矩阵 │\r├─────────────────────────────────────────────────────────────────────────┤\r│ │\r│ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ │\r│ │ 自然语言理解 │ │ 上下文推理 │ │ 分类决策 │ │\r│ │ │ │ │ │ │ │\r│ │ • 语义解析 │ │ • 领域知识 │ │ • 多维分类 │ │\r│ │ • 实体识别 │ │ • 隐含意图 │ │ • 置信度评估 │ │\r│ │ • 关系抽取 │ │ • 歧义消解 │ │ • 结构化输出 │ │\r│ └─────────────────┘ └─────────────────┘ └─────────────────┘ │\r│ │\r└─────────────────────────────────────────────────────────────────────────┘ 4.2 自然语言理解 (NLU) LLM 能够超越关键词匹配，理解查询的深层语义：\n# 传统关键词匹配的问题 query = \"我不想分析数据，只想查一下制度\" # 关键词匹配：检测到\"分析\" → 误判为 DATA # LLM 理解：检测到否定词\"不想\" → 正确识别为 RAG # LLM 的语义理解能力 queries = [ (\"公司的请假流程是怎样的？\", \"RAG\"), # 明确的制度查询 (\"帮我算一下平均工资\", \"DATA\"), # 隐含的计算需求 (\"对比一下各部门的绩效\", \"DATA\"), # 对比分析意图 (\"有没有关于加班的规定\", \"RAG\"), # 知识检索意图 ] 4.3 上下文推理 LLM 利用预训练的领域知识进行推理：\n# 业务领域推理示例 query = \"分析用户从注册到付费的转化情况\" # LLM 推理过程： # 1. 识别关键词：\"用户\"、\"注册\"、\"付费\"、\"转化\" # 2. 关联领域知识：这是典型的用户增长漏斗场景 # 3. 推理结果：domain = GROWTH, logic = FLOW # 分析逻辑推理示例 query = \"各部门薪资分布情况，找出异常高或低的\" # LLM 推理过程： # 1. 识别关键词：\"分布\"、\"异常\"、\"高或低\" # 2. 关联分析模式：寻找离群点、分布区间 # 3. 推理结果：logic = DISTRIBUTION 4.4 结构化分类决策 LLM 将自然语言查询转换为结构化分类结果：\n# 输入 user_query = \"分析本季度各产品线的毛利率构成\" # LLM 输出（结构化 JSON） { \"primary\": \"DATA\", \"domain\": \"FINANCE\", \"logic\": \"COMPOSITION\" } # 系统解析后的完整结果 IntentResult( primary=\"DATA\", domain=\"FINANCE\", logic=\"COMPOSITION\", domain_context=\"财务分析领域：核心关注钱的来源、去向与盈亏...\", logic_context=\"结构与演变分析：优先图表：瀑布图、旭日图...\" ) 五、技术实现细节 5.1 核心数据结构 from dataclasses import dataclass from enum import Enum from typing import Optional class Domain(str, Enum): \"\"\"四大核心业务领域\"\"\" FINANCE = \"FINANCE\" # 财务 GROWTH = \"GROWTH\" # 增长 HR = \"HR\" # 人力 GOVT = \"GOVT\" # 政务 class LogicPattern(str, Enum): \"\"\"六大通用分析逻辑模式\"\"\" ACHIEVING = \"ACHIEVING\" # 进度达成 COMPOSITION = \"COMPOSITION\" # 结构占比 FLOW = \"FLOW\" # 流转损耗 DISTRIBUTION = \"DISTRIBUTION\" # 分布集中 TREND = \"TREND\" # 趋势波动 CORRELATION = \"CORRELATION\" # 关联对比 @dataclass class IntentResult: \"\"\"路由分类结果\"\"\" primary: str # \"RAG\" 或 \"DATA\" domain: Optional[str] = None # Domain 枚举值 logic: Optional[str] = None # LogicPattern 枚举值 @property def domain_context(self) -\u003e str: \"\"\"获取领域背景知识字符串\"\"\" return DOMAIN_CONTEXT.get(self.domain, \"\") @property def logic_context(self) -\u003e str: \"\"\"获取分析逻辑背景知识字符串\"\"\" return LOGIC_CONTEXT.get(self.logic, \"\") 5.2 LLM Prompt 工程 精心设计的 System Prompt 是分类准确性的关键：\n_SYSTEM_PROMPT = \"\"\"你是一个企业智能运营助手的意图识别专家， 负责对用户查询进行三维分类。 【分类维度 1 — primary（必填）】 - RAG : 查询制度/流程/文档/规则/政策/话术等知识性问题 - DATA : 统计数据/分析表格/生成图表/对比数值/趋势分析等数据处理类任务 【分类维度 2 — domain（数据分析时填写，否则 null）】 - FINANCE : 财务、收入、支出、利润、成本、预算、现金流 - GROWTH : 用户增长、转化率、留存率、DAU/MAU、漏斗 - HR : 员工、薪资、考勤、招聘、离职、绩效 - GOVT : 政务、政府、行政、政策、审批、办事 【分类维度 3 — logic（数据分析时填写，否则 null）】 - ACHIEVING : KPI达成、目标完成率、实际vs计划 - COMPOSITION : 占比构成、结构分析、来源拆解 - FLOW : 漏斗转化、流量来源、状态转移 - DISTRIBUTION : 分布区间、离群异常值、密度集中 - TREND : 时间趋势、月度变化、同比环比 - CORRELATION : 变量关联、投入产出比、相关性 【输出格式】严格输出 JSON： {\"primary\":\"DATA\",\"domain\":\"HR\",\"logic\":\"DISTRIBUTION\"} \"\"\" 5.3 分类函数实现 def classify_query(user_query: str) -\u003e IntentResult: \"\"\" 对用户查询进行三维意图分类 \"\"\" try: # 调用 LLM API response = client.chat.completions.create( model=\"deepseek-chat\", messages=[ {\"role\": \"system\", \"content\": _SYSTEM_PROMPT}, {\"role\": \"user\", \"content\": user_query}, ], temperature=0.1, # 低温度提高稳定性 max_tokens=60, # 限制输出长度 ) # 解析响应 raw = response.choices[0].message.content.strip() # 提取 JSON（防止模型附加说明文字） match = re.search(r\"\\{.*?\\}\", raw, re.DOTALL) if not match: raise ValueError(f\"响应中未找到 JSON: {raw}\") data = json.loads(match.group()) # 验证并构建结果 primary = data.get(\"primary\", \"DATA\").upper() domain = validate_domain(data.get(\"domain\")) logic = validate_logic(data.get(\"logic\")) return IntentResult(primary=primary, domain=domain, logic=logic) except Exception as e: logger.error(f\"分类失败，回退到 DATA: {e}\") return IntentResult(primary=\"DATA\", domain=None, logic=None) 5.4 错误处理与降级策略 def validate_domain(value: Optional[str]) -\u003e Optional[str]: \"\"\"验证并规范化 domain 值\"\"\" if not value: return None value = value.upper() return value if value in Domain._value2member_map_ else None def validate_logic(value: Optional[str]) -\u003e Optional[str]: \"\"\"验证并规范化 logic 值\"\"\" if not value: return None value = value.upper() return value if value in LogicPattern._value2member_map_ else None 六、组件协同工作机制 6.1 与数据分析引擎协同 # 在 pandas_ai_service.py 中使用意图结果 def analyze(self, file_path: str, query: str, intent: IntentResult) -\u003e Dict: \"\"\" 执行数据分析，注入业务上下文 \"\"\" # 1. 加载数据 df = self.load_data(file_path) # 2. 注入业务上下文到 LLM 提示词 analysis_prompt = f\"\"\" 你是一个专业的{intent.domain_context or '数据'}分析师。 {intent.logic_context} 【数据信息】 - 行数: {len(df)} - 列名: {df.columns.tolist()} 【用户问题】 {query} \"\"\" # 3. 调用 LLM 分析 response = self.client.chat.completions.create( model=\"deepseek-chat\", messages=[{\"role\": \"user\", \"content\": analysis_prompt}], ) return {\"response\": response.choices[0].message.content} 6.2 与图表推荐引擎协同 # 在 chart_recommender.py 中使用意图结果 def recommend_charts(self, df: pd.DataFrame, intent: IntentResult) -\u003e List[str]: \"\"\" 基于意图识别结果推荐图表 \"\"\" # 根据 logic 模式直接推荐图表 logic_to_charts = { \"ACHIEVING\": [\"bullet\", \"gauge\", \"grouped_bar\"], \"COMPOSITION\": [\"waterfall\", \"sunburst\", \"stacked_bar\"], \"FLOW\": [\"sankey\", \"funnel\", \"path\"], \"DISTRIBUTION\": [\"boxplot\", \"violin\", \"histogram\"], \"TREND\": [\"line\", \"area\", \"stacked_area\"], \"CORRELATION\": [\"scatter\", \"heatmap\", \"radar\"], } # 获取推荐图表列表 recommended = logic_to_charts.get(intent.logic, []) # 根据数据特征进一步筛选 return self._filter_by_data_features(df, recommended) 6.3 完整工作流 ┌─────────────────────────────────────────────────────────────────────────┐\r│ 完整工作流程 │\r└─────────────────────────────────────────────────────────────────────────┘\r用户输入: \"分析本季度各产品线的毛利率构成\"\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ Step 1: 意图识别 │\r│ │\r│ classify_query() → IntentResult( │\r│ primary = \"DATA\", │\r│ domain = \"FINANCE\", │\r│ logic = \"COMPOSITION\" │\r│ ) │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ Step 2: 路由分发 │\r│ │\r│ if primary == \"RAG\": │\r│ → 知识库查询引擎 │\r│ else: │\r│ → 数据分析引擎 │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ Step 3: 上下文注入 │\r│ │\r│ domain_context = \"财务分析领域：核心关注钱的来源...\" │\r│ logic_context = \"结构与演变分析：优先图表：瀑布图...\" │\r│ │\r│ → 注入到 LLM 分析提示词 │\r│ → 传递给图表推荐引擎 │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ Step 4: 数据分析 │\r│ │\r│ PandasAI 分析 + LLM 业务解读 │\r│ Chart Recommender 推荐图表 │\r│ Interactive Charts 生成可视化 │\r└─────────────────────────────┬───────────────────────────────────────────┘\r│\r▼\r┌─────────────────────────────────────────────────────────────────────────┐\r│ Step 5: 结果返回 │\r│ │\r│ { │\r│ \"analysis\": \"本季度毛利率构成分析...\", │\r│ \"charts\": [\"waterfall_chart.png\", \"stacked_bar.png\"], │\r│ \"tables\": [\"margin_breakdown.xlsx\"] │\r│ } │\r└─────────────────────────────────────────────────────────────────────────┘ 七、应用场景示例 7.1 财务分析场景 # 用户查询 query = \"分析本季度各产品线的毛利率构成，对比去年同期\" # 意图识别结果 IntentResult( primary=\"DATA\", domain=\"FINANCE\", logic=\"COMPOSITION\" ) # 系统响应 { \"analysis\": \"本季度毛利率构成分析...\", \"charts\": [\"waterfall_chart.png\", \"stacked_bar_yoy.png\"], \"insights\": [ \"产品线A毛利率贡献最大，占比35%\", \"产品线B毛利率同比下降5个百分点\" ] } 7.2 用户增长场景 # 用户查询 query = \"查看新用户从注册到首次付费的转化漏斗\" # 意图识别结果 IntentResult( primary=\"DATA\", domain=\"GROWTH\", logic=\"FLOW\" ) # 系统响应 { \"analysis\": \"用户转化漏斗分析...\", \"charts\": [\"funnel_chart.png\", \"sankey_diagram.png\"], \"insights\": [ \"注册→激活转化率68%，高于行业均值\", \"激活→付费转化率12%，存在优化空间\" ] } 7.3 人力资源场景 # 用户查询 query = \"各部门薪资分布情况，找出异常高或低的\" # 意图识别结果 IntentResult( primary=\"DATA\", domain=\"HR\", logic=\"DISTRIBUTION\" ) # 系统响应 { \"analysis\": \"薪资分布分析...\", \"charts\": [\"boxplot_salary.png\", \"violin_by_dept.png\"], \"insights\": [ \"研发部薪资中位数最高（P50=25K）\", \"行政部存在2个离群高值（\u003eP75+1.5IQR）\" ] } 7.4 政务服务场景 # 用户查询 query = \"各区县政务办件完成率与目标值对比\" # 意图识别结果 IntentResult( primary=\"DATA\", domain=\"GOVT\", logic=\"ACHIEVING\" ) # 系统响应 { \"analysis\": \"政务办件完成率分析...\", \"charts\": [\"bullet_chart.png\", \"grouped_bar_target.png\"], \"insights\": [ \"A区完成率92%，超额完成目标\", \"C区完成率78%，距目标差12个百分点\" ] } 八、性能优化与最佳实践 8.1 性能优化策略 策略 说明 效果 低温度采样 temperature=0.1 提高输出稳定性 限制输出长度 max_tokens=60 减少延迟和成本 JSON 强制提取 正则匹配提取 JSON 容错处理 降级策略 异常时回退到 DATA 保证系统可用 8.2 准确性优化 # 1. 丰富的分类示例 _SYSTEM_PROMPT = \"\"\" 【分类示例】 \"请假流程是什么\" → {\"primary\":\"RAG\",\"domain\":null,\"logic\":null} \"分析毛利率构成\" → {\"primary\":\"DATA\",\"domain\":\"FINANCE\",\"logic\":\"COMPOSITION\"} \"用户转化漏斗\" → {\"primary\":\"DATA\",\"domain\":\"GROWTH\",\"logic\":\"FLOW\"} \"\"\" # 2. 明确的边界条件 \"\"\" 【边界说明】 - \"对比\"不一定是 CORRELATION，也可能是 ACHIEVING（对比目标） - \"分布\"一定是 DISTRIBUTION - \"趋势\"一定涉及时间维度 \"\"\" # 3. 领域关键词映射 DOMAIN_KEYWORDS = { \"FINANCE\": [\"收入\", \"成本\", \"利润\", \"预算\", \"毛利\", \"现金流\"], \"GROWTH\": [\"用户\", \"转化\", \"留存\", \"DAU\", \"MAU\", \"漏斗\"], \"HR\": [\"员工\", \"薪资\", \"考勤\", \"招聘\", \"离职\", \"绩效\"], \"GOVT\": [\"政务\", \"审批\", \"办事\", \"投诉\", \"公共服务\"], } 8.3 监控与日志 # 分类结果日志 logger.info(f\"[Router] 分类结果: primary={primary}, domain={domain}, logic={logic}\") # 异常情况告警 if primary not in (\"RAG\", \"DATA\"): logger.warning(f\"[Router] 无效的 primary 值 '{primary}'，回退到 DATA\") # 性能监控 import time start = time.time() result = classify_query(query) latency = time.time() - start logger.info(f\"[Router] 分类耗时: {latency:.3f}s\") 九、未来展望 9.1 短期优化 丰富图表样式 优化表格生成逻辑 增加更多业务领域（如供应链、客服） 总结 OpsMind 的三维意图识别系统通过 Primary × Domain × Logic 的分类体系，实现了：\n精准路由：准确区分知识查询和数据分析 业务理解：识别查询所属的业务领域 智能引导：根据分析逻辑推荐最佳图表 上下文增强：为下游组件注入业务知识 这一设计充分利用了 LLM 的语义理解和推理能力，同时通过结构化输出和降级策略保证了系统的稳定性和可靠性。\n","wordCount":"1598","inLanguage":"en","datePublished":"0001-01-01T00:00:00Z","dateModified":"0001-01-01T00:00:00Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/"},"publisher":{"@type":"Organization","name":"wwxdsg的个人博客","logo":{"@type":"ImageObject","url":"https://okelekaf01-cmd.github.io/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=nav><div class=logo><a href=https://okelekaf01-cmd.github.io/ accesskey=h title="wwxdsg的个人博客 (Alt + H)">wwxdsg的个人博客</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://okelekaf01-cmd.github.io/ title=主页><span>主页</span></a></li><li><a href=https://okelekaf01-cmd.github.io/projects/ title=个人项目><span>个人项目</span></a></li><li><a href=https://okelekaf01-cmd.github.io/posts/ title=博客><span>博客</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent"></h1><div class=post-meta></div></header><div class=post-content><h1 id=深入解析-opsmind-三维意图识别系统>深入解析 OpsMind 三维意图识别系统<a hidden class=anchor aria-hidden=true href=#深入解析-opsmind-三维意图识别系统>#</a></h1><p><strong>发布日期</strong>: 2026-02-27<br><strong>作者</strong>: wwxdsg
+<strong>标签</strong>: #意图识别 #LLM应用 #自然语言处理 #智能运营</p><hr><h2 id=目录>目录<a hidden class=anchor aria-hidden=true href=#目录>#</a></h2><ol><li><a href=#%E4%B8%80%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA>背景与动机</a></li><li><a href=#%E4%BA%8C%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E6%A6%82%E8%A7%88>系统架构概览</a></li><li><a href=#%E4%B8%89%E7%BB%B4%E5%88%86%E7%B1%BB%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3>三维分类体系详解</a></li><li><a href=#%E5%9B%9Bllm-%E5%9C%A8%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB%E4%B8%AD%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8>LLM 在意图识别中的核心作用</a></li><li><a href=#%E4%BA%94%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82>技术实现细节</a></li><li><a href=#%E5%85%AD%E7%BB%84%E4%BB%B6%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6>组件协同工作机制</a></li><li><a href=#%E4%B8%83%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E7%A4%BA%E4%BE%8B>应用场景示例</a></li><li><a href=#%E5%85%AB%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5>性能优化与最佳实践</a></li><li><a href=#%E4%B9%9D%E6%9C%AA%E6%9D%A5%E5%B1%95%E6%9C%9B>未来展望</a></li></ol><hr><h2 id=一背景与动机>一、背景与动机<a hidden class=anchor aria-hidden=true href=#一背景与动机>#</a></h2><h3 id=11-问题背景>1.1 问题背景<a hidden class=anchor aria-hidden=true href=#11-问题背景>#</a></h3><p>在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：</p><pre tabindex=0><code>用户查询示例：
+├── &#34;公司的请假流程是怎样的？&#34;           → 知识库查询
+├── &#34;分析本季度各产品线的毛利率构成&#34;      → 数据分析
+├── &#34;查看新用户注册到付费的转化漏斗&#34;      → 数据分析
+└── &#34;各部门薪资分布和离群值分析&#34;         → 数据分析
+</code></pre><h3 id=12-之前方案的局限>1.2 之前方案的局限<a hidden class=anchor aria-hidden=true href=#12-之前方案的局限>#</a></h3><table><thead><tr><th>方案</th><th>局限性</th></tr></thead><tbody><tr><td><strong>关键词匹配</strong></td><td>无法理解语义，&ldquo;不想要分析"会被误判为"分析&rdquo;</td></tr><tr><td><strong>规则引擎</strong></td><td>规则难以穷尽，维护成本高</td></tr><tr><td><strong>简单分类</strong></td><td>仅区分"查询"和"分析"，无法提供业务上下文</td></tr></tbody></table><h3 id=13-我们的解决方案>1.3 我们的解决方案<a hidden class=anchor aria-hidden=true href=#13-我们的解决方案>#</a></h3><p>引入 <strong>LLM 驱动的三维意图识别系统</strong>，实现：</p><ul><li>✅ 语义级别的深度理解</li><li>✅ 多维度精细分类</li><li>✅ 业务上下文自动注入</li><li>✅ 图表推荐智能引导</li></ul><hr><h2 id=二系统架构概览>二、系统架构概览<a hidden class=anchor aria-hidden=true href=#二系统架构概览>#</a></h2><h3 id=21-整体架构图>2.1 整体架构图<a hidden class=anchor aria-hidden=true href=#21-整体架构图>#</a></h3><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────────────────┐
+│                           用户查询输入                                   │
+│                    &#34;分析本季度各产品线的毛利率构成&#34;                        │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         意图识别路由器 (Router)                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                     LLM 分类引擎                                 │   │
+│  │    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │   │
+│  │    │   primary   │    │   domain    │    │   logic     │       │   │
+│  │    │  RAG/DATA   │ ×  │ 业务领域    │ ×  │ 分析逻辑    │       │   │
+│  │    └─────────────┘    └─────────────┘    └─────────────┘       │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              │                               │
+              ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────────────────────┐
+│      RAG Handler        │     │              DATA Handler               │
+│   ┌─────────────────┐   │     │  ┌─────────────────────────────────┐    │
+│   │  MaxKB 知识库   │   │     │  │         上下文注入              │    │
+│   │    查询引擎     │   │     │  │  • domain_context (业务背景)    │    │
+│   └─────────────────┘   │     │  │  • logic_context (图表推荐)     │    │
+└─────────────────────────┘     │  └─────────────────────────────────┘    │
+                                │              │                          │
+                                │              ▼                          │
+                                │  ┌─────────────────────────────────┐    │
+                                │  │       数据分析引擎              │    │
+                                │  │  • PandasAI 数据处理            │    │
+                                │  │  • Chart Recommender 图表推荐   │    │
+                                │  │  • Interactive Charts 可视化    │    │
+                                │  └─────────────────────────────────┘    │
+                                └─────────────────────────────────────────┘
+</code></pre><h3 id=22-数据流图>2.2 数据流图<a hidden class=anchor aria-hidden=true href=#22-数据流图>#</a></h3><pre tabindex=0><code>用户查询
+    │
+    ▼
+┌───────────────────┐
+│ classify_query()  │ ───── LLM 三维分类
+└─────────┬─────────┘
+          │
+          ▼
+┌───────────────────┐
+│  IntentResult     │ ───── 数据结构封装
+│  ├─ primary       │
+│  ├─ domain        │
+│  ├─ logic         │
+│  ├─ domain_context│
+│  └─ logic_context │
+└─────────┬─────────┘
+          │
+    ┌─────┴─────┐
+    ▼           ▼
+  RAG路径    DATA路径
+    │           │
+    ▼           ▼
+ 知识库查询   数据分析
+</code></pre><hr><h2 id=三三维分类体系详解>三、三维分类体系详解<a hidden class=anchor aria-hidden=true href=#三三维分类体系详解>#</a></h2><h3 id=31-第一维primary主类别>3.1 第一维：Primary（主类别）<a hidden class=anchor aria-hidden=true href=#31-第一维primary主类别>#</a></h3><p>决定查询的基本处理路径：</p><table><thead><tr><th>类别</th><th>说明</th><th>典型查询</th></tr></thead><tbody><tr><td><strong>RAG</strong></td><td>知识库检索类问题</td><td>&ldquo;请假流程是什么？"、&ldquo;公司保密制度&rdquo;</td></tr><tr><td><strong>DATA</strong></td><td>数据分析类任务</td><td>&ldquo;统计本月销售额&rdquo;、&ldquo;分析用户留存趋势&rdquo;</td></tr></tbody></table><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>PrimaryType</span>(str, Enum):
+</span></span><span style=display:flex><span>    RAG <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;RAG&#34;</span>    <span style=color:#75715e># 知识库查询</span>
+</span></span><span style=display:flex><span>    DATA <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;DATA&#34;</span>  <span style=color:#75715e># 数据分析</span>
+</span></span></code></pre></div><h3 id=32-第二维domain业务领域>3.2 第二维：Domain（业务领域）<a hidden class=anchor aria-hidden=true href=#32-第二维domain业务领域>#</a></h3><p>识别查询所属的业务领域，为分析提供业务上下文：</p><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────────┐
+│                        业务领域矩阵                              │
+├─────────────┬───────────────────────────────────────────────────┤
+│   FINANCE   │  财务领域：钱的来源、去向与盈亏                    │
+│             │  关键词：收入、成本、利润、预算、现金流、毛利       │
+│             │  业务常识：借贷平衡、毛利=收入-成本、净利润率       │
+├─────────────┼───────────────────────────────────────────────────┤
+│   GROWTH    │  增长领域：用户转化、留存与价值                    │
+│             │  关键词：转化率、留存率、DAU/MAU、LTV、漏斗         │
+│             │  业务常识：漏斗阶段顺序、留存衰减律、DAU/MAU比值    │
+├─────────────┼───────────────────────────────────────────────────┤
+│     HR      │  人力领域：人员分布、效能与成本                    │
+│             │  关键词：员工、薪资、考勤、招聘、离职、绩效         │
+│             │  业务常识：职级金字塔、薪酬分位数、离职预警         │
+├─────────────┼───────────────────────────────────────────────────┤
+│    GOVT     │  政务领域：事项进度、公平性与覆盖率                │
+│             │  关键词：政务、审批、办事、投诉、公共服务           │
+│             │  业务常识：行政区划映射、办件时效、人均资源均衡     │
+└─────────────┴───────────────────────────────────────────────────┘
+</code></pre><h3 id=33-第三维logic分析逻辑>3.3 第三维：Logic（分析逻辑）<a hidden class=anchor aria-hidden=true href=#33-第三维logic分析逻辑>#</a></h3><p>识别用户期望的分析方式，直接指导图表推荐：</p><pre tabindex=0><code>┌────────────────────────────────────────────────────────────────────────┐
+│                          分析逻辑模式                                   │
+├──────────────┬────────────────────────┬────────────────────────────────┤
+│    模式      │        分析目标        │          推荐图表              │
+├──────────────┼────────────────────────┼────────────────────────────────┤
+│ ACHIEVING    │ 进度与达成             │ 子弹图、仪表盘、分组柱状图      │
+│              │ 实际 vs 目标对比       │                                │
+├──────────────┼────────────────────────┼────────────────────────────────┤
+│ COMPOSITION  │ 结构与演变             │ 瀑布图、旭日图、堆叠柱状图      │
+│              │ 部分构成整体           │                                │
+├──────────────┼────────────────────────┼────────────────────────────────┤
+│ FLOW         │ 流转与损耗             │ 桑基图、漏斗图、路径图          │
+│              │ 状态间转移             │                                │
+├──────────────┼────────────────────────┼────────────────────────────────┤
+│ DISTRIBUTION │ 分布与集中             │ 箱线图、小提琴图、直方图        │
+│              │ 区间/离群点            │                                │
+├──────────────┼────────────────────────┼────────────────────────────────┤
+│ TREND        │ 趋势与波动             │ 折线图、面积图、堆叠面积图      │
+│              │ 时间维度变化           │                                │
+├──────────────┼────────────────────────┼────────────────────────────────┤
+│ CORRELATION  │ 关联与对比             │ 散点图、热力矩阵、雷达图        │
+│              │ 变量间关系             │                                │
+└──────────────┴────────────────────────┴────────────────────────────────┘
+</code></pre><h3 id=34-三维组合示例>3.4 三维组合示例<a hidden class=anchor aria-hidden=true href=#34-三维组合示例>#</a></h3><table><thead><tr><th>用户查询</th><th>Primary</th><th>Domain</th><th>Logic</th><th>推荐图表</th></tr></thead><tbody><tr><td>&ldquo;本季度毛利率构成分析&rdquo;</td><td>DATA</td><td>FINANCE</td><td>COMPOSITION</td><td>瀑布图、堆叠柱状图</td></tr><tr><td>&ldquo;预算执行率完成情况&rdquo;</td><td>DATA</td><td>FINANCE</td><td>ACHIEVING</td><td>子弹图、仪表盘</td></tr><tr><td>&ldquo;用户转化漏斗分析&rdquo;</td><td>DATA</td><td>GROWTH</td><td>FLOW</td><td>漏斗图、桑基图</td></tr><tr><td>&ldquo;薪资分布和离群值&rdquo;</td><td>DATA</td><td>HR</td><td>DISTRIBUTION</td><td>箱线图、小提琴图</td></tr><tr><td>&ldquo;政务办件完成率对比&rdquo;</td><td>DATA</td><td>GOVT</td><td>ACHIEVING</td><td>分组柱状图</td></tr></tbody></table><hr><h2 id=四llm-在意图识别中的核心作用>四、LLM 在意图识别中的核心作用<a hidden class=anchor aria-hidden=true href=#四llm-在意图识别中的核心作用>#</a></h2><h3 id=41-llm-的三大核心能力>4.1 LLM 的三大核心能力<a hidden class=anchor aria-hidden=true href=#41-llm-的三大核心能力>#</a></h3><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────────────────┐
+│                        LLM 核心能力矩阵                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐      │
+│   │   自然语言理解   │   │   上下文推理    │   │   分类决策      │      │
+│   │                 │   │                 │   │                 │      │
+│   │ • 语义解析      │   │ • 领域知识      │   │ • 多维分类      │      │
+│   │ • 实体识别      │   │ • 隐含意图      │   │ • 置信度评估    │      │
+│   │ • 关系抽取      │   │ • 歧义消解      │   │ • 结构化输出    │      │
+│   └─────────────────┘   └─────────────────┘   └─────────────────┘      │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+</code></pre><h3 id=42-自然语言理解-nlu>4.2 自然语言理解 (NLU)<a hidden class=anchor aria-hidden=true href=#42-自然语言理解-nlu>#</a></h3><p>LLM 能够超越关键词匹配，理解查询的深层语义：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 传统关键词匹配的问题</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;我不想分析数据，只想查一下制度&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 关键词匹配：检测到&#34;分析&#34; → 误判为 DATA</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># LLM 理解：检测到否定词&#34;不想&#34; → 正确识别为 RAG</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># LLM 的语义理解能力</span>
+</span></span><span style=display:flex><span>queries <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    (<span style=color:#e6db74>&#34;公司的请假流程是怎样的？&#34;</span>, <span style=color:#e6db74>&#34;RAG&#34;</span>),      <span style=color:#75715e># 明确的制度查询</span>
+</span></span><span style=display:flex><span>    (<span style=color:#e6db74>&#34;帮我算一下平均工资&#34;</span>, <span style=color:#e6db74>&#34;DATA&#34;</span>),           <span style=color:#75715e># 隐含的计算需求</span>
+</span></span><span style=display:flex><span>    (<span style=color:#e6db74>&#34;对比一下各部门的绩效&#34;</span>, <span style=color:#e6db74>&#34;DATA&#34;</span>),         <span style=color:#75715e># 对比分析意图</span>
+</span></span><span style=display:flex><span>    (<span style=color:#e6db74>&#34;有没有关于加班的规定&#34;</span>, <span style=color:#e6db74>&#34;RAG&#34;</span>),          <span style=color:#75715e># 知识检索意图</span>
+</span></span><span style=display:flex><span>]
+</span></span></code></pre></div><h3 id=43-上下文推理>4.3 上下文推理<a hidden class=anchor aria-hidden=true href=#43-上下文推理>#</a></h3><p>LLM 利用预训练的领域知识进行推理：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 业务领域推理示例</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;分析用户从注册到付费的转化情况&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># LLM 推理过程：</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 1. 识别关键词：&#34;用户&#34;、&#34;注册&#34;、&#34;付费&#34;、&#34;转化&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 2. 关联领域知识：这是典型的用户增长漏斗场景</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 3. 推理结果：domain = GROWTH, logic = FLOW</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 分析逻辑推理示例</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;各部门薪资分布情况，找出异常高或低的&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># LLM 推理过程：</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 1. 识别关键词：&#34;分布&#34;、&#34;异常&#34;、&#34;高或低&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 2. 关联分析模式：寻找离群点、分布区间</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 3. 推理结果：logic = DISTRIBUTION</span>
+</span></span></code></pre></div><h3 id=44-结构化分类决策>4.4 结构化分类决策<a hidden class=anchor aria-hidden=true href=#44-结构化分类决策>#</a></h3><p>LLM 将自然语言查询转换为结构化分类结果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 输入</span>
+</span></span><span style=display:flex><span>user_query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;分析本季度各产品线的毛利率构成&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># LLM 输出（结构化 JSON）</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;primary&#34;</span>: <span style=color:#e6db74>&#34;DATA&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;domain&#34;</span>: <span style=color:#e6db74>&#34;FINANCE&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;logic&#34;</span>: <span style=color:#e6db74>&#34;COMPOSITION&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 系统解析后的完整结果</span>
+</span></span><span style=display:flex><span>IntentResult(
+</span></span><span style=display:flex><span>    primary<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DATA&#34;</span>,
+</span></span><span style=display:flex><span>    domain<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;FINANCE&#34;</span>, 
+</span></span><span style=display:flex><span>    logic<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;COMPOSITION&#34;</span>,
+</span></span><span style=display:flex><span>    domain_context<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;财务分析领域：核心关注钱的来源、去向与盈亏...&#34;</span>,
+</span></span><span style=display:flex><span>    logic_context<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;结构与演变分析：优先图表：瀑布图、旭日图...&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span></code></pre></div><hr><h2 id=五技术实现细节>五、技术实现细节<a hidden class=anchor aria-hidden=true href=#五技术实现细节>#</a></h2><h3 id=51-核心数据结构>5.1 核心数据结构<a hidden class=anchor aria-hidden=true href=#51-核心数据结构>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> dataclasses <span style=color:#f92672>import</span> dataclass
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> enum <span style=color:#f92672>import</span> Enum
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> Optional
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Domain</span>(str, Enum):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;四大核心业务领域&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    FINANCE <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;FINANCE&#34;</span>   <span style=color:#75715e># 财务</span>
+</span></span><span style=display:flex><span>    GROWTH  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;GROWTH&#34;</span>    <span style=color:#75715e># 增长</span>
+</span></span><span style=display:flex><span>    HR      <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;HR&#34;</span>        <span style=color:#75715e># 人力</span>
+</span></span><span style=display:flex><span>    GOVT    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;GOVT&#34;</span>      <span style=color:#75715e># 政务</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>LogicPattern</span>(str, Enum):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;六大通用分析逻辑模式&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    ACHIEVING    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;ACHIEVING&#34;</span>      <span style=color:#75715e># 进度达成</span>
+</span></span><span style=display:flex><span>    COMPOSITION  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;COMPOSITION&#34;</span>    <span style=color:#75715e># 结构占比</span>
+</span></span><span style=display:flex><span>    FLOW         <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;FLOW&#34;</span>           <span style=color:#75715e># 流转损耗</span>
+</span></span><span style=display:flex><span>    DISTRIBUTION <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;DISTRIBUTION&#34;</span>   <span style=color:#75715e># 分布集中</span>
+</span></span><span style=display:flex><span>    TREND        <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;TREND&#34;</span>          <span style=color:#75715e># 趋势波动</span>
+</span></span><span style=display:flex><span>    CORRELATION  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;CORRELATION&#34;</span>    <span style=color:#75715e># 关联对比</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>@dataclass</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>IntentResult</span>:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;路由分类结果&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    primary: str                      <span style=color:#75715e># &#34;RAG&#34; 或 &#34;DATA&#34;</span>
+</span></span><span style=display:flex><span>    domain: Optional[str] <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>      <span style=color:#75715e># Domain 枚举值</span>
+</span></span><span style=display:flex><span>    logic: Optional[str] <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>       <span style=color:#75715e># LogicPattern 枚举值</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@property</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>domain_context</span>(self) <span style=color:#f92672>-&gt;</span> str:
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34;获取领域背景知识字符串&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> DOMAIN_CONTEXT<span style=color:#f92672>.</span>get(self<span style=color:#f92672>.</span>domain, <span style=color:#e6db74>&#34;&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>@property</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>logic_context</span>(self) <span style=color:#f92672>-&gt;</span> str:
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34;获取分析逻辑背景知识字符串&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> LOGIC_CONTEXT<span style=color:#f92672>.</span>get(self<span style=color:#f92672>.</span>logic, <span style=color:#e6db74>&#34;&#34;</span>)
+</span></span></code></pre></div><h3 id=52-llm-prompt-工程>5.2 LLM Prompt 工程<a hidden class=anchor aria-hidden=true href=#52-llm-prompt-工程>#</a></h3><p>精心设计的 System Prompt 是分类准确性的关键：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>_SYSTEM_PROMPT <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;&#34;你是一个企业智能运营助手的意图识别专家，
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>负责对用户查询进行三维分类。
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>【分类维度 1 — primary（必填）】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- RAG  : 查询制度/流程/文档/规则/政策/话术等知识性问题
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- DATA : 统计数据/分析表格/生成图表/对比数值/趋势分析等数据处理类任务
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>【分类维度 2 — domain（数据分析时填写，否则 null）】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- FINANCE : 财务、收入、支出、利润、成本、预算、现金流
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- GROWTH  : 用户增长、转化率、留存率、DAU/MAU、漏斗
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- HR      : 员工、薪资、考勤、招聘、离职、绩效
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- GOVT    : 政务、政府、行政、政策、审批、办事
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>【分类维度 3 — logic（数据分析时填写，否则 null）】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- ACHIEVING    : KPI达成、目标完成率、实际vs计划
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- COMPOSITION  : 占比构成、结构分析、来源拆解
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- FLOW         : 漏斗转化、流量来源、状态转移
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- DISTRIBUTION : 分布区间、离群异常值、密度集中
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- TREND        : 时间趋势、月度变化、同比环比
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- CORRELATION  : 变量关联、投入产出比、相关性
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>【输出格式】严格输出 JSON：
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>{&#34;primary&#34;:&#34;DATA&#34;,&#34;domain&#34;:&#34;HR&#34;,&#34;logic&#34;:&#34;DISTRIBUTION&#34;}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span></code></pre></div><h3 id=53-分类函数实现>5.3 分类函数实现<a hidden class=anchor aria-hidden=true href=#53-分类函数实现>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>classify_query</span>(user_query: str) <span style=color:#f92672>-&gt;</span> IntentResult:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    对用户查询进行三维意图分类
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 调用 LLM API</span>
+</span></span><span style=display:flex><span>        response <span style=color:#f92672>=</span> client<span style=color:#f92672>.</span>chat<span style=color:#f92672>.</span>completions<span style=color:#f92672>.</span>create(
+</span></span><span style=display:flex><span>            model<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;deepseek-chat&#34;</span>,
+</span></span><span style=display:flex><span>            messages<span style=color:#f92672>=</span>[
+</span></span><span style=display:flex><span>                {<span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;system&#34;</span>, <span style=color:#e6db74>&#34;content&#34;</span>: _SYSTEM_PROMPT},
+</span></span><span style=display:flex><span>                {<span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;user&#34;</span>, <span style=color:#e6db74>&#34;content&#34;</span>: user_query},
+</span></span><span style=display:flex><span>            ],
+</span></span><span style=display:flex><span>            temperature<span style=color:#f92672>=</span><span style=color:#ae81ff>0.1</span>,    <span style=color:#75715e># 低温度提高稳定性</span>
+</span></span><span style=display:flex><span>            max_tokens<span style=color:#f92672>=</span><span style=color:#ae81ff>60</span>,      <span style=color:#75715e># 限制输出长度</span>
+</span></span><span style=display:flex><span>        )
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 解析响应</span>
+</span></span><span style=display:flex><span>        raw <span style=color:#f92672>=</span> response<span style=color:#f92672>.</span>choices[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>message<span style=color:#f92672>.</span>content<span style=color:#f92672>.</span>strip()
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 提取 JSON（防止模型附加说明文字）</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>match</span> <span style=color:#f92672>=</span> re<span style=color:#f92672>.</span>search(<span style=color:#e6db74>r</span><span style=color:#e6db74>&#34;\{.*?\}&#34;</span>, raw, re<span style=color:#f92672>.</span>DOTALL)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> <span style=color:#66d9ef>match</span>:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>ValueError</span>(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;响应中未找到 JSON: </span><span style=color:#e6db74>{</span>raw<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        data <span style=color:#f92672>=</span> json<span style=color:#f92672>.</span>loads(<span style=color:#66d9ef>match</span><span style=color:#f92672>.</span>group())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 验证并构建结果</span>
+</span></span><span style=display:flex><span>        primary <span style=color:#f92672>=</span> data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;primary&#34;</span>, <span style=color:#e6db74>&#34;DATA&#34;</span>)<span style=color:#f92672>.</span>upper()
+</span></span><span style=display:flex><span>        domain <span style=color:#f92672>=</span> validate_domain(data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;domain&#34;</span>))
+</span></span><span style=display:flex><span>        logic <span style=color:#f92672>=</span> validate_logic(data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;logic&#34;</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> IntentResult(primary<span style=color:#f92672>=</span>primary, domain<span style=color:#f92672>=</span>domain, logic<span style=color:#f92672>=</span>logic)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+</span></span><span style=display:flex><span>        logger<span style=color:#f92672>.</span>error(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;分类失败，回退到 DATA: </span><span style=color:#e6db74>{</span>e<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> IntentResult(primary<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DATA&#34;</span>, domain<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>, logic<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>)
+</span></span></code></pre></div><h3 id=54-错误处理与降级策略>5.4 错误处理与降级策略<a hidden class=anchor aria-hidden=true href=#54-错误处理与降级策略>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>validate_domain</span>(value: Optional[str]) <span style=color:#f92672>-&gt;</span> Optional[str]:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;验证并规范化 domain 值&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> value:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>None</span>
+</span></span><span style=display:flex><span>    value <span style=color:#f92672>=</span> value<span style=color:#f92672>.</span>upper()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> value <span style=color:#66d9ef>if</span> value <span style=color:#f92672>in</span> Domain<span style=color:#f92672>.</span>_value2member_map_ <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>None</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>validate_logic</span>(value: Optional[str]) <span style=color:#f92672>-&gt;</span> Optional[str]:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;验证并规范化 logic 值&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> value:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>None</span>
+</span></span><span style=display:flex><span>    value <span style=color:#f92672>=</span> value<span style=color:#f92672>.</span>upper()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> value <span style=color:#66d9ef>if</span> value <span style=color:#f92672>in</span> LogicPattern<span style=color:#f92672>.</span>_value2member_map_ <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>None</span>
+</span></span></code></pre></div><hr><h2 id=六组件协同工作机制>六、组件协同工作机制<a hidden class=anchor aria-hidden=true href=#六组件协同工作机制>#</a></h2><h3 id=61-与数据分析引擎协同>6.1 与数据分析引擎协同<a hidden class=anchor aria-hidden=true href=#61-与数据分析引擎协同>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 在 pandas_ai_service.py 中使用意图结果</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>analyze</span>(self, file_path: str, query: str, intent: IntentResult) <span style=color:#f92672>-&gt;</span> Dict:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    执行数据分析，注入业务上下文
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 1. 加载数据</span>
+</span></span><span style=display:flex><span>    df <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>load_data(file_path)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 2. 注入业务上下文到 LLM 提示词</span>
+</span></span><span style=display:flex><span>    analysis_prompt <span style=color:#f92672>=</span> <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    你是一个专业的</span><span style=color:#e6db74>{</span>intent<span style=color:#f92672>.</span>domain_context <span style=color:#f92672>or</span> <span style=color:#e6db74>&#39;数据&#39;</span><span style=color:#e6db74>}</span><span style=color:#e6db74>分析师。
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    </span><span style=color:#e6db74>{</span>intent<span style=color:#f92672>.</span>logic_context<span style=color:#e6db74>}</span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    【数据信息】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    - 行数: </span><span style=color:#e6db74>{</span>len(df)<span style=color:#e6db74>}</span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    - 列名: </span><span style=color:#e6db74>{</span>df<span style=color:#f92672>.</span>columns<span style=color:#f92672>.</span>tolist()<span style=color:#e6db74>}</span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    【用户问题】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    </span><span style=color:#e6db74>{</span>query<span style=color:#e6db74>}</span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 3. 调用 LLM 分析</span>
+</span></span><span style=display:flex><span>    response <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>chat<span style=color:#f92672>.</span>completions<span style=color:#f92672>.</span>create(
+</span></span><span style=display:flex><span>        model<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;deepseek-chat&#34;</span>,
+</span></span><span style=display:flex><span>        messages<span style=color:#f92672>=</span>[{<span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;user&#34;</span>, <span style=color:#e6db74>&#34;content&#34;</span>: analysis_prompt}],
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;response&#34;</span>: response<span style=color:#f92672>.</span>choices[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>message<span style=color:#f92672>.</span>content}
+</span></span></code></pre></div><h3 id=62-与图表推荐引擎协同>6.2 与图表推荐引擎协同<a hidden class=anchor aria-hidden=true href=#62-与图表推荐引擎协同>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 在 chart_recommender.py 中使用意图结果</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>recommend_charts</span>(self, df: pd<span style=color:#f92672>.</span>DataFrame, intent: IntentResult) <span style=color:#f92672>-&gt;</span> List[str]:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    基于意图识别结果推荐图表
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 根据 logic 模式直接推荐图表</span>
+</span></span><span style=display:flex><span>    logic_to_charts <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;ACHIEVING&#34;</span>: [<span style=color:#e6db74>&#34;bullet&#34;</span>, <span style=color:#e6db74>&#34;gauge&#34;</span>, <span style=color:#e6db74>&#34;grouped_bar&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;COMPOSITION&#34;</span>: [<span style=color:#e6db74>&#34;waterfall&#34;</span>, <span style=color:#e6db74>&#34;sunburst&#34;</span>, <span style=color:#e6db74>&#34;stacked_bar&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;FLOW&#34;</span>: [<span style=color:#e6db74>&#34;sankey&#34;</span>, <span style=color:#e6db74>&#34;funnel&#34;</span>, <span style=color:#e6db74>&#34;path&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;DISTRIBUTION&#34;</span>: [<span style=color:#e6db74>&#34;boxplot&#34;</span>, <span style=color:#e6db74>&#34;violin&#34;</span>, <span style=color:#e6db74>&#34;histogram&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;TREND&#34;</span>: [<span style=color:#e6db74>&#34;line&#34;</span>, <span style=color:#e6db74>&#34;area&#34;</span>, <span style=color:#e6db74>&#34;stacked_area&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;CORRELATION&#34;</span>: [<span style=color:#e6db74>&#34;scatter&#34;</span>, <span style=color:#e6db74>&#34;heatmap&#34;</span>, <span style=color:#e6db74>&#34;radar&#34;</span>],
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 获取推荐图表列表</span>
+</span></span><span style=display:flex><span>    recommended <span style=color:#f92672>=</span> logic_to_charts<span style=color:#f92672>.</span>get(intent<span style=color:#f92672>.</span>logic, [])
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 根据数据特征进一步筛选</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>_filter_by_data_features(df, recommended)
+</span></span></code></pre></div><h3 id=63-完整工作流>6.3 完整工作流<a hidden class=anchor aria-hidden=true href=#63-完整工作流>#</a></h3><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────────────────┐
+│                           完整工作流程                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+用户输入: &#34;分析本季度各产品线的毛利率构成&#34;
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Step 1: 意图识别                                                         │
+│                                                                          │
+│   classify_query() → IntentResult(                                       │
+│       primary = &#34;DATA&#34;,                                                  │
+│       domain  = &#34;FINANCE&#34;,                                               │
+│       logic   = &#34;COMPOSITION&#34;                                            │
+│   )                                                                      │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Step 2: 路由分发                                                         │
+│                                                                          │
+│   if primary == &#34;RAG&#34;:                                                   │
+│       → 知识库查询引擎                                                   │
+│   else:                                                                  │
+│       → 数据分析引擎                                                     │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Step 3: 上下文注入                                                       │
+│                                                                          │
+│   domain_context = &#34;财务分析领域：核心关注钱的来源...&#34;                   │
+│   logic_context  = &#34;结构与演变分析：优先图表：瀑布图...&#34;                 │
+│                                                                          │
+│   → 注入到 LLM 分析提示词                                                │
+│   → 传递给图表推荐引擎                                                   │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Step 4: 数据分析                                                         │
+│                                                                          │
+│   PandasAI 分析 + LLM 业务解读                                           │
+│   Chart Recommender 推荐图表                                             │
+│   Interactive Charts 生成可视化                                          │
+└─────────────────────────────┬───────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Step 5: 结果返回                                                         │
+│                                                                          │
+│   {                                                                      │
+│       &#34;analysis&#34;: &#34;本季度毛利率构成分析...&#34;,                             │
+│       &#34;charts&#34;: [&#34;waterfall_chart.png&#34;, &#34;stacked_bar.png&#34;],              │
+│       &#34;tables&#34;: [&#34;margin_breakdown.xlsx&#34;]                                │
+│   }                                                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+</code></pre><hr><h2 id=七应用场景示例>七、应用场景示例<a hidden class=anchor aria-hidden=true href=#七应用场景示例>#</a></h2><h3 id=71-财务分析场景>7.1 财务分析场景<a hidden class=anchor aria-hidden=true href=#71-财务分析场景>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 用户查询</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;分析本季度各产品线的毛利率构成，对比去年同期&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 意图识别结果</span>
+</span></span><span style=display:flex><span>IntentResult(
+</span></span><span style=display:flex><span>    primary<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DATA&#34;</span>,
+</span></span><span style=display:flex><span>    domain<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;FINANCE&#34;</span>,
+</span></span><span style=display:flex><span>    logic<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;COMPOSITION&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 系统响应</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;analysis&#34;</span>: <span style=color:#e6db74>&#34;本季度毛利率构成分析...&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;charts&#34;</span>: [<span style=color:#e6db74>&#34;waterfall_chart.png&#34;</span>, <span style=color:#e6db74>&#34;stacked_bar_yoy.png&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;insights&#34;</span>: [
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;产品线A毛利率贡献最大，占比35%&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;产品线B毛利率同比下降5个百分点&#34;</span>
+</span></span><span style=display:flex><span>    ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=72-用户增长场景>7.2 用户增长场景<a hidden class=anchor aria-hidden=true href=#72-用户增长场景>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 用户查询</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;查看新用户从注册到首次付费的转化漏斗&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 意图识别结果</span>
+</span></span><span style=display:flex><span>IntentResult(
+</span></span><span style=display:flex><span>    primary<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DATA&#34;</span>,
+</span></span><span style=display:flex><span>    domain<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;GROWTH&#34;</span>,
+</span></span><span style=display:flex><span>    logic<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;FLOW&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 系统响应</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;analysis&#34;</span>: <span style=color:#e6db74>&#34;用户转化漏斗分析...&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;charts&#34;</span>: [<span style=color:#e6db74>&#34;funnel_chart.png&#34;</span>, <span style=color:#e6db74>&#34;sankey_diagram.png&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;insights&#34;</span>: [
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;注册→激活转化率68%，高于行业均值&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;激活→付费转化率12%，存在优化空间&#34;</span>
+</span></span><span style=display:flex><span>    ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=73-人力资源场景>7.3 人力资源场景<a hidden class=anchor aria-hidden=true href=#73-人力资源场景>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 用户查询</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;各部门薪资分布情况，找出异常高或低的&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 意图识别结果</span>
+</span></span><span style=display:flex><span>IntentResult(
+</span></span><span style=display:flex><span>    primary<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DATA&#34;</span>,
+</span></span><span style=display:flex><span>    domain<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;HR&#34;</span>,
+</span></span><span style=display:flex><span>    logic<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DISTRIBUTION&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 系统响应</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;analysis&#34;</span>: <span style=color:#e6db74>&#34;薪资分布分析...&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;charts&#34;</span>: [<span style=color:#e6db74>&#34;boxplot_salary.png&#34;</span>, <span style=color:#e6db74>&#34;violin_by_dept.png&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;insights&#34;</span>: [
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;研发部薪资中位数最高（P50=25K）&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;行政部存在2个离群高值（&gt;P75+1.5IQR）&#34;</span>
+</span></span><span style=display:flex><span>    ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=74-政务服务场景>7.4 政务服务场景<a hidden class=anchor aria-hidden=true href=#74-政务服务场景>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 用户查询</span>
+</span></span><span style=display:flex><span>query <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;各区县政务办件完成率与目标值对比&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 意图识别结果</span>
+</span></span><span style=display:flex><span>IntentResult(
+</span></span><span style=display:flex><span>    primary<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;DATA&#34;</span>,
+</span></span><span style=display:flex><span>    domain<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;GOVT&#34;</span>,
+</span></span><span style=display:flex><span>    logic<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;ACHIEVING&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 系统响应</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;analysis&#34;</span>: <span style=color:#e6db74>&#34;政务办件完成率分析...&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;charts&#34;</span>: [<span style=color:#e6db74>&#34;bullet_chart.png&#34;</span>, <span style=color:#e6db74>&#34;grouped_bar_target.png&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;insights&#34;</span>: [
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;A区完成率92%，超额完成目标&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;C区完成率78%，距目标差12个百分点&#34;</span>
+</span></span><span style=display:flex><span>    ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=八性能优化与最佳实践>八、性能优化与最佳实践<a hidden class=anchor aria-hidden=true href=#八性能优化与最佳实践>#</a></h2><h3 id=81-性能优化策略>8.1 性能优化策略<a hidden class=anchor aria-hidden=true href=#81-性能优化策略>#</a></h3><table><thead><tr><th>策略</th><th>说明</th><th>效果</th></tr></thead><tbody><tr><td><strong>低温度采样</strong></td><td>temperature=0.1</td><td>提高输出稳定性</td></tr><tr><td><strong>限制输出长度</strong></td><td>max_tokens=60</td><td>减少延迟和成本</td></tr><tr><td><strong>JSON 强制提取</strong></td><td>正则匹配提取 JSON</td><td>容错处理</td></tr><tr><td><strong>降级策略</strong></td><td>异常时回退到 DATA</td><td>保证系统可用</td></tr></tbody></table><h3 id=82-准确性优化>8.2 准确性优化<a hidden class=anchor aria-hidden=true href=#82-准确性优化>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 1. 丰富的分类示例</span>
+</span></span><span style=display:flex><span>_SYSTEM_PROMPT <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>【分类示例】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;请假流程是什么&#34; → {&#34;primary&#34;:&#34;RAG&#34;,&#34;domain&#34;:null,&#34;logic&#34;:null}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;分析毛利率构成&#34; → {&#34;primary&#34;:&#34;DATA&#34;,&#34;domain&#34;:&#34;FINANCE&#34;,&#34;logic&#34;:&#34;COMPOSITION&#34;}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;用户转化漏斗&#34;   → {&#34;primary&#34;:&#34;DATA&#34;,&#34;domain&#34;:&#34;GROWTH&#34;,&#34;logic&#34;:&#34;FLOW&#34;}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 2. 明确的边界条件</span>
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>【边界说明】
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- &#34;对比&#34;不一定是 CORRELATION，也可能是 ACHIEVING（对比目标）
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- &#34;分布&#34;一定是 DISTRIBUTION
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- &#34;趋势&#34;一定涉及时间维度
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 3. 领域关键词映射</span>
+</span></span><span style=display:flex><span>DOMAIN_KEYWORDS <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;FINANCE&#34;</span>: [<span style=color:#e6db74>&#34;收入&#34;</span>, <span style=color:#e6db74>&#34;成本&#34;</span>, <span style=color:#e6db74>&#34;利润&#34;</span>, <span style=color:#e6db74>&#34;预算&#34;</span>, <span style=color:#e6db74>&#34;毛利&#34;</span>, <span style=color:#e6db74>&#34;现金流&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;GROWTH&#34;</span>: [<span style=color:#e6db74>&#34;用户&#34;</span>, <span style=color:#e6db74>&#34;转化&#34;</span>, <span style=color:#e6db74>&#34;留存&#34;</span>, <span style=color:#e6db74>&#34;DAU&#34;</span>, <span style=color:#e6db74>&#34;MAU&#34;</span>, <span style=color:#e6db74>&#34;漏斗&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;HR&#34;</span>: [<span style=color:#e6db74>&#34;员工&#34;</span>, <span style=color:#e6db74>&#34;薪资&#34;</span>, <span style=color:#e6db74>&#34;考勤&#34;</span>, <span style=color:#e6db74>&#34;招聘&#34;</span>, <span style=color:#e6db74>&#34;离职&#34;</span>, <span style=color:#e6db74>&#34;绩效&#34;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;GOVT&#34;</span>: [<span style=color:#e6db74>&#34;政务&#34;</span>, <span style=color:#e6db74>&#34;审批&#34;</span>, <span style=color:#e6db74>&#34;办事&#34;</span>, <span style=color:#e6db74>&#34;投诉&#34;</span>, <span style=color:#e6db74>&#34;公共服务&#34;</span>],
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=83-监控与日志>8.3 监控与日志<a hidden class=anchor aria-hidden=true href=#83-监控与日志>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 分类结果日志</span>
+</span></span><span style=display:flex><span>logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;[Router] 分类结果: primary=</span><span style=color:#e6db74>{</span>primary<span style=color:#e6db74>}</span><span style=color:#e6db74>, domain=</span><span style=color:#e6db74>{</span>domain<span style=color:#e6db74>}</span><span style=color:#e6db74>, logic=</span><span style=color:#e6db74>{</span>logic<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 异常情况告警</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> primary <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> (<span style=color:#e6db74>&#34;RAG&#34;</span>, <span style=color:#e6db74>&#34;DATA&#34;</span>):
+</span></span><span style=display:flex><span>    logger<span style=color:#f92672>.</span>warning(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;[Router] 无效的 primary 值 &#39;</span><span style=color:#e6db74>{</span>primary<span style=color:#e6db74>}</span><span style=color:#e6db74>&#39;，回退到 DATA&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 性能监控</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span>start <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>result <span style=color:#f92672>=</span> classify_query(query)
+</span></span><span style=display:flex><span>latency <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time() <span style=color:#f92672>-</span> start
+</span></span><span style=display:flex><span>logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;[Router] 分类耗时: </span><span style=color:#e6db74>{</span>latency<span style=color:#e6db74>:</span><span style=color:#e6db74>.3f</span><span style=color:#e6db74>}</span><span style=color:#e6db74>s&#34;</span>)
+</span></span></code></pre></div><hr><h2 id=九未来展望>九、未来展望<a hidden class=anchor aria-hidden=true href=#九未来展望>#</a></h2><h3 id=91-短期优化>9.1 短期优化<a hidden class=anchor aria-hidden=true href=#91-短期优化>#</a></h3><ul><li><input disabled type=checkbox> 丰富图表样式</li><li><input disabled type=checkbox> 优化表格生成逻辑</li><li><input disabled type=checkbox> 增加更多业务领域（如供应链、客服）</li></ul><hr><h2 id=总结>总结<a hidden class=anchor aria-hidden=true href=#总结>#</a></h2><p>OpsMind 的三维意图识别系统通过 <strong>Primary × Domain × Logic</strong> 的分类体系，实现了：</p><ol><li><strong>精准路由</strong>：准确区分知识查询和数据分析</li><li><strong>业务理解</strong>：识别查询所属的业务领域</li><li><strong>智能引导</strong>：根据分析逻辑推荐最佳图表</li><li><strong>上下文增强</strong>：为下游组件注入业务知识</li></ol><p>这一设计充分利用了 LLM 的语义理解和推理能力，同时通过结构化输出和降级策略保证了系统的稳定性和可靠性。</p></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://okelekaf01-cmd.github.io/>wwxdsg的个人博客</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

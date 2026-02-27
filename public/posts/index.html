@@ -1,31 +1,96 @@
 <!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Posts | wwxdsg的个人博客</title><meta name=keywords content><meta name=description content="Posts - wwxdsg的个人博客"><meta name=author content><link rel=canonical href=https://okelekaf01-cmd.github.io/posts/><link crossorigin=anonymous href=/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as=style><link rel=icon href=https://okelekaf01-cmd.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://okelekaf01-cmd.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://okelekaf01-cmd.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://okelekaf01-cmd.github.io/apple-touch-icon.png><link rel=mask-icon href=https://okelekaf01-cmd.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://okelekaf01-cmd.github.io/posts/index.xml title=rss><link rel=alternate hreflang=en href=https://okelekaf01-cmd.github.io/posts/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://okelekaf01-cmd.github.io/posts/"><meta property="og:site_name" content="wwxdsg的个人博客"><meta property="og:title" content="Posts"><meta property="og:locale" content="zh-cn"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Posts"><meta name=twitter:description content><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://okelekaf01-cmd.github.io/posts/"}]}</script></head><body class=list id=top><header class=header><nav class=nav><div class=logo><a href=https://okelekaf01-cmd.github.io/ accesskey=h title="wwxdsg的个人博客 (Alt + H)">wwxdsg的个人博客</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
 <svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://okelekaf01-cmd.github.io/ title=主页><span>主页</span></a></li><li><a href=https://okelekaf01-cmd.github.io/projects/ title=个人项目><span>个人项目</span></a></li><li><a href=https://okelekaf01-cmd.github.io/posts/ title=博客><span class=active>博客</span></a></li></ul></nav></header><main class=main><header class=page-header><h1>Posts</h1></header><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思</h2></header><div class=entry-content><p>从"调包侠"到"架构师"：你正在经历什么？ 你之所以觉得"我都用 AI 了为什么还要写这么多逻辑"，是因为你正在经历**从"调用一个功能"到"构建一个产品"**的过程。
-调用功能 vs 构建产品 调用功能：
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://okelekaf01-cmd.github.io/ title=主页><span>主页</span></a></li><li><a href=https://okelekaf01-cmd.github.io/projects/ title=个人项目><span>个人项目</span></a></li><li><a href=https://okelekaf01-cmd.github.io/posts/ title=博客><span class=active>博客</span></a></li></ul></nav></header><main class=main><header class=page-header><h1>Posts</h1></header><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思</h2></header><div class=entry-content><p>我在刚开始写这个项目的时候觉得"我都用 AI 了为什么还要写这么多逻辑"，不是简单的给ai套个壳子就能有不错的效果了吗，后来发现事情没有我想的那么简单
+这本质上是调用功能和构建产品的区别 调用功能：
 # 调一下 df.chat()，它只能算个 Demo result = df.chat("帮我分析这个数据") 构建产品：
 处理脏数据 提供图表推荐 设计追问机制 管理 Session 这些才是让 OpsMind 能在真实办公场景下不"翻车"的核心竞争力。
 大模型应用的本质 大模型应用不是简单的"调 API"，而是构建一个完整的产品系统。LLM 只是其中一个组件，真正的价值在于如何将其与业务逻辑、数据处理、用户体验有机结合。
 1. 缘起：图表推荐，只给类型是不够的 最近在折腾智能图表推荐系统。做过数据可视化的同学都知道，系统告诉你"这组数据适合散点图"只完成了 30% 的工作。剩下的 70% 痛点在于：
-到底哪一列该放 X 轴？ 哪一列是 Y 轴？ 是否需要图例（Legend）分组？ 为了解决这个"最后一公里"的映射问题，我闭关写了一套混合模式的追问机制。当时我觉得方案已经非常闭环了：能推断的直接出图，不确定的再来问用户。
+到底哪一列该放 X 轴？ 哪一列是 Y 轴？ 是否需要图例（Legend）分组？ 为了解决这个映射问题，我闭关写了一套混合模式的追问机制。当时我觉得方案已经非常闭环了：能推断的直接出图，不确定的再来问用户。
 2. 方案设计：既要智能，又要掌控感 我设计的核心是混合模式（Hybrid Mode）。
 快速通道 利用 LLM 强大的语义理解能力，直接分析用户的 Query 和数据特征（Data Features），给出置信度高的列映射。
 透明展示 系统不搞"黑盒"，推断结果会清晰地展示给用户。
 追问流程 如果 LLM 只有 50% 的把握，或者发现数据中存在多个可能的数值列，系统会触发 ClarificationQuestion。
 为了支撑这个机制，我重构了底层数据结构，定义了 ChartColumnMapping（列映射）和 ChartInference（推断结果）等数据类，并为 15 种常用图表配置了严格的属性要求（CHART_REQUIREMENTS）。
 # 核心数据类：让推断结果结构化 @dataclass class ChartInference: chart_type: str # 图表类型 column_mapping: ChartColumnMapping # 具体的列映射方案 confidence: float # 置信度 (0-1) needs_clarification: bool = False # 是否需要反向追问用户 3. 翻车现场：当"脏数据"遇到"理想逻辑" 代码写完，本地测试集跑了一遍，全绿通过。我志得意满，觉得这套 450 行代码的逻辑已经无懈可击了。
-...</p></div><footer class=entry-footer><span title='2026-02-07 16:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>okelekaf01-cmd</span></footer><a class=entry-link aria-label="post link to 从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思" href=https://okelekaf01-cmd.github.io/posts/blog3/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>预设代码、Skill 与 MCP</h2></header><div class=entry-content><p>预设代码、Skill 与 MCP
-本文以我的开源项目 OpsMind 为例，探讨 AI 应用开发中三种常见的技术模式：预设代码、Skill 和 MCP，分析它们的本质区别与适用场景。
+...</p></div><footer class=entry-footer><span title='2026-02-07 16:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思" href=https://okelekaf01-cmd.github.io/posts/blog3/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>预设代码、Skill 与 MCP</h2></header><div class=entry-content><p>本文以我的开源项目 OpsMind 为例，探讨 AI 应用开发中三种常见的技术模式：预设代码、Skill 和 MCP，分析它们的本质区别与适用场景。
 最近在开发 OpsMind —— 一个智能运营决策中枢，核心功能是通过自然语言对话进行数据分析和文件生成。在研究 AI 应用架构时，我接触到了 Skill 和 MCP 两个概念。 起初我有些困惑：我的项目也能通过对话生成文件，这和 MCP 有什么区别？预设代码算不算 Skill 技术？这些技术和提示词工程又是什么关系？
 我的现状：预设代码模式 项目架构 OpsMind 目前的核心是一个 DataAnalysisEngine 类，所有功能都硬编码在类方法中：
 class DataAnalysisEngine: """数据分析引擎类""" def generate_charts(self, df, chart_types): """生成图表""" if "histogram" in chart_types: plt.hist(...) # 直方图 if "scatter" in chart_types: plt.scatter(...) # 散点图 if "heatmap" in chart_types: sns.heatmap(...) # 热力图 # ... 更多图表类型 def generate_tables(self, df, table_types): """生成表格""" if "basic_stats" in table_types: df.describe().to_excel(...) # 统计表 if "pivot" in table_types: df.pivot_table(...).to_excel(...) # 透视表 # ... 更多表格类型 执行流程 用户说"帮我分析销售数据并生成图表"，整个流程如下：
-...</p></div><footer class=entry-footer><span title='2026-02-07 14:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>okelekaf01-cmd</span></footer><a class=entry-link aria-label="post link to 预设代码、Skill 与 MCP" href=https://okelekaf01-cmd.github.io/posts/blog2/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>从 404 到成功上线：我的 Hugo 博客折腾记</h2></header><div class=entry-content><p>终于，我也拥有了个人博客！ 在这个被社交媒体碎片化信息充斥的时代，我决定找一个安静的角落，记录自己的思考。没想到，这个过程比我想象中要"精彩"得多。
+...</p></div><footer class=entry-footer><span title='2026-02-07 14:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 预设代码、Skill 与 MCP" href=https://okelekaf01-cmd.github.io/posts/blog2/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent>从 404 到成功上线：我的 Hugo 博客折腾记</h2></header><div class=entry-content><p>终于，我也拥有了个人博客！ 在这个被社交媒体碎片化信息充斥的时代，我决定找一个安静的角落，记录自己的思考。没想到，这个过程比我想象中要"精彩"得多。
 为什么选择 Hugo？ 在选择博客方案时，我被 Hugo 的极速和简洁吸引了。它是基于 Go 语言开发的静态网站生成器，这意味着：
 快：生成网页的速度几乎是毫秒级的。 安全：没有数据库，黑客想黑都无从下手。 极简：只需要写 Markdown，剩下的交给自动化脚本。 那些令我头大的"坑" 虽然现在的页面看起来很清爽，但部署过程简直是一场"排雷游戏"：
 GitHub Pages 的 404 迷局： 最开始看到 404 页面时，我一度怀疑人生。后来才发现，原来是自动化脚本（YAML）的配置出了错，导致生成的网页根本没装进服务器。
 YAML 脚本的"高冷"： GitHub Actions 的脚本非常挑剔。一行缩进不对，或者引用的插件版本旧了，它就会回你一个冰冷的"红叉"。在不断重试和修改中，我终于理解了 git add、git commit 和 git push 这"三板斧"的真正含义。
 baseURL 的重要性： 当初写错了 baseURL，结果网页虽然上去了，样式却全乱了。原来那是给 Hugo 指路用的，指错了路，图片和皮肤就都找不到了。
 现在的成果 现在，只要我在本地写下一段文字，执行简单的 Git 命令，GitHub 就会自动帮我把内容发布到全世界都能看到的地方。这种**“自动化”**的感觉真的太酷了！
-结语 这个博客不仅是一个网页，它是我解决问题、不断尝试的记录。 如果你也正在访问这个页面，欢迎常来坐坐！</p></div><footer class=entry-footer><span title='2026-02-07 10:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>okelekaf01-cmd</span></footer><a class=entry-link aria-label="post link to 从 404 到成功上线：我的 Hugo 博客折腾记" href=https://okelekaf01-cmd.github.io/posts/first-post/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://okelekaf01-cmd.github.io/>wwxdsg的个人博客</a></span> ·
+结语 这个博客不仅是一个网页，它是我解决问题、不断尝试的记录。 如果你也正在访问这个页面，欢迎常来坐坐！</p></div><footer class=entry-footer><span title='2026-02-07 10:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 从 404 到成功上线：我的 Hugo 博客折腾记" href=https://okelekaf01-cmd.github.io/posts/first-post/></a></article><article class=post-entry><header class=entry-header><h2 class=entry-hint-parent></h2></header><div class=entry-content><p>深入解析 OpsMind 三维意图识别系统 发布日期: 2026-02-27
+作者: wwxdsg 标签: #意图识别 #LLM应用 #自然语言处理 #智能运营
+目录 背景与动机 系统架构概览 三维分类体系详解 LLM 在意图识别中的核心作用 技术实现细节 组件协同工作机制 应用场景示例 性能优化与最佳实践 未来展望 一、背景与动机 1.1 问题背景 在企业智能运营场景中，用户查询种类繁多，传统的关键词匹配或规则引擎难以应对：
+用户查询示例：
+├── "公司的请假流程是怎样的？" → 知识库查询
+├── "分析本季度各产品线的毛利率构成" → 数据分析
+├── "查看新用户注册到付费的转化漏斗" → 数据分析
+└── "各部门薪资分布和离群值分析" → 数据分析 1.2 之前方案的局限 方案 局限性 关键词匹配 无法理解语义，“不想要分析"会被误判为"分析” 规则引擎 规则难以穷尽，维护成本高 简单分类 仅区分"查询"和"分析"，无法提供业务上下文 1.3 我们的解决方案 引入 LLM 驱动的三维意图识别系统，实现：
+✅ 语义级别的深度理解 ✅ 多维度精细分类 ✅ 业务上下文自动注入 ✅ 图表推荐智能引导 二、系统架构概览 2.1 整体架构图 ┌─────────────────────────────────────────────────────────────────────────┐
+│ 用户查询输入 │
+│ "分析本季度各产品线的毛利率构成" │
+└─────────────────────────────┬───────────────────────────────────────────┘
+│
+▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 意图识别路由器 (Router) │
+│ ┌─────────────────────────────────────────────────────────────────┐ │
+│ │ LLM 分类引擎 │ │
+│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ │
+│ │ │ primary │ │ domain │ │ logic │ │ │
+│ │ │ RAG/DATA │ × │ 业务领域 │ × │ 分析逻辑 │ │ │
+│ │ └─────────────┘ └─────────────┘ └─────────────┘ │ │
+│ └─────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────┬───────────────────────────────────────────┘
+│
+┌───────────────┴───────────────┐
+│ │
+▼ ▼
+┌─────────────────────────┐ ┌─────────────────────────────────────────┐
+│ RAG Handler │ │ DATA Handler │
+│ ┌─────────────────┐ │ │ ┌─────────────────────────────────┐ │
+│ │ MaxKB 知识库 │ │ │ │ 上下文注入 │ │
+│ │ 查询引擎 │ │ │ │ • domain_context (业务背景) │ │
+│ └─────────────────┘ │ │ │ • logic_context (图表推荐) │ │
+└─────────────────────────┘ │ └─────────────────────────────────┘ │
+│ │ │
+│ ▼ │
+│ ┌─────────────────────────────────┐ │
+│ │ 数据分析引擎 │ │
+│ │ • PandasAI 数据处理 │ │
+│ │ • Chart Recommender 图表推荐 │ │
+│ │ • Interactive Charts 可视化 │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────────┘ 2.2 数据流图 用户查询
+│
+▼
+┌───────────────────┐
+│ classify_query() │ ───── LLM 三维分类
+└─────────┬─────────┘
+│
+▼
+┌───────────────────┐
+│ IntentResult │ ───── 数据结构封装
+│ ├─ primary │
+│ ├─ domain │
+│ ├─ logic │
+│ ├─ domain_context│
+│ └─ logic_context │
+└─────────┬─────────┘
+│
+┌─────┴─────┐
+▼ ▼
+RAG路径 DATA路径
+│ │
+▼ ▼
+知识库查询 数据分析 三、三维分类体系详解 3.1 第一维：Primary（主类别） 决定查询的基本处理路径：
+...</p></div><footer class=entry-footer></footer><a class=entry-link aria-label="post link to " href=https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://okelekaf01-cmd.github.io/>wwxdsg的个人博客</a></span> ·
 <span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
 <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
