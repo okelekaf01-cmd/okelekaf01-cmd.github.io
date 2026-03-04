@@ -64,7 +64,7 @@ RAG路径 DATA路径
 │ │
 ▼ ▼
 知识库查询 数据分析 三、三维分类体系详解 3.1 第一维：Primary（主类别） 决定查询的基本处理路径：
-...</p></div><footer class=entry-footer><span title='2026-02-27 10:00:00 +0800 CST'>February 27, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 深入解析 OpsMind 三维意图识别系统" href=https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>从模型应用开发不是简单的调用api</h2></header><div class=entry-content><p>大模型应用开发不是简单的调用api 我在刚开始写这个项目的时候觉得"我都用 AI 了为什么还要写这么多逻辑"，不是简单的给ai套个壳子就能有不错的效果了吗，后来发现事情没有我想的那么简单
+...</p></div><footer class=entry-footer><span title='2026-02-05 10:00:00 +0800 CST'>February 5, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 深入解析 OpsMind 三维意图识别系统" href=https://okelekaf01-cmd.github.io/posts/blog4_intent_recognition/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思</h2></header><div class=entry-content><p>大模型应用开发不是简单的调用api 我在刚开始写这个项目的时候觉得"我都用 AI 了为什么还要写这么多逻辑"，不是简单的给ai套个壳子就能有不错的效果了吗，后来发现事情没有我想的那么简单
 这本质上是调用功能和构建产品的区别 调用功能：
 # 调一下 df.chat()，它只能算个 Demo result = df.chat("帮我分析这个数据") 构建产品：
 处理脏数据 提供图表推荐 设计追问机制 管理 Session 这些才是让 OpsMind 能在真实办公场景下不"翻车"的核心竞争力。
@@ -77,7 +77,7 @@ RAG路径 DATA路径
 追问流程 如果 LLM 只有 50% 的把握，或者发现数据中存在多个可能的数值列，系统会触发 ClarificationQuestion。
 为了支撑这个机制，我重构了底层数据结构，定义了 ChartColumnMapping（列映射）和 ChartInference（推断结果）等数据类，并为 15 种常用图表配置了严格的属性要求（CHART_REQUIREMENTS）。
 # 核心数据类：让推断结果结构化 @dataclass class ChartInference: chart_type: str # 图表类型 column_mapping: ChartColumnMapping # 具体的列映射方案 confidence: float # 置信度 (0-1) needs_clarification: bool = False # 是否需要反向追问用户 3. 翻车现场：当"脏数据"遇到"理想逻辑" 代码写完，本地测试集跑了一遍，全绿通过。我志得意满，觉得这套 450 行代码的逻辑已经无懈可击了。
-...</p></div><footer class=entry-footer><span title='2026-02-07 16:00:00 +0800 CST'>February 7, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 从模型应用开发不是简单的调用api" href=https://okelekaf01-cmd.github.io/posts/blog3/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://okelekaf01-cmd.github.io/>wwxdsg的个人博客</a></span> ·
+...</p></div><footer class=entry-footer><span title='2026-01-31 10:00:00 +0800 CST'>January 31, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span></footer><a class=entry-link aria-label="post link to 从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思" href=https://okelekaf01-cmd.github.io/posts/blog3/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://okelekaf01-cmd.github.io/>wwxdsg的个人博客</a></span> ·
 <span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
 <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>

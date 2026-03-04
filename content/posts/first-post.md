@@ -1,6 +1,6 @@
 --- 
 title: "从 404 到成功上线：我的 Hugo 博客折腾记" 
-date: 2026-02-07T10:00:00+08:00 
+date: 2026-01-21T10:00:00+08:00 
 draft: false 
 tags: ["Hugo", "GitHub Pages", "技术折腾"] 
 categories: ["随笔"] 
