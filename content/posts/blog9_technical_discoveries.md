@@ -1,4 +1,12 @@
-# 从需求出发的技术发现：我与ai应用架构的三次"重逢"
+---
+title: "从需求出发的技术发现：我与 AI 架构的三次重逢"
+date: 2026-03-01T10:00:00+08:00
+draft: false
+tags: ["AI架构", "技术发现", "Agent", "Tool Calling"]
+categories: ["技术文章"]
+author: "wwxdsg"
+description: "分享在OpsMind项目开发中三次技术重逢的经历：预设代码与Skill、JSON输出与Tool Calling、自主判断与Agent"
+---
 
 ## 引言
 
