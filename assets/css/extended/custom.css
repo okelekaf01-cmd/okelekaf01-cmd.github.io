@@ -1,0 +1,47 @@
+#menu {
+    position: relative;
+}
+
+#menu li {
+    position: relative;
+    display: inline-block;
+}
+
+#menu li a {
+    display: block;
+    padding: 8px 12px;
+}
+
+#menu .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--theme);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 120px;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#menu .submenu li {
+    display: block;
+    margin: 0;
+}
+
+#menu .submenu li a {
+    padding: 8px 16px;
+    white-space: nowrap;
+}
+
+#menu .submenu li a:hover {
+    background: var(--tertiary);
+}
+
+#menu li:hover > .submenu {
+    display: block;
+}
