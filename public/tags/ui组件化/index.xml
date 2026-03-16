@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>UI组件化 on wwxdsg的个人博客</title><link>https://okelekaf01-cmd.github.io/tags/ui%E7%BB%84%E4%BB%B6%E5%8C%96/</link><description>Recent content in UI组件化 on wwxdsg的个人博客</description><generator>Hugo -- 0.155.2</generator><language>zh-cn</language><lastBuildDate>Fri, 20 Feb 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://okelekaf01-cmd.github.io/tags/ui%E7%BB%84%E4%BB%B6%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>OpsMind 项目工程化里程碑：测试体系与 UI 组件化</title><link>https://okelekaf01-cmd.github.io/posts/blog7_engineering_milestone/</link><pubDate>Fri, 20 Feb 2026 10:00:00 +0800</pubDate><guid>https://okelekaf01-cmd.github.io/posts/blog7_engineering_milestone/</guid><description>记录OpsMind项目从功能开发到工程化建设的里程碑，包括测试体系、UI组件化和开发工具链完善</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>UI组件化 on wwxdsg的个人博客</title>
+    <link>https://okelekaf01-cmd.github.io/tags/ui%E7%BB%84%E4%BB%B6%E5%8C%96/</link>
+    <description>Recent content in UI组件化 on wwxdsg的个人博客</description>
+    <generator>Hugo -- 0.155.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 20 Feb 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://okelekaf01-cmd.github.io/tags/ui%E7%BB%84%E4%BB%B6%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpsMind 项目工程化里程碑：测试体系与 UI 组件化</title>
+      <link>https://okelekaf01-cmd.github.io/opsmind/blog7_engineering_milestone/</link>
+      <pubDate>Fri, 20 Feb 2026 10:00:00 +0800</pubDate>
+      <guid>https://okelekaf01-cmd.github.io/opsmind/blog7_engineering_milestone/</guid>
+      <description>记录OpsMind项目从功能开发到工程化建设的里程碑，包括测试体系、UI组件化和开发工具链完善</description>
+    </item>
+  </channel>
+</rss>

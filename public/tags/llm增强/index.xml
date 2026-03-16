@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>LLM增强 on wwxdsg的个人博客</title><link>https://okelekaf01-cmd.github.io/tags/llm%E5%A2%9E%E5%BC%BA/</link><description>Recent content in LLM增强 on wwxdsg的个人博客</description><generator>Hugo -- 0.155.2</generator><language>zh-cn</language><lastBuildDate>Wed, 25 Feb 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://okelekaf01-cmd.github.io/tags/llm%E5%A2%9E%E5%BC%BA/index.xml" rel="self" type="application/rss+xml"/><item><title>OpsMind 数据预处理模块升级：从简单清洗到智能结构化</title><link>https://okelekaf01-cmd.github.io/posts/blog8_preprocessor_upgrade/</link><pubDate>Wed, 25 Feb 2026 10:00:00 +0800</pubDate><guid>https://okelekaf01-cmd.github.io/posts/blog8_preprocessor_upgrade/</guid><description>分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>LLM增强 on wwxdsg的个人博客</title>
+    <link>https://okelekaf01-cmd.github.io/tags/llm%E5%A2%9E%E5%BC%BA/</link>
+    <description>Recent content in LLM增强 on wwxdsg的个人博客</description>
+    <generator>Hugo -- 0.155.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 25 Feb 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://okelekaf01-cmd.github.io/tags/llm%E5%A2%9E%E5%BC%BA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpsMind 数据预处理模块升级：从简单清洗到智能结构化</title>
+      <link>https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/</link>
+      <pubDate>Wed, 25 Feb 2026 10:00:00 +0800</pubDate>
+      <guid>https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/</guid>
+      <description>分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能</description>
+    </item>
+  </channel>
+</rss>

@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>AI架构 on wwxdsg的个人博客</title><link>https://okelekaf01-cmd.github.io/tags/ai%E6%9E%B6%E6%9E%84/</link><description>Recent content in AI架构 on wwxdsg的个人博客</description><generator>Hugo -- 0.155.2</generator><language>zh-cn</language><lastBuildDate>Sun, 01 Mar 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://okelekaf01-cmd.github.io/tags/ai%E6%9E%B6%E6%9E%84/index.xml" rel="self" type="application/rss+xml"/><item><title>从需求出发的技术发现：我与 AI 架构的三次重逢</title><link>https://okelekaf01-cmd.github.io/posts/blog9_technical_discoveries/</link><pubDate>Sun, 01 Mar 2026 10:00:00 +0800</pubDate><guid>https://okelekaf01-cmd.github.io/posts/blog9_technical_discoveries/</guid><description>分享在OpsMind项目开发中三次技术重逢的经历：预设代码与Skill、JSON输出与Tool Calling、自主判断与Agent</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>AI架构 on wwxdsg的个人博客</title>
+    <link>https://okelekaf01-cmd.github.io/tags/ai%E6%9E%B6%E6%9E%84/</link>
+    <description>Recent content in AI架构 on wwxdsg的个人博客</description>
+    <generator>Hugo -- 0.155.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 01 Mar 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://okelekaf01-cmd.github.io/tags/ai%E6%9E%B6%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从需求出发的技术发现：我与 AI 架构的三次重逢</title>
+      <link>https://okelekaf01-cmd.github.io/opsmind/blog9_technical_discoveries/</link>
+      <pubDate>Sun, 01 Mar 2026 10:00:00 +0800</pubDate>
+      <guid>https://okelekaf01-cmd.github.io/opsmind/blog9_technical_discoveries/</guid>
+      <description>分享在OpsMind项目开发中三次技术重逢的经历：预设代码与Skill、JSON输出与Tool Calling、自主判断与Agent</description>
+    </item>
+  </channel>
+</rss>

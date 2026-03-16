@@ -19,3 +19,18 @@ theme = 'PaperMod'
     name = "博客"
     url = "/posts/"
     weight = 3
+  [[menu.main]]
+    identifier = "opsmind"
+    name = "OpsMind开发"
+    url = "/opsmind/"
+    weight = 4
+  [[menu.main]]
+    identifier = "internship"
+    name = "实习记录"
+    url = "/internship/"
+    weight = 5
+  [[menu.main]]
+    identifier = "notes"
+    name = "学习笔记"
+    url = "/notes/"
+    weight = 6
