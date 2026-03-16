@@ -15,27 +15,17 @@ theme = 'PaperMod'
     url = "/projects/"
     weight = 2
   [[menu.main]]
-    identifier = "posts"
-    name = "博客"
-    url = "/posts/"
-    weight = 3
-    [menu.main.params]
-      pre = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg>"
-  [[menu.main]]
     identifier = "opsmind"
     name = "OpsMind开发"
     url = "/opsmind/"
-    weight = 4
-    parent = "posts"
+    weight = 3
   [[menu.main]]
     identifier = "internship"
     name = "实习记录"
     url = "/internship/"
-    weight = 5
-    parent = "posts"
+    weight = 4
   [[menu.main]]
     identifier = "notes"
     name = "学习笔记"
     url = "/notes/"
-    weight = 6
-    parent = "posts"
+    weight = 5
