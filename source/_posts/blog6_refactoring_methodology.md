@@ -2,6 +2,7 @@
 title: "OpsMind 图表模块重构"
 date: 2026-02-15T10:00:00+08:00
 draft: false
+top_img: false
 tags: ["重构", "配置驱动", "方法论", "代码质量"]
 categories: ["技术文章"]
 author: "wwxdsg"

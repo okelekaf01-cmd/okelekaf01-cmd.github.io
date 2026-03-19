@@ -2,6 +2,7 @@
 title: "从需求出发的技术发现：我与 AI 架构的三次重逢"
 date: 2026-03-01T10:00:00+08:00
 draft: false
+top_img: false
 tags: ["AI架构", "技术发现", "Agent", "Tool Calling"]
 categories: ["技术文章"]
 author: "wwxdsg"
@@ -151,4 +152,3 @@ for iteration in range(max_iterations):
 这，或许就是独立思考最大的价值。
 
 ---
-

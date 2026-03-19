@@ -2,6 +2,7 @@
 title: "OpsMind 项目工程化里程碑：测试体系与 UI 组件化"
 date: 2026-02-20T10:00:00+08:00
 draft: false
+top_img: false
 tags: ["工程化", "测试", "UI组件化", "项目里程碑"]
 categories: ["技术文章"]
 author: "wwxdsg"
