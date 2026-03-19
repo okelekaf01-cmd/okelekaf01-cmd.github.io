@@ -2,7 +2,6 @@
 title: "LLM 在 OpsMind 项目中的技术实现详解"
 date: 2026-02-10T10:00:00+08:00
 draft: false
-top_img: false
 tags: ["LLM", "DeepSeek", "技术实现", "代码分析"]
 categories: ["技术文章"]
 author: "wwxdsg"

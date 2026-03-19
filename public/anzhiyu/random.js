@@ -1,3 +1,3 @@
-var posts=["/opsmind/blog2/","/opsmind/blog6_refactoring_methodology/","/opsmind/blog3/","/opsmind/blog4_intent_recognition/","/opsmind/blog9_technical_discoveries/","/opsmind/blog5_llm_implementation/","/notes/first-post/","/opsmind/blog8_preprocessor_upgrade/","/opsmind/blog7_engineering_milestone/"];function toRandomPost(){
+var posts=["/opsmind/blog2/","/opsmind/blog3/","/opsmind/blog4_intent_recognition/","/opsmind/blog5_llm_implementation/","/opsmind/blog8_preprocessor_upgrade/","/opsmind/blog9_technical_discoveries/","/opsmind/blog6_refactoring_methodology/","/opsmind/blog7_engineering_milestone/","/notes/first-post/"];function toRandomPost(){
     pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
   };
