@@ -4,6 +4,7 @@ menu:
     归档: /archives/ || anzhiyu-icon-box-archive
     分类: /categories/ || anzhiyu-icon-shapes
     标签: /tags/ || anzhiyu-icon-tags
+    友链: /link/ || anzhiyu-icon-link
   专题:
     项目: /projects/ || anzhiyu-icon-code
     OpsMind: /opsmind/ || anzhiyu-icon-robot

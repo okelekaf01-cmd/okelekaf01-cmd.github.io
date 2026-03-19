@@ -1,0 +1,9 @@
+- class_name: 朋友们
+  class_desc: 一起写博客的人
+  flink_style: anzhiyu
+  link_list:
+    - name: Enoch
+      link: https://cccignore.github.io/
+      avatar: https://cccignore.github.io/favicon.ico
+      descr: 记录流动的思绪，留住片刻的光
+      recommend: true
