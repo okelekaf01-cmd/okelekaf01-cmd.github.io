@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/internship-motion-library-day1-day2.svg
 cover: /img/covers/internship-motion-library-day1-day2.svg
 tags: ["实习记录", "架构设计", "Bug定位", "Remotion", "动效系统", "工程化"]
-categories: ["技术文章"]
+categories: ["实习记录"]
 author: "wwxdsg"
 description: "聚焦架构设计与排障实战，复盘我在两天内完成 Motion Library 体系化设计、渲染层扩展和关键 Bug 定位修复的全过程。"
 permalink: /internship/motion-library-day1-day2/

@@ -4,6 +4,41 @@
   
     
     <entry>
+      <title>开发日志｜Studio 动效系统：从崩溃修复到定位交互重构</title>
+      <link href="//internship/studio-motion-devlog-2026-03-19/"/>
+      <url>//internship/studio-motion-devlog-2026-03-19/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/img/covers/studio-motion-devlog-2026-03-19.svg" alt="Studio Motion Devlog Cover"></p><p>今天这轮开发我主要做了四件事：稳定性修复、工程整理、UI 清理、定位交互升级。<br>这篇日志只保留技术主线，不展开分支状态和业务流程。</p><h2 id="1-稳定性修复：先止血，再扩展"><a href="#1-稳定性修复：先止血，再扩展" class="headerlink" title="1. 稳定性修复：先止血，再扩展"></a>1. 稳定性修复：先止血，再扩展</h2><h3 id="音频可视化组件崩溃"><a href="#音频可视化组件崩溃" class="headerlink" title="音频可视化组件崩溃"></a>音频可视化组件崩溃</h3><p><code>AudioSpectrum</code> &#x2F; <code>AudioWaveformLine</code> 在无音频 <code>src</code> 时会直接报错：</p><p><code>TypeError: url must be a string</code></p><p>问题根因很明确：组件内部默认 <code>src</code> 一定存在，结果在 <code>undefined</code> 场景下触发了 <code>fetch(undefined)</code>。</p><p>修复策略是把 <code>src</code> 变成可选，并加入降级路径：</p><ol><li>有 <code>src</code>：保持原有真实音频分析逻辑</li><li>无 <code>src</code>：进入演示模式，用 <code>sin</code> 波形驱动可视化</li></ol><p>这样做的价值不只是不崩溃。更重要的是，编辑器在“无真实素材”的设计阶段也能正常预览，交互链路完整可用。</p><h2 id="2-工程整理：把变更从“能跑”变成“可维护”"><a href="#2-工程整理：把变更从“能跑”变成“可维护”" class="headerlink" title="2. 工程整理：把变更从“能跑”变成“可维护”"></a>2. 工程整理：把变更从“能跑”变成“可维护”</h2><p>前期动效开发提交较碎，语义分散，不利于后续评审与回溯。我做了语义归并，把核心变更收敛到两个主题：</p><ol><li>高级动效扩充 + 视觉优化 + 场景套件</li><li>参数化配置 + 布局定位系统 + 新增组件</li></ol><p>同时处理了多轨道时间轴相关改动带来的冲突。处理原则是“能力并存”而非二选一：</p><ol><li>多轨道逻辑保留</li><li>场景套件逻辑保留</li><li>共享数据结构不改语义，只做兼容拼接</li></ol><p>这一步的重点不是“把冲突消掉”，而是保证两条演进路线不互相污染。</p><h2 id="3-UI-清理：统一入口，减少重复配置"><a href="#3-UI-清理：统一入口，减少重复配置" class="headerlink" title="3. UI 清理：统一入口，减少重复配置"></a>3. UI 清理：统一入口，减少重复配置</h2><p>动效配置能力已经集中在右侧图层面板（<code>ElementInspector</code> + <code>LayerPanel</code>），左栏继续保留一套动效选择 UI 会造成重复心智负担。</p><p>所以我清理了 <code>keyframe-card.tsx</code> 的冗余实现，包括：</p><ol><li>动效预览相关 import 和弹层</li><li><code>MotionEffectsSection</code> 及其整段逻辑</li><li>背景&#x2F;文字&#x2F;叠层的本地动效数据数组</li></ol><p>这次清理是“删 UI，不删能力”：</p><ol><li><code>keyframe.motionEffects</code> 数据字段仍保留</li><li>渲染层读取逻辑不变</li><li>现有动画效果不受影响</li></ol><h2 id="4-定位交互升级：从参数输入到可视化操控"><a href="#4-定位交互升级：从参数输入到可视化操控" class="headerlink" title="4. 定位交互升级：从参数输入到可视化操控"></a>4. 定位交互升级：从参数输入到可视化操控</h2><p>这部分是今天最有体感提升的一块。</p><h3 id="第一版：缩略画布-九宫格"><a href="#第一版：缩略画布-九宫格" class="headerlink" title="第一版：缩略画布 + 九宫格"></a>第一版：缩略画布 + 九宫格</h3><p>我先把 <code>GeometrySection</code> 的 X&#x2F;Y&#x2F;W&#x2F;H 输入改为可视化控件：</p><ol><li>16:9 缩略画布支持点击&#x2F;拖动定位</li><li>3×3 九宫格快速落位</li><li>25% &#x2F; 50% &#x2F; 100% 大小档</li><li>透明度滑杆</li></ol><p>这版解决了“数值可调但不直观”的问题。</p><h3 id="第二版（最终）：文本框式拖拽"><a href="#第二版（最终）：文本框式拖拽" class="headerlink" title="第二版（最终）：文本框式拖拽"></a>第二版（最终）：文本框式拖拽</h3><p>随后升级为更符合设计直觉的交互模型：</p><ol><li>拖动框内部：移动 <code>x / y</code></li><li>拖动四角：同时缩放与位移</li><li>拖动四边：单轴缩放</li><li>九宫格：快速对齐预设位置</li><li>大小档：快速设定占比</li></ol><p>实现上，使用 <code>useRef</code> 保存拖拽起始状态，<code>onMouseMove</code> 在父容器统一捕获，8 个 handle 单独声明 cursor 方向。<br>数据层依然沿用 <code>StudioLayer.x / y / width / height</code>，避免破坏既有结构。</p><h2 id="5-当日新增动效组件"><a href="#5-当日新增动效组件" class="headerlink" title="5. 当日新增动效组件"></a>5. 当日新增动效组件</h2><p>今天接入了 3 个组件：</p><ol><li><code>MinimalIntro</code>（<code>PK-003</code>）：极简风开场</li><li><code>MinimalOutro</code>（<code>PK-004</code>）：极简风收尾</li><li><code>TechGridIntro</code>（<code>PK-005</code>）：科技网格开场</li></ol><p>这三类组件的接入意义在于补齐开场-收尾-科技风的常用组合，直接提升模板可用性。</p><h2 id="6-今日结论"><a href="#6-今日结论" class="headerlink" title="6. 今日结论"></a>6. 今日结论</h2><p>这轮迭代最核心的收获，不是“又加了几个动效”，而是三件事：</p><ol><li>系统在无素材场景下仍可稳定运行</li><li>动效配置入口收敛为单一主路径</li><li>图层定位从“参数编辑”升级为“直接操控”</li></ol><p>从工程角度看，这让 Studio 动效系统更接近一个可持续演进的产品，而不是持续堆功能的实验场。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 实习记录 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 工程化 </tag>
+            
+            <tag> 实习记录 </tag>
+            
+            <tag> Remotion </tag>
+            
+            <tag> 动效系统 </tag>
+            
+            <tag> Bug定位 </tag>
+            
+            <tag> 交互设计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>两天实习复盘：动效系统架构设计与 Bug 定位实战</title>
       <link href="//internship/motion-library-day1-day2/"/>
       <url>//internship/motion-library-day1-day2/</url>
@@ -13,7 +48,7 @@
       
       <categories>
           
-          <category> 技术文章 </category>
+          <category> 实习记录 </category>
           
       </categories>
       
