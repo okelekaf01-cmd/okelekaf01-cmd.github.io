@@ -1,725 +1,470 @@
-<!DOCTYPE html>
-<html lang="en" dir="auto" data-theme="auto">
-
-<head><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>预设代码、Skill 与 MCP | wwxdsg的个人博客</title>
-<meta name="keywords" content="AI, 架构设计, 技术模式">
-<meta name="description" content="探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景">
-<meta name="author" content="wwxdsg">
-<link rel="canonical" href="https://okelekaf01-cmd.github.io/opsmind/blog2/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.36425ade08177ac29d86af306e92cdbb1a7cb0679bbe73544a6d745a8789de6e.css" integrity="sha256-NkJa3ggXesKdhq8wbpLNuxp8sGebvnNUSm10WoeJ3m4=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://okelekaf01-cmd.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://okelekaf01-cmd.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://okelekaf01-cmd.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://okelekaf01-cmd.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://okelekaf01-cmd.github.io/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://okelekaf01-cmd.github.io/opsmind/blog2/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-                color-scheme: dark;
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .toc {
-                background: var(--entry);
-            }
-        }
-
-        @media (prefers-color-scheme: light) {
-            .list::-webkit-scrollbar-thumb {
-                border-color: var(--code-bg);
-            }
-        }
-
-    </style>
-</noscript>
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else if (localStorage.getItem("pref-theme") === "light") {
-       document.querySelector("html").dataset.theme = 'light';
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else {
-        document.querySelector("html").dataset.theme = 'light';
-    }
-
-</script><meta property="og:url" content="https://okelekaf01-cmd.github.io/opsmind/blog2/">
-  <meta property="og:site_name" content="wwxdsg的个人博客">
-  <meta property="og:title" content="预设代码、Skill 与 MCP">
-  <meta property="og:description" content="探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景">
-  <meta property="og:locale" content="zh-cn">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="opsmind">
-    <meta property="article:published_time" content="2026-01-26T10:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-26T10:00:00+08:00">
-    <meta property="article:tag" content="AI">
-    <meta property="article:tag" content="架构设计">
-    <meta property="article:tag" content="技术模式">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="预设代码、Skill 与 MCP">
-<meta name="twitter:description" content="探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "OpsMind开发日志",
-      "item": "https://okelekaf01-cmd.github.io/opsmind/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "预设代码、Skill 与 MCP",
-      "item": "https://okelekaf01-cmd.github.io/opsmind/blog2/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "预设代码、Skill 与 MCP",
-  "name": "预设代码、Skill 与 MCP",
-  "description": "探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景",
-  "keywords": [
-    "AI", "架构设计", "技术模式"
-  ],
-  "articleBody": "本文以我的开源项目 OpsMind 为例，探讨 AI 应用开发中三种常见的技术模式：预设代码、Skill 和 MCP，分析它们的本质区别与适用场景。\n最近在开发 OpsMind —— 一个智能运营决策中枢，核心功能是通过自然语言对话进行数据分析和文件生成。在研究 AI 应用架构时，我接触到了 Skill 和 MCP 两个概念。 起初我有些困惑：我的项目也能通过对话生成文件，这和 MCP 有什么区别？预设代码算不算 Skill 技术？这些技术和提示词工程又是什么关系？\n我的现状：预设代码模式 项目架构 OpsMind 目前的核心是一个 DataAnalysisEngine 类，所有功能都硬编码在类方法中：\nclass DataAnalysisEngine: \"\"\"数据分析引擎类\"\"\" def generate_charts(self, df, chart_types): \"\"\"生成图表\"\"\" if \"histogram\" in chart_types: plt.hist(...) # 直方图 if \"scatter\" in chart_types: plt.scatter(...) # 散点图 if \"heatmap\" in chart_types: sns.heatmap(...) # 热力图 # ... 更多图表类型 def generate_tables(self, df, table_types): \"\"\"生成表格\"\"\" if \"basic_stats\" in table_types: df.describe().to_excel(...) # 统计表 if \"pivot\" in table_types: df.pivot_table(...).to_excel(...) # 透视表 # ... 更多表格类型 执行流程 用户说\"帮我分析销售数据并生成图表\"，整个流程如下：\n┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐\r│ 用户输入 │ ──→ │ LLM 判断 │ ──→ │ 调用预设 │ ──→ │ 生成文件 │\r│ │ │ 意图 │ │ 函数 │ │ │\r└─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘ LLM 的作用是判断用户想要什么类型的图表/表格，然后调用对应的 Python 函数执行。\n这种模式的特点 优点 缺点 开发简单，逻辑清晰 功能固定，扩展需改代码 性能好，无额外开销 无法被其他 AI 应用复用 功能可控，调试方便 所有功能耦合在一起 我把这种模式称为预设代码模式——功能写死在代码里，调用时直接执行。\nSkill 技术：动态能力注入 什么是 Skill Skill 是一种运行时动态加载能力的模式。与预设代码不同，Skill 不是把所有功能都写死在启动时加载，而是根据用户需求，按需激活对应的能力模块。\n如果用 Skill 重构 OpsMind skills/\r├── data_analysis/\r│ └── skill.md # 数据分析能力\r├── chart_generation/\r│ └── skill.md # 图表生成能力\r└── table_export/\r└── skill.md # 表格导出能力 每个 Skill 文件包含：\n# 图表生成 Skill ## 触发条件 用户要求生成图表、可视化数据时激活 ## Prompt 模板 你是一个数据可视化专家，可以生成以下图表： - 直方图：调用 generate_histogram(data, column) - 散点图：调用 generate_scatter(data, x_col, y_col) - 热力图：调用 generate_heatmap(data, columns) ## 工具定义 - generate_histogram(data, column): 生成指定列的直方图 - generate_scatter(data, x_col, y_col): 生成散点图 - generate_heatmap(data, columns): 生成相关性热力图 执行流程对比 预设代码模式：\n启动时加载所有功能 → 用户提问 → LLM 选择函数 → 执行 Skill 模式：\n启动时加载基础能力 → 用户提问 → 识别需要哪个 Skill → 动态注入 Skill → LLM 使用 Skill 中的工具 → 执行 与预设代码的对比 维度 预设代码 Skill 加载时机 启动时全部加载 运行时按需加载 Prompt 位置 固定在代码里 动态注入上下文 扩展方式 修改源代码 添加 Skill 文件 隔离性 功能耦合 模块独立 复用性 仅限本项目 可跨项目复用 我的理解：Skill 本质上是把\"能力\"抽象成可插拔的模块，让 AI Agent 能够根据任务动态组装自己的能力集。\nMCP：跨应用工具共享协议 什么是 MCP MCP（Model Context Protocol）是 Anthropic 推出的开放协议，让 AI 应用能够调用外部工具。与 Skill 不同，MCP 关注的是跨应用的能力共享。\n如果用 MCP 重构 OpsMind 我可以把数据分析能力封装成 MCP Server：\n# mcp_server.py from mcp import Server server = Server(\"opsmind-data-analysis\") @server.tool(\"analyze_excel\") def analyze_excel(file_path: str, query: str) -\u003e dict: \"\"\" 分析 Excel 文件并返回结果 Args: file_path: Excel 文件路径 query: 分析需求描述 Returns: 包含分析结果的字典 \"\"\" df = pd.read_excel(file_path) # 分析逻辑... return {\"result\": analysis_result} @server.tool(\"generate_chart\") def generate_chart(data_path: str, chart_type: str, columns: list) -\u003e str: \"\"\" 生成图表并返回文件路径 Args: data_path: 数据文件路径 chart_type: 图表类型 (histogram/scatter/heatmap) columns: 要分析的列名 Returns: 生成的图表文件路径 \"\"\" # 图表生成逻辑... return chart_path MCP 的核心价值 ┌─────────────────────────────────────────────────────────────┐\r│ MCP 生态 │\r├─────────────────────────────────────────────────────────────┤\r│ │\r│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │\r│ │ Claude │ │ Cursor │ │ Trae │ │\r│ │ (Client) │ │ (Client) │ │ (Client) │ │\r│ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ │\r│ │ │ │ │\r│ └─────────────────┼─────────────────┘ │\r│ │ │\r│ ▼ │\r│ ┌─────────────────┐ │\r│ │ MCP Protocol │ │\r│ └────────┬────────┘ │\r│ │ │\r│ ┌─────────────────┼─────────────────┐ │\r│ │ │ │ │\r│ ▼ ▼ ▼ │\r│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │\r│ │ OpsMind │ │ 文件系统 │ │ 数据库 │ │\r│ │ (Server) │ │ (Server) │ │ (Server) │ │\r│ └─────────────┘ └─────────────┘ └─────────────┘ │\r│ │\r└─────────────────────────────────────────────────────────────┘ 这样，任何支持 MCP 的 AI 应用都能直接使用 OpsMind 的数据分析工具，无需重复开发。\n与 Skill 的对比 维度 Skill MCP 作用范围 单个 AI 应用内部 跨应用共享 工具位置 应用内 独立进程 协议标准 无统一标准 统一开放协议 适用场景 能力模块化 工具生态化 开发成本 较低 需要实现协议 我的理解：MCP 解决的是\"工具孤岛\"问题——让不同 AI 应用能够共享同一套工具，而不是每个应用都重复开发。\n三者的本质区别 架构对比图 ┌─────────────────────────────────────────────────────────────────┐\r│ │\r│ 【预设代码】 │\r│ │\r│ ┌─────────────────────────────────────────────────────────┐ │\r│ │ AI 应用 │ │\r│ │ ┌─────────┐ ┌─────────┐ ┌─────────┐ │ │\r│ │ │ 功能 A │ │ 功能 B │ │ 功能 C │ ← 全部硬编码 │ │\r│ │ └─────────┘ └─────────┘ └─────────┘ │ │\r│ └─────────────────────────────────────────────────────────┘ │\r│ │\r├─────────────────────────────────────────────────────────────────┤\r│ │\r│ 【Skill】 │\r│ │\r│ ┌─────────────────────────────────────────────────────────┐ │\r│ │ AI 应用 │ │\r│ │ ┌─────────┐ │ │\r│ │ │ 基础能力 │ ←── 动态加载 ───┐ │ │\r│ │ └─────────┘ │ │ │\r│ └───────────────────────────────┼─────────────────────────┘ │\r│ │ │\r│ ┌───────────────┬───────────────┴───────────────┐ │\r│ │ Skill A │ Skill B │ Skill C │ │\r│ │ (按需加载) │ (按需加载) │ (按需加载) │ │\r│ └───────────────┴───────────────┴───────────────┘ │\r│ │\r├─────────────────────────────────────────────────────────────────┤\r│ │\r│ 【MCP】 │\r│ │\r│ ┌─────────────────┐ ┌─────────────────┐ │\r│ │ AI 应用 A │ │ AI 应用 B │ │\r│ │ (MCP Client) │ │ (MCP Client) │ │\r│ └────────┬────────┘ └────────┬────────┘ │\r│ │ │ │\r│ └───────────┬───────────────┘ │\r│ │ │\r│ ▼ │\r│ ┌─────────────────────┐ │\r│ │ MCP Protocol │ │\r│ └──────────┬──────────┘ │\r│ │ │\r│ ┌─────────────┼─────────────┐ │\r│ │ │ │ │\r│ ▼ ▼ ▼ │\r│ ┌───────────┐ ┌───────────┐ ┌───────────┐ │\r│ │MCP Server │ │MCP Server │ │MCP Server │ │\r│ │ (工具1) │ │ (工具2) │ │ (工具3) │ │\r│ └───────────┘ └───────────┘ └───────────┘ │\r│ │\r└─────────────────────────────────────────────────────────────────┘ 核心差异总结 维度 预设代码 Skill MCP 设计目标 快速实现功能 模块化能力管理 跨应用工具共享 工具位置 应用内部 应用内部 独立进程 加载方式 启动时全部加载 运行时按需加载 通过协议调用 扩展方式 修改源代码 添加 Skill 文件 连接新 Server 共享能力 无法共享 应用内共享 跨应用共享 开发成本 低 中 高 适用规模 小型项目 中型项目 大型生态 提示词与执行层的关系 一个关键问题 在研究这些技术时，我曾有一个疑问：这些技术都可以算是集成的提示词吗？\n答案是：不完全是，但都和提示词相关。\n分层理解 ┌─────────────────────────────────────────────────────────┐\r│ │\r│ ┌─────────────────────────────────────────────────┐ │\r│ │ LLM（大语言模型） │ │\r│ └─────────────────────────────────────────────────┘ │\r│ │ │\r│ ▼ │\r│ ┌─────────────────────────────────────────────────┐ │\r│ │ 【提示词层】决定 LLM 知道什么 │ │\r│ │ │ │\r│ │ - 告诉 LLM 有哪些能力可用 │ │\r│ │ - 告诉 LLM 如何调用这些能力 │ │\r│ │ - 告诉 LLM 参数格式和返回格式 │ │\r│ └─────────────────────────────────────────────────┘ │\r│ │ │\r│ ▼ │\r│ ┌─────────────────────────────────────────────────┐ │\r│ │ 【执行层】决定实际做什么 │ │\r│ │ │ │\r│ │ - 预设代码：应用内的 Python 函数 │ │\r│ │ - Skill：应用内的模块化函数 │ │\r│ │ - MCP：外部独立进程 │ │\r│ └─────────────────────────────────────────────────┘ │\r│ │\r└─────────────────────────────────────────────────────────┘ 以 OpsMind 为例 预设代码模式：\n# 提示词部分：告诉 LLM 有哪些图表类型可选 prompt = \"\"\" 【可选图表类型】 - histogram: 直方图 - 查看数值分布 - scatter: 散点图 - 查看变量关系 - heatmap: 热力图 - 查看特征相关性 \"\"\" # 执行部分：Python 代码直接执行 if \"histogram\" in chart_types: plt.hist(...) # ← 这不是提示词，是真正的代码执行 Skill 模式：\n# 图表生成 Skill 你是一个数据可视化专家，可以生成以下图表： - 直方图：调用 generate_histogram(data, column) - 散点图：调用 generate_scatter(data, x_col, y_col) MCP 模式：\n# MCP Server 定义工具 @server.tool(\"generate_chart\") def generate_chart(data_path: str, chart_type: str) -\u003e str: \"\"\"生成图表并返回文件路径\"\"\" # ← 这个描述会变成提示词 # 实际执行代码 return chart_path # LLM 收到的提示词： # 你可以使用以下工具： # - generate_chart: 生成图表，参数：data_path, chart_type 形象比喻 概念 比喻 作用 提示词 菜单 告诉客人（LLM）有什么菜 预设代码/Skill/MCP 厨房 真正做菜的地方 关键理解：\n提示词是 LLM 的\"说明书\"——告诉它能做什么 预设代码/Skill/MCP 是执行层——真正干活的代码 这三种技术都依赖提示词让 LLM 知道有什么能力可用，但不是提示词本身 技术选型建议 场景匹配 场景 推荐模式 理由 快速开发 MVP 预设代码 开发成本低，迭代快 功能相对固定 预设代码 无需复杂架构 需要模块化扩展 Skill 能力可插拔，易维护 多团队协作开发 Skill 模块独立，职责清晰 需要跨应用共享工具 MCP 一次开发，多处使用 构建工具生态 MCP 开放协议，生态共赢 OpsMind 的演进方向 目前 OpsMind 使用预设代码模式，对于单一应用来说已经足够。但未来可以考虑：\n┌─────────────────────────────────────────────────────────────┐\r│ OpsMind 架构演进 │\r├─────────────────────────────────────────────────────────────┤\r│ │\r│ 第一阶段：预设代码（当前） │\r│ ├── 快速实现核心功能 │\r│ ├── 验证产品价值 │\r│ └── 积累用户反馈 │\r│ │\r│ 第二阶段：引入 Skill │\r│ ├── 模块化现有功能 │\r│ ├── 支持第三方 Skill 扩展 │\r│ └── 提升可维护性 │\r│ │\r│ 第三阶段：MCP Server │\r│ ├── 开放数据分析能力给其他 AI 应用 │\r│ ├── 接入 MCP 生态 │\r│ └── 构建工具生态 │\r│ │\r└─────────────────────────────────────────────────────────────┘ 组合使用 三者并非互斥，可以组合使用：\nAI 应用 → Skill（动态加载能力）→ MCP Client → MCP Server（调用外部工具） 例如：\nOpsMind 作为 AI 应用 使用 Skill 管理内部能力模块 通过 MCP Client 连接外部工具（如数据库、文件系统） 同时作为 MCP Server 对外提供服务 总结 核心观点 预设代码：功能写死在代码里，简单直接，适合快速开发和功能固定的场景。\nSkill：动态能力注入，按需加载，适合模块化设计和需要扩展的场景。\nMCP：跨应用工具共享，开放协议，适合构建工具生态和跨应用复用。\n提示词与执行层：提示词是 LLM 的\"说明书\"，预设代码/Skill/MCP 是真正干活的\"执行层\"，两者配合才能让 AI 应用具备实际能力。\n架构演进路径 预设代码 → Skill → MCP\r↓ ↓ ↓\r功能固定 能力模块化 工具生态化\r↓ ↓ ↓\r单应用内 单应用内 跨应用共享\r↓ ↓ ↓\r改代码扩展 加文件扩展 连接新Server 最后的话 没有最好的架构，只有最适合的架构。理解每种模式的适用场景，才能做出正确的技术选型。\n对于 OpsMind 这样的项目，从预设代码开始是正确的选择——先验证价值，再考虑架构演进。当功能逐渐丰富、用户需求多样化时，再引入 Skill 和 MCP，逐步构建更开放、更可扩展的架构。\n",
-  "wordCount" : "1170",
-  "inLanguage": "en",
-  "datePublished": "2026-01-26T10:00:00+08:00",
-  "dateModified": "2026-01-26T10:00:00+08:00",
-  "author":{
-    "@type": "Person",
-    "name": "wwxdsg"
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>预设代码、Skill 与 MCP | wwxdsg的个人博客</title><meta name="keywords" content="AI,架构设计,技术模式"><meta name="author" content="wwxdsg"><meta name="copyright" content="wwxdsg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="预设代码、Skill 与 MCP"><meta name="application-name" content="预设代码、Skill 与 MCP"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="预设代码、Skill 与 MCP"><meta property="og:url" content="https://okelekaf01-cmd.github.io/opsmind/blog2/index.html"><meta property="og:site_name" content="wwxdsg的个人博客"><meta property="og:description" content="探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://okelekaf01-cmd.github.io/favicon.ico"><meta property="article:author" content="wwxdsg"><meta property="article:tag" content="[&quot;博客&quot;,&quot;技术博客&quot;,&quot;AI&quot;,&quot;Agent&quot;,&quot;Hugo&quot;,&quot;Hexo&quot;]"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://okelekaf01-cmd.github.io/favicon.ico"><meta name="description" content="探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://okelekaf01-cmd.github.io/opsmind/blog2/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: ,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
   },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://okelekaf01-cmd.github.io/opsmind/blog2/"
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
   },
-  "publisher": {
-    "@type": "Organization",
-    "name": "wwxdsg的个人博客",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://okelekaf01-cmd.github.io/favicon.ico"
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: wwxdsg","link":"链接: ","source":"来源: wwxdsg的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.css'
     }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'wwxdsg的个人博客',
+  title: '预设代码、Skill 与 MCP',
+  postAI: '',
+  pageFillDescription: '我的现状：预设代码模式, 项目架构, 执行流程, 这种模式的特点, Skill 技术：动态能力注入, 什么是 Skill, 如果用 Skill 重构 OpsMind, 执行流程对比, 与预设代码的对比, MCP：跨应用工具共享协议, 什么是 MCP, 如果用 MCP 重构 OpsMind, MCP 的核心价值, 与 Skill 的对比, 三者的本质区别, 架构对比图, 核心差异总结, 提示词与执行层的关系, 一个关键问题, 分层理解, 以 OpsMind 为例, 形象比喻, 技术选型建议, 场景匹配, OpsMind 的演进方向, 组合使用, 总结, 核心观点, 架构演进路径, 最后的话本文以我的开源项目为例探讨应用开发中三种常见的技术模式预设代码和分析它们的本质区别与适用场景最近在开发一个智能运营决策中枢核心功能是通过自然语言对话进行数据分析和文件生成在研究应用架构时我接触到了和两个概念起初我有些困惑我的项目也能通过对话生成文件这和有什么区别预设代码算不算技术这些技术和提示词工程又是什么关系我的现状预设代码模式项目架构目前的核心是一个类所有功能都硬编码在类方法中数据分析引擎类生成图表直方图散点图热力图更多图表类型生成表格统计表透视表更多表格类型执行流程用户说帮我分析销售数据并生成图表整个流程如下用户输入判断调用预设生成文件意图函数的作用是判断用户想要什么类型的图表表格然后调用对应的函数执行这种模式的特点优点缺点开发简单逻辑清晰功能固定扩展需改代码性能好无额外开销无法被其他应用复用功能可控调试方便所有功能耦合在一起我把这种模式称为预设代码模式功能写死在代码里调用时直接执行技术动态能力注入什么是是一种运行时动态加载能力的模式与预设代码不同不是把所有功能都写死在启动时加载而是根据用户需求按需激活对应的能力模块如果用重构数据分析能力图表生成能力表格导出能力每个文件包含图表生成触发条件用户要求生成图表可视化数据时激活模板你是一个数据可视化专家可以生成以下图表直方图调用散点图调用热力图调用工具定义生成指定列的直方图生成散点图生成相关性热力图执行流程对比预设代码模式启动时加载所有功能用户提问选择函数执行模式启动时加载基础能力用户提问识别需要哪个动态注入使用中的工具执行与预设代码的对比维度预设代码加载时机启动时全部加载运行时按需加载位置固定在代码里动态注入上下文扩展方式修改源代码添加文件隔离性功能耦合模块独立复用性仅限本项目可跨项目复用我的理解本质上是把能力抽象成可插拔的模块让能够根据任务动态组装自己的能力集跨应用工具共享协议什么是是推出的开放协议让应用能够调用外部工具与不同关注的是跨应用的能力共享如果用重构我可以把数据分析能力封装成分析文件并返回结果文件路径分析需求描述包含分析结果的字典分析逻辑生成图表并返回文件路径数据文件路径图表类型要分析的列名生成的图表文件路径图表生成逻辑的核心价值生态文件系统数据库这样任何支持的应用都能直接使用的数据分析工具无需重复开发与的对比维度作用范围单个应用内部跨应用共享工具位置应用内独立进程协议标准无统一标准统一开放协议适用场景能力模块化工具生态化开发成本较低需要实现协议我的理解解决的是工具孤岛问题让不同应用能够共享同一套工具而不是每个应用都重复开发三者的本质区别架构对比图预设代码应用功能功能功能全部硬编码应用基础能力动态加载按需加载按需加载按需加载应用应用工具工具工具核心差异总结维度预设代码设计目标快速实现功能模块化能力管理跨应用工具共享工具位置应用内部应用内部独立进程加载方式启动时全部加载运行时按需加载通过协议调用扩展方式修改源代码添加文件连接新共享能力无法共享应用内共享跨应用共享开发成本低中高适用规模小型项目中型项目大型生态提示词与执行层的关系一个关键问题在研究这些技术时我曾有一个疑问这些技术都可以算是集成的提示词吗答案是不完全是但都和提示词相关分层理解大语言模型提示词层决定知道什么告诉有哪些能力可用告诉如何调用这些能力告诉参数格式和返回格式执行层决定实际做什么预设代码应用内的函数应用内的模块化函数外部独立进程以为例预设代码模式提示词部分告诉有哪些图表类型可选可选图表类型直方图查看数值分布散点图查看变量关系热力图查看特征相关性执行部分代码直接执行这不是提示词是真正的代码执行模式这部分会转换成提示词注入给图表生成你是一个数据可视化专家可以生成以下图表直方图调用散点图调用实际执行的函数定义在别处模式定义工具生成图表并返回文件路径这个描述会变成提示词实际执行代码收到的提示词你可以使用以下工具生成图表参数形象比喻概念比喻作用提示词菜单告诉客人有什么菜预设代码厨房真正做菜的地方关键理解提示词是的说明书告诉它能做什么预设代码是执行层真正干活的代码这三种技术都依赖提示词让知道有什么能力可用但不是提示词本身技术选型建议场景匹配场景推荐模式理由快速开发预设代码开发成本低迭代快功能相对固定预设代码无需复杂架构需要模块化扩展能力可插拔易维护多团队协作开发模块独立职责清晰需要跨应用共享工具一次开发多处使用构建工具生态开放协议生态共赢的演进方向目前使用预设代码模式对于单一应用来说已经足够但未来可以考虑架构演进第一阶段预设代码当前快速实现核心功能验证产品价值积累用户反馈第二阶段引入模块化现有功能支持第三方扩展提升可维护性第三阶段开放数据分析能力给其他应用接入生态构建工具生态组合使用三者并非互斥可以组合使用应用动态加载能力调用外部工具例如作为应用使用管理内部能力模块通过连接外部工具如数据库文件系统同时作为对外提供服务总结核心观点预设代码功能写死在代码里简单直接适合快速开发和功能固定的场景动态能力注入按需加载适合模块化设计和需要扩展的场景跨应用工具共享开放协议适合构建工具生态和跨应用复用提示词与执行层提示词是的说明书预设代码是真正干活的执行层两者配合才能让应用具备实际能力架构演进路径预设代码功能固定能力模块化工具生态化单应用内单应用内跨应用共享改代码扩展加文件扩展连接新最后的话没有最好的架构只有最适合的架构理解每种模式的适用场景才能做出正确的技术选型对于这样的项目从预设代码开始是正确的选择先验证价值再考虑架构演进当功能逐渐丰富用户需求多样化时再引入和逐步构建更开放更可扩展的架构',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-03-19 10:27:04',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 8.1.1"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
   }
 }
-</script>
-</head>
-<body id="top">
-    <header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="https://okelekaf01-cmd.github.io/" accesskey="h" title="wwxdsg的个人博客 (Alt + H)">wwxdsg的个人博客</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/" title="主页">
-                    <span>主页</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/projects/" title="个人项目">
-                    <span>个人项目</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/opsmind/" title="OpsMind开发">
-                    <span>OpsMind开发</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/internship/" title="实习记录">
-                    <span>实习记录</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/notes/" title="学习笔记">
-                    <span>学习笔记</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main">
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
 
-<article class="post-single">
-  <header class="post-header">
-    
-    <h1 class="post-title entry-hint-parent">
-      预设代码、Skill 与 MCP
-    </h1>
-    <div class="post-description">
-      探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景
-    </div>
-    <div class="post-meta"><span title='2026-01-26 10:00:00 +0800 CST'>January 26, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span>
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">wwxdsg的个人博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.05rem;">AI<sup>1</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 1.05rem;">Agent<sup>1</sup></a><a href="/tags/DeepSeek/" style="font-size: 1.05rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 1.05rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 1.05rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 1.05rem;">LLM<sup>1</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 1.05rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 1.05rem;">LLM应用<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 1.05rem;">Tool Calling<sup>1</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 1.05rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.05rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 1.05rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 1.05rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>1</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 1.05rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 1.05rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 1.05rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 1.05rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 1.05rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">数据预处理<sup>1</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 1.05rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 1.05rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 1.05rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">架构设计<sup>2</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.05rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 1.05rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 1.05rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 1.05rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/02/"><span class="card-archive-list-date">二月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/AI/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>AI</span></a><a class="article-meta__tags" href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>架构设计</span></a><a class="article-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>技术模式</span></a></span></div></div><h1 class="post-title" itemprop="name headline">预设代码、Skill 与 MCP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2026-01-25T18:00:00.000Z" title="发表于 2026-01-26 02:00:00">2026-01-26</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2026-03-19T02:27:04.203Z" title="更新于 2026-03-19 10:27:04">2026-03-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为中国"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>中国</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src=""></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://okelekaf01-cmd.github.io/opsmind/blog2/"><header><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a><a href="/tags/AI/" tabindex="-1" itemprop="url">AI</a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" tabindex="-1" itemprop="url">架构设计</a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" tabindex="-1" itemprop="url">技术模式</a><h1 id="CrawlerTitle" itemprop="name headline">预设代码、Skill 与 MCP</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">wwxdsg</span><time itemprop="dateCreated datePublished" datetime="2026-01-25T18:00:00.000Z" title="发表于 2026-01-26 02:00:00">2026-01-26</time><time itemprop="dateCreated datePublished" datetime="2026-03-19T02:27:04.203Z" title="更新于 2026-03-19 10:27:04">2026-03-19</time></header><p>本文以我的开源项目 OpsMind 为例，探讨 AI 应用开发中三种常见的技术模式：预设代码、Skill 和 MCP，分析它们的本质区别与适用场景。</p>
+<p>最近在开发 <strong>OpsMind</strong> —— 一个智能运营决策中枢，核心功能是通过自然语言对话进行数据分析和文件生成。在研究 AI 应用架构时，我接触到了 <strong>Skill</strong> 和 <strong>MCP</strong> 两个概念。<br>起初我有些困惑：我的项目也能通过对话生成文件，这和 MCP 有什么区别？预设代码算不算 Skill 技术？这些技术和提示词工程又是什么关系？</p>
+<h2 id="我的现状：预设代码模式"><a href="#我的现状：预设代码模式" class="headerlink" title="我的现状：预设代码模式"></a>我的现状：预设代码模式</h2><h3 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h3><p>OpsMind 目前的核心是一个 <code>DataAnalysisEngine</code> 类，所有功能都硬编码在类方法中：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DataAnalysisEngine</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;数据分析引擎类&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generate_charts</span>(<span class="params">self, df, chart_types</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;生成图表&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;histogram&quot;</span> <span class="keyword">in</span> chart_types:</span><br><span class="line">            plt.hist(...)      <span class="comment"># 直方图</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;scatter&quot;</span> <span class="keyword">in</span> chart_types:</span><br><span class="line">            plt.scatter(...)    <span class="comment"># 散点图</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;heatmap&quot;</span> <span class="keyword">in</span> chart_types:</span><br><span class="line">            sns.heatmap(...)    <span class="comment"># 热力图</span></span><br><span class="line">        <span class="comment"># ... 更多图表类型</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generate_tables</span>(<span class="params">self, df, table_types</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;生成表格&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;basic_stats&quot;</span> <span class="keyword">in</span> table_types:</span><br><span class="line">            df.describe().to_excel(...)    <span class="comment"># 统计表</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;pivot&quot;</span> <span class="keyword">in</span> table_types:</span><br><span class="line">            df.pivot_table(...).to_excel(...)  <span class="comment"># 透视表</span></span><br><span class="line">        <span class="comment"># ... 更多表格类型</span></span><br></pre></td></tr></table></figure>
 
-</div>
-  </header> 
-  <div class="post-content"><p>本文以我的开源项目 OpsMind 为例，探讨 AI 应用开发中三种常见的技术模式：预设代码、Skill 和 MCP，分析它们的本质区别与适用场景。</p>
-<p>最近在开发 <strong>OpsMind</strong> —— 一个智能运营决策中枢，核心功能是通过自然语言对话进行数据分析和文件生成。在研究 AI 应用架构时，我接触到了 <strong>Skill</strong> 和 <strong>MCP</strong> 两个概念。
-起初我有些困惑：我的项目也能通过对话生成文件，这和 MCP 有什么区别？预设代码算不算 Skill 技术？这些技术和提示词工程又是什么关系？</p>
-<h2 id="我的现状预设代码模式">我的现状：预设代码模式<a hidden class="anchor" aria-hidden="true" href="#我的现状预设代码模式">#</a></h2>
-<h3 id="项目架构">项目架构<a hidden class="anchor" aria-hidden="true" href="#项目架构">#</a></h3>
-<p>OpsMind 目前的核心是一个 <code>DataAnalysisEngine</code> 类，所有功能都硬编码在类方法中：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DataAnalysisEngine</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;数据分析引擎类&#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_charts</span>(self, df, chart_types):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;生成图表&#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;histogram&#34;</span> <span style="color:#f92672">in</span> chart_types:
-</span></span><span style="display:flex;"><span>            plt<span style="color:#f92672">.</span>hist(<span style="color:#f92672">...</span>)      <span style="color:#75715e"># 直方图</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;scatter&#34;</span> <span style="color:#f92672">in</span> chart_types:
-</span></span><span style="display:flex;"><span>            plt<span style="color:#f92672">.</span>scatter(<span style="color:#f92672">...</span>)    <span style="color:#75715e"># 散点图</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;heatmap&#34;</span> <span style="color:#f92672">in</span> chart_types:
-</span></span><span style="display:flex;"><span>            sns<span style="color:#f92672">.</span>heatmap(<span style="color:#f92672">...</span>)    <span style="color:#75715e"># 热力图</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ... 更多图表类型</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_tables</span>(self, df, table_types):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;生成表格&#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;basic_stats&#34;</span> <span style="color:#f92672">in</span> table_types:
-</span></span><span style="display:flex;"><span>            df<span style="color:#f92672">.</span>describe()<span style="color:#f92672">.</span>to_excel(<span style="color:#f92672">...</span>)    <span style="color:#75715e"># 统计表</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;pivot&#34;</span> <span style="color:#f92672">in</span> table_types:
-</span></span><span style="display:flex;"><span>            df<span style="color:#f92672">.</span>pivot_table(<span style="color:#f92672">...</span>)<span style="color:#f92672">.</span>to_excel(<span style="color:#f92672">...</span>)  <span style="color:#75715e"># 透视表</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ... 更多表格类型</span>
-</span></span></code></pre></div><h3 id="执行流程">执行流程<a hidden class="anchor" aria-hidden="true" href="#执行流程">#</a></h3>
-<p>用户说&quot;帮我分析销售数据并生成图表&quot;，整个流程如下：</p>
-<pre tabindex="0"><code>┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  用户输入   │ ──→ │  LLM 判断   │ ──→ │  调用预设   │ ──→ │  生成文件   │
-│             │     │    意图     │     │    函数     │     │             │
-└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
-</code></pre><p>LLM 的作用是判断用户想要什么类型的图表/表格，然后调用对应的 Python 函数执行。</p>
-<h3 id="这种模式的特点">这种模式的特点<a hidden class="anchor" aria-hidden="true" href="#这种模式的特点">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>优点</th>
-          <th>缺点</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>开发简单，逻辑清晰</td>
-          <td>功能固定，扩展需改代码</td>
-      </tr>
-      <tr>
-          <td>性能好，无额外开销</td>
-          <td>无法被其他 AI 应用复用</td>
-      </tr>
-      <tr>
-          <td>功能可控，调试方便</td>
-          <td>所有功能耦合在一起</td>
-      </tr>
-  </tbody>
-</table>
+<h3 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h3><p>用户说”帮我分析销售数据并生成图表”，整个流程如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐</span><br><span class="line">│  用户输入   │ ──→ │  LLM 判断   │ ──→ │  调用预设   │ ──→ │  生成文件   │</span><br><span class="line">│             │     │    意图     │     │    函数     │     │             │</span><br><span class="line">└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>LLM 的作用是判断用户想要什么类型的图表&#x2F;表格，然后调用对应的 Python 函数执行。</p>
+<h3 id="这种模式的特点"><a href="#这种模式的特点" class="headerlink" title="这种模式的特点"></a>这种模式的特点</h3><table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发简单，逻辑清晰</td>
+<td>功能固定，扩展需改代码</td>
+</tr>
+<tr>
+<td>性能好，无额外开销</td>
+<td>无法被其他 AI 应用复用</td>
+</tr>
+<tr>
+<td>功能可控，调试方便</td>
+<td>所有功能耦合在一起</td>
+</tr>
+</tbody></table>
 <p>我把这种模式称为<strong>预设代码模式</strong>——功能写死在代码里，调用时直接执行。</p>
 <hr>
-<h2 id="skill-技术动态能力注入">Skill 技术：动态能力注入<a hidden class="anchor" aria-hidden="true" href="#skill-技术动态能力注入">#</a></h2>
-<h3 id="什么是-skill">什么是 Skill<a hidden class="anchor" aria-hidden="true" href="#什么是-skill">#</a></h3>
-<p>Skill 是一种<strong>运行时动态加载能力</strong>的模式。与预设代码不同，Skill 不是把所有功能都写死在启动时加载，而是根据用户需求，按需激活对应的能力模块。</p>
-<h3 id="如果用-skill-重构-opsmind">如果用 Skill 重构 OpsMind<a hidden class="anchor" aria-hidden="true" href="#如果用-skill-重构-opsmind">#</a></h3>
-<pre tabindex="0"><code>skills/
-├── data_analysis/
-│   └── skill.md          # 数据分析能力
-├── chart_generation/
-│   └── skill.md          # 图表生成能力
-└── table_export/
-    └── skill.md          # 表格导出能力
-</code></pre><p>每个 Skill 文件包含：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span># 图表生成 Skill
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">## 触发条件
-</span></span></span><span style="display:flex;"><span>用户要求生成图表、可视化数据时激活
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">## Prompt 模板
-</span></span></span><span style="display:flex;"><span>你是一个数据可视化专家，可以生成以下图表：
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 直方图：调用 generate_histogram(data, column)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 散点图：调用 generate_scatter(data, x_col, y_col)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 热力图：调用 generate_heatmap(data, columns)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">## 工具定义
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> generate_histogram(data, column): 生成指定列的直方图
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> generate_scatter(data, x_col, y_col): 生成散点图
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> generate_heatmap(data, columns): 生成相关性热力图
-</span></span></code></pre></div><h3 id="执行流程对比">执行流程对比<a hidden class="anchor" aria-hidden="true" href="#执行流程对比">#</a></h3>
-<p><strong>预设代码模式：</strong></p>
-<pre tabindex="0"><code>启动时加载所有功能 → 用户提问 → LLM 选择函数 → 执行
-</code></pre><p><strong>Skill 模式：</strong></p>
-<pre tabindex="0"><code>启动时加载基础能力 → 用户提问 → 识别需要哪个 Skill → 动态注入 Skill → LLM 使用 Skill 中的工具 → 执行
-</code></pre><h3 id="与预设代码的对比">与预设代码的对比<a hidden class="anchor" aria-hidden="true" href="#与预设代码的对比">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>维度</th>
-          <th>预设代码</th>
-          <th>Skill</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>加载时机</td>
-          <td>启动时全部加载</td>
-          <td>运行时按需加载</td>
-      </tr>
-      <tr>
-          <td>Prompt 位置</td>
-          <td>固定在代码里</td>
-          <td>动态注入上下文</td>
-      </tr>
-      <tr>
-          <td>扩展方式</td>
-          <td>修改源代码</td>
-          <td>添加 Skill 文件</td>
-      </tr>
-      <tr>
-          <td>隔离性</td>
-          <td>功能耦合</td>
-          <td>模块独立</td>
-      </tr>
-      <tr>
-          <td>复用性</td>
-          <td>仅限本项目</td>
-          <td>可跨项目复用</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>我的理解</strong>：Skill 本质上是把&quot;能力&quot;抽象成可插拔的模块，让 AI Agent 能够根据任务动态组装自己的能力集。</p>
+<h2 id="Skill-技术：动态能力注入"><a href="#Skill-技术：动态能力注入" class="headerlink" title="Skill 技术：动态能力注入"></a>Skill 技术：动态能力注入</h2><h3 id="什么是-Skill"><a href="#什么是-Skill" class="headerlink" title="什么是 Skill"></a>什么是 Skill</h3><p>Skill 是一种<strong>运行时动态加载能力</strong>的模式。与预设代码不同，Skill 不是把所有功能都写死在启动时加载，而是根据用户需求，按需激活对应的能力模块。</p>
+<h3 id="如果用-Skill-重构-OpsMind"><a href="#如果用-Skill-重构-OpsMind" class="headerlink" title="如果用 Skill 重构 OpsMind"></a>如果用 Skill 重构 OpsMind</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">skills/</span><br><span class="line">├── data_analysis/</span><br><span class="line">│   └── skill.md          # 数据分析能力</span><br><span class="line">├── chart_generation/</span><br><span class="line">│   └── skill.md          # 图表生成能力</span><br><span class="line">└── table_export/</span><br><span class="line">    └── skill.md          # 表格导出能力</span><br></pre></td></tr></table></figure>
+
+<p>每个 Skill 文件包含：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># 图表生成 Skill</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 触发条件</span></span><br><span class="line">用户要求生成图表、可视化数据时激活</span><br><span class="line"></span><br><span class="line"><span class="section">## Prompt 模板</span></span><br><span class="line">你是一个数据可视化专家，可以生成以下图表：</span><br><span class="line"><span class="bullet">-</span> 直方图：调用 generate<span class="emphasis">_histogram(data, column)</span></span><br><span class="line"><span class="emphasis">- 散点图：调用 generate_</span>scatter(data, x<span class="emphasis">_col, y_</span>col)</span><br><span class="line"><span class="bullet">-</span> 热力图：调用 generate<span class="emphasis">_heatmap(data, columns)</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## 工具定义</span></span><br><span class="line"><span class="emphasis">- generate_</span>histogram(data, column): 生成指定列的直方图</span><br><span class="line"><span class="bullet">-</span> generate<span class="emphasis">_scatter(data, x_</span>col, y<span class="emphasis">_col): 生成散点图</span></span><br><span class="line"><span class="emphasis">- generate_</span>heatmap(data, columns): 生成相关性热力图</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行流程对比"><a href="#执行流程对比" class="headerlink" title="执行流程对比"></a>执行流程对比</h3><p><strong>预设代码模式：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">启动时加载所有功能 → 用户提问 → LLM 选择函数 → 执行</span><br></pre></td></tr></table></figure>
+
+<p><strong>Skill 模式：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">启动时加载基础能力 → 用户提问 → 识别需要哪个 Skill → 动态注入 Skill → LLM 使用 Skill 中的工具 → 执行</span><br></pre></td></tr></table></figure>
+
+<h3 id="与预设代码的对比"><a href="#与预设代码的对比" class="headerlink" title="与预设代码的对比"></a>与预设代码的对比</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>预设代码</th>
+<th>Skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>加载时机</td>
+<td>启动时全部加载</td>
+<td>运行时按需加载</td>
+</tr>
+<tr>
+<td>Prompt 位置</td>
+<td>固定在代码里</td>
+<td>动态注入上下文</td>
+</tr>
+<tr>
+<td>扩展方式</td>
+<td>修改源代码</td>
+<td>添加 Skill 文件</td>
+</tr>
+<tr>
+<td>隔离性</td>
+<td>功能耦合</td>
+<td>模块独立</td>
+</tr>
+<tr>
+<td>复用性</td>
+<td>仅限本项目</td>
+<td>可跨项目复用</td>
+</tr>
+</tbody></table>
+<p><strong>我的理解</strong>：Skill 本质上是把”能力”抽象成可插拔的模块，让 AI Agent 能够根据任务动态组装自己的能力集。</p>
 <hr>
-<h2 id="mcp跨应用工具共享协议">MCP：跨应用工具共享协议<a hidden class="anchor" aria-hidden="true" href="#mcp跨应用工具共享协议">#</a></h2>
-<h3 id="什么是-mcp">什么是 MCP<a hidden class="anchor" aria-hidden="true" href="#什么是-mcp">#</a></h3>
-<p>MCP（Model Context Protocol）是 Anthropic 推出的开放协议，让 AI 应用能够调用外部工具。与 Skill 不同，MCP 关注的是<strong>跨应用的能力共享</strong>。</p>
-<h3 id="如果用-mcp-重构-opsmind">如果用 MCP 重构 OpsMind<a hidden class="anchor" aria-hidden="true" href="#如果用-mcp-重构-opsmind">#</a></h3>
-<p>我可以把数据分析能力封装成 MCP Server：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># mcp_server.py</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> mcp <span style="color:#f92672">import</span> Server
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>server <span style="color:#f92672">=</span> Server(<span style="color:#e6db74">&#34;opsmind-data-analysis&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@server.tool</span>(<span style="color:#e6db74">&#34;analyze_excel&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">analyze_excel</span>(file_path: str, query: str) <span style="color:#f92672">-&gt;</span> dict:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    分析 Excel 文件并返回结果
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        file_path: Excel 文件路径
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        query: 分析需求描述
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        包含分析结果的字典
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_excel(file_path)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 分析逻辑...</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;result&#34;</span>: analysis_result}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@server.tool</span>(<span style="color:#e6db74">&#34;generate_chart&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_chart</span>(data_path: str, chart_type: str, columns: list) <span style="color:#f92672">-&gt;</span> str:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    生成图表并返回文件路径
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        data_path: 数据文件路径
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        chart_type: 图表类型 (histogram/scatter/heatmap)
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        columns: 要分析的列名
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        生成的图表文件路径
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 图表生成逻辑...</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> chart_path
-</span></span></code></pre></div><h3 id="mcp-的核心价值">MCP 的核心价值<a hidden class="anchor" aria-hidden="true" href="#mcp-的核心价值">#</a></h3>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────┐
-│                        MCP 生态                              │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │
-│   │   Claude    │   │   Cursor    │   │    Trae     │      │
-│   │   (Client)  │   │   (Client)  │   │   (Client)  │      │
-│   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘      │
-│          │                 │                 │              │
-│          └─────────────────┼─────────────────┘              │
-│                            │                                │
-│                            ▼                                │
-│                   ┌─────────────────┐                       │
-│                   │   MCP Protocol  │                       │
-│                   └────────┬────────┘                       │
-│                            │                                │
-│          ┌─────────────────┼─────────────────┐              │
-│          │                 │                 │              │
-│          ▼                 ▼                 ▼              │
-│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │
-│   │ OpsMind     │   │  文件系统   │   │  数据库     │      │
-│   │ (Server)    │   │  (Server)   │   │  (Server)   │      │
-│   └─────────────┘   └─────────────┘   └─────────────┘      │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-</code></pre><p>这样，任何支持 MCP 的 AI 应用都能直接使用 OpsMind 的数据分析工具，无需重复开发。</p>
-<h3 id="与-skill-的对比">与 Skill 的对比<a hidden class="anchor" aria-hidden="true" href="#与-skill-的对比">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>维度</th>
-          <th>Skill</th>
-          <th>MCP</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>作用范围</td>
-          <td>单个 AI 应用内部</td>
-          <td>跨应用共享</td>
-      </tr>
-      <tr>
-          <td>工具位置</td>
-          <td>应用内</td>
-          <td>独立进程</td>
-      </tr>
-      <tr>
-          <td>协议标准</td>
-          <td>无统一标准</td>
-          <td>统一开放协议</td>
-      </tr>
-      <tr>
-          <td>适用场景</td>
-          <td>能力模块化</td>
-          <td>工具生态化</td>
-      </tr>
-      <tr>
-          <td>开发成本</td>
-          <td>较低</td>
-          <td>需要实现协议</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>我的理解</strong>：MCP 解决的是&quot;工具孤岛&quot;问题——让不同 AI 应用能够共享同一套工具，而不是每个应用都重复开发。</p>
+<h2 id="MCP：跨应用工具共享协议"><a href="#MCP：跨应用工具共享协议" class="headerlink" title="MCP：跨应用工具共享协议"></a>MCP：跨应用工具共享协议</h2><h3 id="什么是-MCP"><a href="#什么是-MCP" class="headerlink" title="什么是 MCP"></a>什么是 MCP</h3><p>MCP（Model Context Protocol）是 Anthropic 推出的开放协议，让 AI 应用能够调用外部工具。与 Skill 不同，MCP 关注的是<strong>跨应用的能力共享</strong>。</p>
+<h3 id="如果用-MCP-重构-OpsMind"><a href="#如果用-MCP-重构-OpsMind" class="headerlink" title="如果用 MCP 重构 OpsMind"></a>如果用 MCP 重构 OpsMind</h3><p>我可以把数据分析能力封装成 MCP Server：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mcp_server.py</span></span><br><span class="line"><span class="keyword">from</span> mcp <span class="keyword">import</span> Server</span><br><span class="line"></span><br><span class="line">server = Server(<span class="string">&quot;opsmind-data-analysis&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@server.tool(<span class="params"><span class="string">&quot;analyze_excel&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">analyze_excel</span>(<span class="params">file_path: <span class="built_in">str</span>, query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    分析 Excel 文件并返回结果</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        file_path: Excel 文件路径</span></span><br><span class="line"><span class="string">        query: 分析需求描述</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        包含分析结果的字典</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    df = pd.read_excel(file_path)</span><br><span class="line">    <span class="comment"># 分析逻辑...</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;result&quot;</span>: analysis_result&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@server.tool(<span class="params"><span class="string">&quot;generate_chart&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_chart</span>(<span class="params">data_path: <span class="built_in">str</span>, chart_type: <span class="built_in">str</span>, columns: <span class="built_in">list</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    生成图表并返回文件路径</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        data_path: 数据文件路径</span></span><br><span class="line"><span class="string">        chart_type: 图表类型 (histogram/scatter/heatmap)</span></span><br><span class="line"><span class="string">        columns: 要分析的列名</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        生成的图表文件路径</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 图表生成逻辑...</span></span><br><span class="line">    <span class="keyword">return</span> chart_path</span><br></pre></td></tr></table></figure>
+
+<h3 id="MCP-的核心价值"><a href="#MCP-的核心价值" class="headerlink" title="MCP 的核心价值"></a>MCP 的核心价值</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        MCP 生态                              │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                             │</span><br><span class="line">│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │</span><br><span class="line">│   │   Claude    │   │   Cursor    │   │    Trae     │      │</span><br><span class="line">│   │   (Client)  │   │   (Client)  │   │   (Client)  │      │</span><br><span class="line">│   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘      │</span><br><span class="line">│          │                 │                 │              │</span><br><span class="line">│          └─────────────────┼─────────────────┘              │</span><br><span class="line">│                            │                                │</span><br><span class="line">│                            ▼                                │</span><br><span class="line">│                   ┌─────────────────┐                       │</span><br><span class="line">│                   │   MCP Protocol  │                       │</span><br><span class="line">│                   └────────┬────────┘                       │</span><br><span class="line">│                            │                                │</span><br><span class="line">│          ┌─────────────────┼─────────────────┐              │</span><br><span class="line">│          │                 │                 │              │</span><br><span class="line">│          ▼                 ▼                 ▼              │</span><br><span class="line">│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │</span><br><span class="line">│   │ OpsMind     │   │  文件系统   │   │  数据库     │      │</span><br><span class="line">│   │ (Server)    │   │  (Server)   │   │  (Server)   │      │</span><br><span class="line">│   └─────────────┘   └─────────────┘   └─────────────┘      │</span><br><span class="line">│                                                             │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>这样，任何支持 MCP 的 AI 应用都能直接使用 OpsMind 的数据分析工具，无需重复开发。</p>
+<h3 id="与-Skill-的对比"><a href="#与-Skill-的对比" class="headerlink" title="与 Skill 的对比"></a>与 Skill 的对比</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Skill</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作用范围</td>
+<td>单个 AI 应用内部</td>
+<td>跨应用共享</td>
+</tr>
+<tr>
+<td>工具位置</td>
+<td>应用内</td>
+<td>独立进程</td>
+</tr>
+<tr>
+<td>协议标准</td>
+<td>无统一标准</td>
+<td>统一开放协议</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>能力模块化</td>
+<td>工具生态化</td>
+</tr>
+<tr>
+<td>开发成本</td>
+<td>较低</td>
+<td>需要实现协议</td>
+</tr>
+</tbody></table>
+<p><strong>我的理解</strong>：MCP 解决的是”工具孤岛”问题——让不同 AI 应用能够共享同一套工具，而不是每个应用都重复开发。</p>
 <hr>
-<h2 id="三者的本质区别">三者的本质区别<a hidden class="anchor" aria-hidden="true" href="#三者的本质区别">#</a></h2>
-<h3 id="架构对比图">架构对比图<a hidden class="anchor" aria-hidden="true" href="#架构对比图">#</a></h3>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│  【预设代码】                                                    │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐  │
-│   │                    AI 应用                               │  │
-│   │  ┌─────────┐  ┌─────────┐  ┌─────────┐                 │  │
-│   │  │ 功能 A  │  │ 功能 B  │  │ 功能 C  │  ← 全部硬编码    │  │
-│   │  └─────────┘  └─────────┘  └─────────┘                 │  │
-│   └─────────────────────────────────────────────────────────┘  │
-│                                                                 │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  【Skill】                                                      │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐  │
-│   │                    AI 应用                               │  │
-│   │  ┌─────────┐                                            │  │
-│   │  │ 基础能力 │  ←── 动态加载 ───┐                         │  │
-│   │  └─────────┘                  │                         │  │
-│   └───────────────────────────────┼─────────────────────────┘  │
-│                                   │                            │
-│   ┌───────────────┬───────────────┴───────────────┐           │
-│   │  Skill A      │  Skill B      │  Skill C      │           │
-│   │  (按需加载)   │  (按需加载)   │  (按需加载)   │           │
-│   └───────────────┴───────────────┴───────────────┘           │
-│                                                                 │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  【MCP】                                                        │
-│                                                                 │
-│   ┌─────────────────┐         ┌─────────────────┐             │
-│   │    AI 应用 A    │         │    AI 应用 B    │             │
-│   │   (MCP Client)  │         │   (MCP Client)  │             │
-│   └────────┬────────┘         └────────┬────────┘             │
-│            │                           │                       │
-│            └───────────┬───────────────┘                       │
-│                        │                                       │
-│                        ▼                                       │
-│            ┌─────────────────────┐                             │
-│            │   MCP Protocol      │                             │
-│            └──────────┬──────────┘                             │
-│                       │                                        │
-│         ┌─────────────┼─────────────┐                          │
-│         │             │             │                          │
-│         ▼             ▼             ▼                          │
-│   ┌───────────┐ ┌───────────┐ ┌───────────┐                   │
-│   │MCP Server │ │MCP Server │ │MCP Server │                   │
-│   │   (工具1) │ │   (工具2) │ │   (工具3) │                   │
-│   └───────────┘ └───────────┘ └───────────┘                   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-</code></pre><h3 id="核心差异总结">核心差异总结<a hidden class="anchor" aria-hidden="true" href="#核心差异总结">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>维度</th>
-          <th>预设代码</th>
-          <th>Skill</th>
-          <th>MCP</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>设计目标</strong></td>
-          <td>快速实现功能</td>
-          <td>模块化能力管理</td>
-          <td>跨应用工具共享</td>
-      </tr>
-      <tr>
-          <td><strong>工具位置</strong></td>
-          <td>应用内部</td>
-          <td>应用内部</td>
-          <td>独立进程</td>
-      </tr>
-      <tr>
-          <td><strong>加载方式</strong></td>
-          <td>启动时全部加载</td>
-          <td>运行时按需加载</td>
-          <td>通过协议调用</td>
-      </tr>
-      <tr>
-          <td><strong>扩展方式</strong></td>
-          <td>修改源代码</td>
-          <td>添加 Skill 文件</td>
-          <td>连接新 Server</td>
-      </tr>
-      <tr>
-          <td><strong>共享能力</strong></td>
-          <td>无法共享</td>
-          <td>应用内共享</td>
-          <td>跨应用共享</td>
-      </tr>
-      <tr>
-          <td><strong>开发成本</strong></td>
-          <td>低</td>
-          <td>中</td>
-          <td>高</td>
-      </tr>
-      <tr>
-          <td><strong>适用规模</strong></td>
-          <td>小型项目</td>
-          <td>中型项目</td>
-          <td>大型生态</td>
-      </tr>
-  </tbody>
-</table>
+<h2 id="三者的本质区别"><a href="#三者的本质区别" class="headerlink" title="三者的本质区别"></a>三者的本质区别</h2><h3 id="架构对比图"><a href="#架构对比图" class="headerlink" title="架构对比图"></a>架构对比图</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                                                                 │</span><br><span class="line">│  【预设代码】                                                    │</span><br><span class="line">│                                                                 │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────┐  │</span><br><span class="line">│   │                    AI 应用                               │  │</span><br><span class="line">│   │  ┌─────────┐  ┌─────────┐  ┌─────────┐                 │  │</span><br><span class="line">│   │  │ 功能 A  │  │ 功能 B  │  │ 功能 C  │  ← 全部硬编码    │  │</span><br><span class="line">│   │  └─────────┘  └─────────┘  └─────────┘                 │  │</span><br><span class="line">│   └─────────────────────────────────────────────────────────┘  │</span><br><span class="line">│                                                                 │</span><br><span class="line">├─────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                 │</span><br><span class="line">│  【Skill】                                                      │</span><br><span class="line">│                                                                 │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────┐  │</span><br><span class="line">│   │                    AI 应用                               │  │</span><br><span class="line">│   │  ┌─────────┐                                            │  │</span><br><span class="line">│   │  │ 基础能力 │  ←── 动态加载 ───┐                         │  │</span><br><span class="line">│   │  └─────────┘                  │                         │  │</span><br><span class="line">│   └───────────────────────────────┼─────────────────────────┘  │</span><br><span class="line">│                                   │                            │</span><br><span class="line">│   ┌───────────────┬───────────────┴───────────────┐           │</span><br><span class="line">│   │  Skill A      │  Skill B      │  Skill C      │           │</span><br><span class="line">│   │  (按需加载)   │  (按需加载)   │  (按需加载)   │           │</span><br><span class="line">│   └───────────────┴───────────────┴───────────────┘           │</span><br><span class="line">│                                                                 │</span><br><span class="line">├─────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                 │</span><br><span class="line">│  【MCP】                                                        │</span><br><span class="line">│                                                                 │</span><br><span class="line">│   ┌─────────────────┐         ┌─────────────────┐             │</span><br><span class="line">│   │    AI 应用 A    │         │    AI 应用 B    │             │</span><br><span class="line">│   │   (MCP Client)  │         │   (MCP Client)  │             │</span><br><span class="line">│   └────────┬────────┘         └────────┬────────┘             │</span><br><span class="line">│            │                           │                       │</span><br><span class="line">│            └───────────┬───────────────┘                       │</span><br><span class="line">│                        │                                       │</span><br><span class="line">│                        ▼                                       │</span><br><span class="line">│            ┌─────────────────────┐                             │</span><br><span class="line">│            │   MCP Protocol      │                             │</span><br><span class="line">│            └──────────┬──────────┘                             │</span><br><span class="line">│                       │                                        │</span><br><span class="line">│         ┌─────────────┼─────────────┐                          │</span><br><span class="line">│         │             │             │                          │</span><br><span class="line">│         ▼             ▼             ▼                          │</span><br><span class="line">│   ┌───────────┐ ┌───────────┐ ┌───────────┐                   │</span><br><span class="line">│   │MCP Server │ │MCP Server │ │MCP Server │                   │</span><br><span class="line">│   │   (工具1) │ │   (工具2) │ │   (工具3) │                   │</span><br><span class="line">│   └───────────┘ └───────────┘ └───────────┘                   │</span><br><span class="line">│                                                                 │</span><br><span class="line">└─────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="核心差异总结"><a href="#核心差异总结" class="headerlink" title="核心差异总结"></a>核心差异总结</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>预设代码</th>
+<th>Skill</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>设计目标</strong></td>
+<td>快速实现功能</td>
+<td>模块化能力管理</td>
+<td>跨应用工具共享</td>
+</tr>
+<tr>
+<td><strong>工具位置</strong></td>
+<td>应用内部</td>
+<td>应用内部</td>
+<td>独立进程</td>
+</tr>
+<tr>
+<td><strong>加载方式</strong></td>
+<td>启动时全部加载</td>
+<td>运行时按需加载</td>
+<td>通过协议调用</td>
+</tr>
+<tr>
+<td><strong>扩展方式</strong></td>
+<td>修改源代码</td>
+<td>添加 Skill 文件</td>
+<td>连接新 Server</td>
+</tr>
+<tr>
+<td><strong>共享能力</strong></td>
+<td>无法共享</td>
+<td>应用内共享</td>
+<td>跨应用共享</td>
+</tr>
+<tr>
+<td><strong>开发成本</strong></td>
+<td>低</td>
+<td>中</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>适用规模</strong></td>
+<td>小型项目</td>
+<td>中型项目</td>
+<td>大型生态</td>
+</tr>
+</tbody></table>
 <hr>
-<h2 id="提示词与执行层的关系">提示词与执行层的关系<a hidden class="anchor" aria-hidden="true" href="#提示词与执行层的关系">#</a></h2>
-<h3 id="一个关键问题">一个关键问题<a hidden class="anchor" aria-hidden="true" href="#一个关键问题">#</a></h3>
-<p>在研究这些技术时，我曾有一个疑问：<strong>这些技术都可以算是集成的提示词吗？</strong></p>
+<h2 id="提示词与执行层的关系"><a href="#提示词与执行层的关系" class="headerlink" title="提示词与执行层的关系"></a>提示词与执行层的关系</h2><h3 id="一个关键问题"><a href="#一个关键问题" class="headerlink" title="一个关键问题"></a>一个关键问题</h3><p>在研究这些技术时，我曾有一个疑问：<strong>这些技术都可以算是集成的提示词吗？</strong></p>
 <p>答案是：<strong>不完全是，但都和提示词相关。</strong></p>
-<h3 id="分层理解">分层理解<a hidden class="anchor" aria-hidden="true" href="#分层理解">#</a></h3>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────┐
-│                                                         │
-│   ┌─────────────────────────────────────────────────┐   │
-│   │              LLM（大语言模型）                    │   │
-│   └─────────────────────────────────────────────────┘   │
-│                          │                              │
-│                          ▼                              │
-│   ┌─────────────────────────────────────────────────┐   │
-│   │         【提示词层】决定 LLM 知道什么             │   │
-│   │                                                  │   │
-│   │   - 告诉 LLM 有哪些能力可用                      │   │
-│   │   - 告诉 LLM 如何调用这些能力                    │   │
-│   │   - 告诉 LLM 参数格式和返回格式                  │   │
-│   └─────────────────────────────────────────────────┘   │
-│                          │                              │
-│                          ▼                              │
-│   ┌─────────────────────────────────────────────────┐   │
-│   │         【执行层】决定实际做什么                  │   │
-│   │                                                  │   │
-│   │   - 预设代码：应用内的 Python 函数               │   │
-│   │   - Skill：应用内的模块化函数                    │   │
-│   │   - MCP：外部独立进程                           │   │
-│   └─────────────────────────────────────────────────┘   │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-</code></pre><h3 id="以-opsmind-为例">以 OpsMind 为例<a hidden class="anchor" aria-hidden="true" href="#以-opsmind-为例">#</a></h3>
-<p><strong>预设代码模式：</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 提示词部分：告诉 LLM 有哪些图表类型可选</span>
-</span></span><span style="display:flex;"><span>prompt <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">【可选图表类型】
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- histogram: 直方图 - 查看数值分布
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- scatter: 散点图 - 查看变量关系
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- heatmap: 热力图 - 查看特征相关性
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 执行部分：Python 代码直接执行</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;histogram&#34;</span> <span style="color:#f92672">in</span> chart_types:
-</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>hist(<span style="color:#f92672">...</span>)  <span style="color:#75715e"># ← 这不是提示词，是真正的代码执行</span>
-</span></span></code></pre></div><p><strong>Skill 模式：</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>&lt;!-- skill.md - 这部分会转换成提示词注入给 LLM --&gt;
-</span></span><span style="display:flex;"><span># 图表生成 Skill
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>你是一个数据可视化专家，可以生成以下图表：
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 直方图：调用 generate_histogram(data, column)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 散点图：调用 generate_scatter(data, x_col, y_col)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;!-- 实际执行的函数定义在别处 --&gt;
-</span></span></code></pre></div><p><strong>MCP 模式：</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># MCP Server 定义工具</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@server.tool</span>(<span style="color:#e6db74">&#34;generate_chart&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_chart</span>(data_path: str, chart_type: str) <span style="color:#f92672">-&gt;</span> str:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;生成图表并返回文件路径&#34;&#34;&#34;</span>  <span style="color:#75715e"># ← 这个描述会变成提示词</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 实际执行代码</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> chart_path
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># LLM 收到的提示词：</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 你可以使用以下工具：</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># - generate_chart: 生成图表，参数：data_path, chart_type</span>
-</span></span></code></pre></div><h3 id="形象比喻">形象比喻<a hidden class="anchor" aria-hidden="true" href="#形象比喻">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>概念</th>
-          <th>比喻</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>提示词</strong></td>
-          <td>菜单</td>
-          <td>告诉客人（LLM）有什么菜</td>
-      </tr>
-      <tr>
-          <td><strong>预设代码/Skill/MCP</strong></td>
-          <td>厨房</td>
-          <td>真正做菜的地方</td>
-      </tr>
-  </tbody>
-</table>
+<h3 id="分层理解"><a href="#分层理解" class="headerlink" title="分层理解"></a>分层理解</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│                                                         │</span><br><span class="line">│   ┌─────────────────────────────────────────────────┐   │</span><br><span class="line">│   │              LLM（大语言模型）                    │   │</span><br><span class="line">│   └─────────────────────────────────────────────────┘   │</span><br><span class="line">│                          │                              │</span><br><span class="line">│                          ▼                              │</span><br><span class="line">│   ┌─────────────────────────────────────────────────┐   │</span><br><span class="line">│   │         【提示词层】决定 LLM 知道什么             │   │</span><br><span class="line">│   │                                                  │   │</span><br><span class="line">│   │   - 告诉 LLM 有哪些能力可用                      │   │</span><br><span class="line">│   │   - 告诉 LLM 如何调用这些能力                    │   │</span><br><span class="line">│   │   - 告诉 LLM 参数格式和返回格式                  │   │</span><br><span class="line">│   └─────────────────────────────────────────────────┘   │</span><br><span class="line">│                          │                              │</span><br><span class="line">│                          ▼                              │</span><br><span class="line">│   ┌─────────────────────────────────────────────────┐   │</span><br><span class="line">│   │         【执行层】决定实际做什么                  │   │</span><br><span class="line">│   │                                                  │   │</span><br><span class="line">│   │   - 预设代码：应用内的 Python 函数               │   │</span><br><span class="line">│   │   - Skill：应用内的模块化函数                    │   │</span><br><span class="line">│   │   - MCP：外部独立进程                           │   │</span><br><span class="line">│   └─────────────────────────────────────────────────┘   │</span><br><span class="line">│                                                         │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="以-OpsMind-为例"><a href="#以-OpsMind-为例" class="headerlink" title="以 OpsMind 为例"></a>以 OpsMind 为例</h3><p><strong>预设代码模式：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 提示词部分：告诉 LLM 有哪些图表类型可选</span></span><br><span class="line">prompt = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">【可选图表类型】</span></span><br><span class="line"><span class="string">- histogram: 直方图 - 查看数值分布</span></span><br><span class="line"><span class="string">- scatter: 散点图 - 查看变量关系</span></span><br><span class="line"><span class="string">- heatmap: 热力图 - 查看特征相关性</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行部分：Python 代码直接执行</span></span><br><span class="line"><span class="keyword">if</span> <span class="string">&quot;histogram&quot;</span> <span class="keyword">in</span> chart_types:</span><br><span class="line">    plt.hist(...)  <span class="comment"># ← 这不是提示词，是真正的代码执行</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Skill 模式：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&lt;!-- skill.md - 这部分会转换成提示词注入给 LLM --&gt;</span><br><span class="line"><span class="section"># 图表生成 Skill</span></span><br><span class="line"></span><br><span class="line">你是一个数据可视化专家，可以生成以下图表：</span><br><span class="line"><span class="bullet">-</span> 直方图：调用 generate<span class="emphasis">_histogram(data, column)</span></span><br><span class="line"><span class="emphasis">- 散点图：调用 generate_</span>scatter(data, x<span class="emphasis">_col, y_</span>col)</span><br><span class="line"></span><br><span class="line">&lt;!-- 实际执行的函数定义在别处 --&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>MCP 模式：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># MCP Server 定义工具</span></span><br><span class="line"><span class="meta">@server.tool(<span class="params"><span class="string">&quot;generate_chart&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_chart</span>(<span class="params">data_path: <span class="built_in">str</span>, chart_type: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成图表并返回文件路径&quot;&quot;&quot;</span>  <span class="comment"># ← 这个描述会变成提示词</span></span><br><span class="line">    <span class="comment"># 实际执行代码</span></span><br><span class="line">    <span class="keyword">return</span> chart_path</span><br><span class="line"></span><br><span class="line"><span class="comment"># LLM 收到的提示词：</span></span><br><span class="line"><span class="comment"># 你可以使用以下工具：</span></span><br><span class="line"><span class="comment"># - generate_chart: 生成图表，参数：data_path, chart_type</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="形象比喻"><a href="#形象比喻" class="headerlink" title="形象比喻"></a>形象比喻</h3><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>比喻</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>提示词</strong></td>
+<td>菜单</td>
+<td>告诉客人（LLM）有什么菜</td>
+</tr>
+<tr>
+<td><strong>预设代码&#x2F;Skill&#x2F;MCP</strong></td>
+<td>厨房</td>
+<td>真正做菜的地方</td>
+</tr>
+</tbody></table>
 <p><strong>关键理解</strong>：</p>
 <ul>
-<li>提示词是 LLM 的&quot;说明书&quot;——告诉它能做什么</li>
-<li>预设代码/Skill/MCP 是执行层——真正干活的代码</li>
+<li>提示词是 LLM 的”说明书”——告诉它能做什么</li>
+<li>预设代码&#x2F;Skill&#x2F;MCP 是执行层——真正干活的代码</li>
 <li>这三种技术都<strong>依赖提示词</strong>让 LLM 知道有什么能力可用，但<strong>不是提示词本身</strong></li>
 </ul>
 <hr>
-<h2 id="技术选型建议">技术选型建议<a hidden class="anchor" aria-hidden="true" href="#技术选型建议">#</a></h2>
-<h3 id="场景匹配">场景匹配<a hidden class="anchor" aria-hidden="true" href="#场景匹配">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>场景</th>
-          <th>推荐模式</th>
-          <th>理由</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>快速开发 MVP</td>
-          <td>预设代码</td>
-          <td>开发成本低，迭代快</td>
-      </tr>
-      <tr>
-          <td>功能相对固定</td>
-          <td>预设代码</td>
-          <td>无需复杂架构</td>
-      </tr>
-      <tr>
-          <td>需要模块化扩展</td>
-          <td>Skill</td>
-          <td>能力可插拔，易维护</td>
-      </tr>
-      <tr>
-          <td>多团队协作开发</td>
-          <td>Skill</td>
-          <td>模块独立，职责清晰</td>
-      </tr>
-      <tr>
-          <td>需要跨应用共享工具</td>
-          <td>MCP</td>
-          <td>一次开发，多处使用</td>
-      </tr>
-      <tr>
-          <td>构建工具生态</td>
-          <td>MCP</td>
-          <td>开放协议，生态共赢</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="opsmind-的演进方向">OpsMind 的演进方向<a hidden class="anchor" aria-hidden="true" href="#opsmind-的演进方向">#</a></h3>
-<p>目前 OpsMind 使用预设代码模式，对于单一应用来说已经足够。但未来可以考虑：</p>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────┐
-│                    OpsMind 架构演进                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  第一阶段：预设代码（当前）                                   │
-│  ├── 快速实现核心功能                                        │
-│  ├── 验证产品价值                                            │
-│  └── 积累用户反馈                                            │
-│                                                             │
-│  第二阶段：引入 Skill                                        │
-│  ├── 模块化现有功能                                          │
-│  ├── 支持第三方 Skill 扩展                                   │
-│  └── 提升可维护性                                            │
-│                                                             │
-│  第三阶段：MCP Server                                        │
-│  ├── 开放数据分析能力给其他 AI 应用                          │
-│  ├── 接入 MCP 生态                                           │
-│  └── 构建工具生态                                            │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-</code></pre><h3 id="组合使用">组合使用<a hidden class="anchor" aria-hidden="true" href="#组合使用">#</a></h3>
-<p>三者并非互斥，可以组合使用：</p>
-<pre tabindex="0"><code>AI 应用 → Skill（动态加载能力）→ MCP Client → MCP Server（调用外部工具）
-</code></pre><p>例如：</p>
+<h2 id="技术选型建议"><a href="#技术选型建议" class="headerlink" title="技术选型建议"></a>技术选型建议</h2><h3 id="场景匹配"><a href="#场景匹配" class="headerlink" title="场景匹配"></a>场景匹配</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐模式</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>快速开发 MVP</td>
+<td>预设代码</td>
+<td>开发成本低，迭代快</td>
+</tr>
+<tr>
+<td>功能相对固定</td>
+<td>预设代码</td>
+<td>无需复杂架构</td>
+</tr>
+<tr>
+<td>需要模块化扩展</td>
+<td>Skill</td>
+<td>能力可插拔，易维护</td>
+</tr>
+<tr>
+<td>多团队协作开发</td>
+<td>Skill</td>
+<td>模块独立，职责清晰</td>
+</tr>
+<tr>
+<td>需要跨应用共享工具</td>
+<td>MCP</td>
+<td>一次开发，多处使用</td>
+</tr>
+<tr>
+<td>构建工具生态</td>
+<td>MCP</td>
+<td>开放协议，生态共赢</td>
+</tr>
+</tbody></table>
+<h3 id="OpsMind-的演进方向"><a href="#OpsMind-的演进方向" class="headerlink" title="OpsMind 的演进方向"></a>OpsMind 的演进方向</h3><p>目前 OpsMind 使用预设代码模式，对于单一应用来说已经足够。但未来可以考虑：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    OpsMind 架构演进                          │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                             │</span><br><span class="line">│  第一阶段：预设代码（当前）                                   │</span><br><span class="line">│  ├── 快速实现核心功能                                        │</span><br><span class="line">│  ├── 验证产品价值                                            │</span><br><span class="line">│  └── 积累用户反馈                                            │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第二阶段：引入 Skill                                        │</span><br><span class="line">│  ├── 模块化现有功能                                          │</span><br><span class="line">│  ├── 支持第三方 Skill 扩展                                   │</span><br><span class="line">│  └── 提升可维护性                                            │</span><br><span class="line">│                                                             │</span><br><span class="line">│  第三阶段：MCP Server                                        │</span><br><span class="line">│  ├── 开放数据分析能力给其他 AI 应用                          │</span><br><span class="line">│  ├── 接入 MCP 生态                                           │</span><br><span class="line">│  └── 构建工具生态                                            │</span><br><span class="line">│                                                             │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合使用"><a href="#组合使用" class="headerlink" title="组合使用"></a>组合使用</h3><p>三者并非互斥，可以组合使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AI 应用 → Skill（动态加载能力）→ MCP Client → MCP Server（调用外部工具）</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
 <ul>
 <li>OpsMind 作为 AI 应用</li>
 <li>使用 Skill 管理内部能力模块</li>
@@ -727,123 +472,91 @@
 <li>同时作为 MCP Server 对外提供服务</li>
 </ul>
 <hr>
-<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
-<h3 id="核心观点">核心观点<a hidden class="anchor" aria-hidden="true" href="#核心观点">#</a></h3>
-<ol>
-<li>
-<p><strong>预设代码</strong>：功能写死在代码里，简单直接，适合快速开发和功能固定的场景。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="核心观点"><a href="#核心观点" class="headerlink" title="核心观点"></a>核心观点</h3><ol>
+<li><p><strong>预设代码</strong>：功能写死在代码里，简单直接，适合快速开发和功能固定的场景。</p>
 </li>
-<li>
-<p><strong>Skill</strong>：动态能力注入，按需加载，适合模块化设计和需要扩展的场景。</p>
+<li><p><strong>Skill</strong>：动态能力注入，按需加载，适合模块化设计和需要扩展的场景。</p>
 </li>
-<li>
-<p><strong>MCP</strong>：跨应用工具共享，开放协议，适合构建工具生态和跨应用复用。</p>
+<li><p><strong>MCP</strong>：跨应用工具共享，开放协议，适合构建工具生态和跨应用复用。</p>
 </li>
-<li>
-<p><strong>提示词与执行层</strong>：提示词是 LLM 的&quot;说明书&quot;，预设代码/Skill/MCP 是真正干活的&quot;执行层&quot;，两者配合才能让 AI 应用具备实际能力。</p>
+<li><p><strong>提示词与执行层</strong>：提示词是 LLM 的”说明书”，预设代码&#x2F;Skill&#x2F;MCP 是真正干活的”执行层”，两者配合才能让 AI 应用具备实际能力。</p>
 </li>
 </ol>
-<h3 id="架构演进路径">架构演进路径<a hidden class="anchor" aria-hidden="true" href="#架构演进路径">#</a></h3>
-<pre tabindex="0"><code>预设代码 → Skill → MCP
-   ↓         ↓        ↓
- 功能固定  能力模块化  工具生态化
-   ↓         ↓        ↓
- 单应用内   单应用内   跨应用共享
-   ↓         ↓        ↓
-改代码扩展 加文件扩展 连接新Server
-</code></pre><h3 id="最后的话">最后的话<a hidden class="anchor" aria-hidden="true" href="#最后的话">#</a></h3>
-<p>没有最好的架构，只有最适合的架构。理解每种模式的适用场景，才能做出正确的技术选型。</p>
+<h3 id="架构演进路径"><a href="#架构演进路径" class="headerlink" title="架构演进路径"></a>架构演进路径</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">预设代码 → Skill → MCP</span><br><span class="line">   ↓         ↓        ↓</span><br><span class="line"> 功能固定  能力模块化  工具生态化</span><br><span class="line">   ↓         ↓        ↓</span><br><span class="line"> 单应用内   单应用内   跨应用共享</span><br><span class="line">   ↓         ↓        ↓</span><br><span class="line">改代码扩展 加文件扩展 连接新Server</span><br></pre></td></tr></table></figure>
+
+<h3 id="最后的话"><a href="#最后的话" class="headerlink" title="最后的话"></a>最后的话</h3><p>没有最好的架构，只有最适合的架构。理解每种模式的适用场景，才能做出正确的技术选型。</p>
 <p>对于 OpsMind 这样的项目，从预设代码开始是正确的选择——先验证价值，再考虑架构演进。当功能逐渐丰富、用户需求多样化时，再引入 Skill 和 MCP，逐步构建更开放、更可扩展的架构。</p>
 <hr>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/about/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/favicon.ico" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/favicon.ico" title="头像" alt="头像"></a><div class="post-copyright__author_name">wwxdsg</div><div class="post-copyright__author_desc">记录技术学习与生活思考的个人空间</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://okelekaf01-cmd.github.io/opsmind/blog2/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://okelekaf01-cmd.github.io/opsmind/blog2/')">预设代码、Skill 与 MCP</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://okelekaf01-cmd.github.io/opsmind/blog2/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=预设代码、Skill 与 MCP&amp;url=https://okelekaf01-cmd.github.io/opsmind/blog2/&amp;pic=" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://okelekaf01-cmd.github.io" target="_blank">wwxdsg的个人博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/AI/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>AI<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>架构设计<span class="tagsPageCount">2</span></a><a class="post-meta__box__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>技术模式<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="/favicon.ico" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/notes/first-post/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">从 404 到成功上线：我的 Hugo 博客折腾记</div></div></a></div><div class="next-post pull-right"><a href="/opsmind/blog3/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/opsmind/blog3/" title="从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-01-31</div><div class="title">从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/favicon.ico" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">持续记录 AI 开发、工程实践与学习笔记</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><h1 class="author-info__name">wwxdsg</h1><div class="author-info__desc">记录技术学习与生活思考的个人空间</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/okelekaf01-cmd" target="_blank" title="GitHub"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的个人博客，这里主要记录项目开发与技术思考。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E7%8E%B0%E7%8A%B6%EF%BC%9A%E9%A2%84%E8%AE%BE%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">我的现状：预设代码模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">项目架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">这种模式的特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Skill-%E6%8A%80%E6%9C%AF%EF%BC%9A%E5%8A%A8%E6%80%81%E8%83%BD%E5%8A%9B%E6%B3%A8%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">Skill 技术：动态能力注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Skill"><span class="toc-number">2.1.</span> <span class="toc-text">什么是 Skill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E7%94%A8-Skill-%E9%87%8D%E6%9E%84-OpsMind"><span class="toc-number">2.2.</span> <span class="toc-text">如果用 Skill 重构 OpsMind</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%AF%B9%E6%AF%94"><span class="toc-number">2.3.</span> <span class="toc-text">执行流程对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E%E9%A2%84%E8%AE%BE%E4%BB%A3%E7%A0%81%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">2.4.</span> <span class="toc-text">与预设代码的对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP%EF%BC%9A%E8%B7%A8%E5%BA%94%E7%94%A8%E5%B7%A5%E5%85%B7%E5%85%B1%E4%BA%AB%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.</span> <span class="toc-text">MCP：跨应用工具共享协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-MCP"><span class="toc-number">3.1.</span> <span class="toc-text">什么是 MCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E7%94%A8-MCP-%E9%87%8D%E6%9E%84-OpsMind"><span class="toc-number">3.2.</span> <span class="toc-text">如果用 MCP 重构 OpsMind</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP-%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="toc-number">3.3.</span> <span class="toc-text">MCP 的核心价值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E-Skill-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">3.4.</span> <span class="toc-text">与 Skill 的对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E8%80%85%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB"><span class="toc-number">4.</span> <span class="toc-text">三者的本质区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94%E5%9B%BE"><span class="toc-number">4.1.</span> <span class="toc-text">架构对比图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82%E6%80%BB%E7%BB%93"><span class="toc-number">4.2.</span> <span class="toc-text">核心差异总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%B1%82%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">5.</span> <span class="toc-text">提示词与执行层的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98"><span class="toc-number">5.1.</span> <span class="toc-text">一个关键问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E7%90%86%E8%A7%A3"><span class="toc-number">5.2.</span> <span class="toc-text">分层理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5-OpsMind-%E4%B8%BA%E4%BE%8B"><span class="toc-number">5.3.</span> <span class="toc-text">以 OpsMind 为例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%A2%E8%B1%A1%E6%AF%94%E5%96%BB"><span class="toc-number">5.4.</span> <span class="toc-text">形象比喻</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="toc-number">6.</span> <span class="toc-text">技术选型建议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%8C%B9%E9%85%8D"><span class="toc-number">6.1.</span> <span class="toc-text">场景匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpsMind-%E7%9A%84%E6%BC%94%E8%BF%9B%E6%96%B9%E5%90%91"><span class="toc-number">6.2.</span> <span class="toc-text">OpsMind 的演进方向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8"><span class="toc-number">6.3.</span> <span class="toc-text">组合使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A7%82%E7%82%B9"><span class="toc-number">7.1.</span> <span class="toc-text">核心观点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B%E8%B7%AF%E5%BE%84"><span class="toc-number">7.2.</span> <span class="toc-text">架构演进路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E7%9A%84%E8%AF%9D"><span class="toc-number">7.3.</span> <span class="toc-text">最后的话</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog9_technical_discoveries/" title="从需求出发的技术发现：我与 AI 架构的三次重逢">从需求出发的技术发现：我与 AI 架构的三次重逢</a><time datetime="2026-02-28T18:00:00.000Z" title="发表于 2026-03-01 02:00:00">2026-03-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog8_preprocessor_upgrade/" title="OpsMind 数据预处理模块升级：从简单清洗到智能结构化">OpsMind 数据预处理模块升级：从简单清洗到智能结构化</a><time datetime="2026-02-24T18:00:00.000Z" title="发表于 2026-02-25 02:00:00">2026-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog7_engineering_milestone/" title="OpsMind 项目工程化里程碑：测试体系与 UI 组件化">OpsMind 项目工程化里程碑：测试体系与 UI 组件化</a><time datetime="2026-02-19T18:00:00.000Z" title="发表于 2026-02-20 02:00:00">2026-02-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog6_refactoring_methodology/" title="OpsMind 图表模块重构">OpsMind 图表模块重构</a><time datetime="2026-02-14T18:00:00.000Z" title="发表于 2026-02-15 02:00:00">2026-02-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog5_llm_implementation/" title="LLM 在 OpsMind 项目中的技术实现详解">LLM 在 OpsMind 项目中的技术实现详解</a><time datetime="2026-02-09T18:00:00.000Z" title="发表于 2026-02-10 02:00:00">2026-02-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="footer_custom_text">基于 Hexo 与 AnZhiYu 主题构建</div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2026 By <a class="footer-bar-link" href="/about/" title="wwxdsg" target="_blank">wwxdsg</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io" title="Hexo">Hexo</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">31</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://hexo.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 0.88rem;">AI<sup>1</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 0.88rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 0.88rem;">Agent<sup>1</sup></a><a href="/tags/DeepSeek/" style="font-size: 0.88rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 0.88rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 0.88rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 0.88rem;">LLM<sup>1</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 0.88rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 0.88rem;">LLM应用<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 0.88rem;">Tool Calling<sup>1</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 0.88rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 0.88rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 0.88rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 0.88rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 0.88rem;">工程化<sup>1</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 0.88rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 0.88rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 0.88rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 0.88rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 0.88rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">数据预处理<sup>1</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 0.88rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 0.88rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 0.88rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 0.88rem;">架构设计<sup>2</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 0.88rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 0.88rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 0.88rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 0.88rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;undefined&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://cdn.cbd.int/qrcodejs@1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
 
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
 
-  </div>
-
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="https://okelekaf01-cmd.github.io/tags/ai/">AI</a></li>
-      <li><a href="https://okelekaf01-cmd.github.io/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/">架构设计</a></li>
-      <li><a href="https://okelekaf01-cmd.github.io/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/">技术模式</a></li>
-    </ul>
-  </footer>
-</article>
-    </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="https://okelekaf01-cmd.github.io/">wwxdsg的个人博客</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu');
-    if (menu) {
-        
-        const scrollPosition = localStorage.getItem("menu-scroll-position");
-        if (scrollPosition) {
-            menu.scrollLeft = parseInt(scrollPosition, 10);
-        }
-        
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
     }
+  }
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
+  typeof typed === 'object' && typed.destroy()
 
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
 
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
 
-</script>
-</body>
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
 
-</html>
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

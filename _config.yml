@@ -1,0 +1,40 @@
+title: wwxdsg的个人博客
+subtitle: 记录技术学习与生活思考的个人空间
+description: 记录技术学习、AI 开发实践与生活思考的个人博客
+keywords:
+  - 博客
+  - 技术博客
+  - AI
+  - Agent
+  - Hugo
+  - Hexo
+author: wwxdsg
+language: zh-CN
+timezone: Asia/Shanghai
+url: https://okelekaf01-cmd.github.io
+root: /
+permalink: :title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: false
+
+theme: anzhiyu
+
+per_page: 10
+pagination_dir: page
+
+deploy:
+  type:
+
+search:
+  path: search.xml
+  field: post
+  content: true
+
+highlight:
+  enable: false
+  line_number: false
+
+prismjs:
+  enable: false

@@ -1,881 +1,517 @@
-<!DOCTYPE html>
-<html lang="en" dir="auto" data-theme="auto">
-
-<head><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>OpsMind 数据预处理模块升级：从简单清洗到智能结构化 | wwxdsg的个人博客</title>
-<meta name="keywords" content="数据预处理, 宽表转换, 智能推断, LLM增强">
-<meta name="description" content="分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能">
-<meta name="author" content="wwxdsg">
-<link rel="canonical" href="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.36425ade08177ac29d86af306e92cdbb1a7cb0679bbe73544a6d745a8789de6e.css" integrity="sha256-NkJa3ggXesKdhq8wbpLNuxp8sGebvnNUSm10WoeJ3m4=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://okelekaf01-cmd.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://okelekaf01-cmd.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://okelekaf01-cmd.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://okelekaf01-cmd.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://okelekaf01-cmd.github.io/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-                color-scheme: dark;
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .toc {
-                background: var(--entry);
-            }
-        }
-
-        @media (prefers-color-scheme: light) {
-            .list::-webkit-scrollbar-thumb {
-                border-color: var(--code-bg);
-            }
-        }
-
-    </style>
-</noscript>
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else if (localStorage.getItem("pref-theme") === "light") {
-       document.querySelector("html").dataset.theme = 'light';
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else {
-        document.querySelector("html").dataset.theme = 'light';
-    }
-
-</script><meta property="og:url" content="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/">
-  <meta property="og:site_name" content="wwxdsg的个人博客">
-  <meta property="og:title" content="OpsMind 数据预处理模块升级：从简单清洗到智能结构化">
-  <meta property="og:description" content="分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能">
-  <meta property="og:locale" content="zh-cn">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="opsmind">
-    <meta property="article:published_time" content="2026-02-25T10:00:00+08:00">
-    <meta property="article:modified_time" content="2026-02-25T10:00:00+08:00">
-    <meta property="article:tag" content="数据预处理">
-    <meta property="article:tag" content="宽表转换">
-    <meta property="article:tag" content="智能推断">
-    <meta property="article:tag" content="LLM增强">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OpsMind 数据预处理模块升级：从简单清洗到智能结构化">
-<meta name="twitter:description" content="分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "OpsMind开发日志",
-      "item": "https://okelekaf01-cmd.github.io/opsmind/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "OpsMind 数据预处理模块升级：从简单清洗到智能结构化",
-      "item": "https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "OpsMind 数据预处理模块升级：从简单清洗到智能结构化",
-  "name": "OpsMind 数据预处理模块升级：从简单清洗到智能结构化",
-  "description": "分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能",
-  "keywords": [
-    "数据预处理", "宽表转换", "智能推断", "LLM增强"
-  ],
-  "articleBody": "一、背景与问题 1.1 原有预处理能力 OpsMind 的数据预处理模块已具备以下能力：\n功能 方法 说明 数据诊断 diagnose() 缺失率、重复行、类型异常检测 基础清洗 clean() 去重、类型修正、缺失值填充 衍生属性 generate_derived() 年龄段分箱、日期维度展开 LLM 建议 suggest_derived() 根据查询意图建议衍生规则 1.2 遇到的问题 在实际使用中，我们发现了一个常见的数据格式问题：宽表结构。\n┌─────────────────────────────────────────────────────────────────────────┐\r│ 典型宽表问题 │\r├─────────────────────────────────────────────────────────────────────────┤\r│ │\r│ 原始数据（宽表）： │\r│ ┌──────────┬──────┬──────┬──────┬──────┬──────┐ │\r│ │ Unnamed │ 2020 │ 2021 │ 2022 │ 2023 │ 2024 │ │\r│ ├──────────┼──────┼──────┼──────┼──────┼──────┤ │\r│ │ 北京 │ 100 │ 120 │ 150 │ 180 │ 200 │ │\r│ │ 上海 │ 200 │ 220 │ 250 │ 280 │ 300 │ │\r│ │ 广东 │ 150 │ 170 │ 190 │ 210 │ 230 │ │\r│ └──────────┴──────┴──────┴──────┴──────┴──────┘ │\r│ │\r│ 问题： │\r│ 1. 年份作为列名，无法按时间维度分析 │\r│ 2. Unnamed 列名无语义，难以理解 │\r│ 3. 无法直接绘制趋势图（需要年份作为行） │\r│ │\r│ 期望格式（长表）： │\r│ ┌──────────┬──────┬──────┐ │\r│ │ 省份 │ 年份 │ 值 │ │\r│ ├──────────┼──────┼──────┤ │\r│ │ 北京 │ 2020 │ 100 │ │\r│ │ 北京 │ 2021 │ 120 │ │\r│ │ ... │ ... │ ... │ │\r│ └──────────┴──────┴──────┘ │\r│ │\r└─────────────────────────────────────────────────────────────────────────┘ 1.3 其他痛点 异常值干扰：极端值影响统计分析和图表展示 表头行错位：Excel 导出时表头前有说明行，导致列名解析错误 Unnamed 列：导出数据丢失列名，难以理解数据语义 二、新增功能概览 2.1 功能矩阵 功能 方法 说明 新增 数据诊断 diagnose() 缺失率、重复行、类型异常 - 基础清洗 clean() 去重、类型修正、缺失值填充 - 宽表检测 detect_structure() 检测年份列、日期列、Unnamed列 ✅ 结构归一化 normalize() 宽表→长表、表头校正 ✅ 异常值处理 _handle_outliers() IQR 方法截断异常值 ✅ 列名推断 _infer_column_name() 根据内容推断语义名称 ✅ 衍生属性 generate_derived() 年龄段、日期维度 - LLM 建议 suggest_derived() 智能衍生建议 - 一站式预处理 prepare() 全流程整合 升级 2.2 预处理流程升级 升级前：\r┌─────────┐ ┌─────────┐ ┌─────────────┐\r│ clean │ → │ suggest │ → │ generate │\r│ │ │ derived │ │ derived │\r└─────────┘ └─────────┘ └─────────────┘\r升级后：\r┌───────────┐ ┌─────────┐ ┌───────────┐ ┌─────────┐ ┌─────────────┐\r│ normalize │ → │ clean │ → │ outliers │ → │ suggest │ → │ generate │\r│ (新增) │ │ │ │ (新增) │ │ derived │ │ derived │\r└───────────┘ └─────────┘ └───────────┘ └─────────┘ └─────────────┘\r│\r├── detect_structure() 检测宽表\r├── melt_wide_table() 宽表转长表\r└── 表头行校正 三、宽表结构检测 3.1 检测逻辑 def detect_structure(self, df: pd.DataFrame) -\u003e Dict[str, Any]: \"\"\" 轻量级宽表结构检测（无 LLM 调用） Returns: { needs_attention: bool, # 是否需要用户关注 confidence: float, # 检测置信度 (0-1) format: str, # \"wide_year\" | \"wide_date\" | \"normal\" year_cols: List[str], # 年份列名列表 date_str_cols: List[str], # 日期字符串列名列表 text_cols: List[str], # 非时间文本列名 nan_cols: List[str], # 全 NaN 列名 unnamed_cols: List[str], # Unnamed 列名 inferred_names: Dict, # 推断的列名映射 suggested_config: Dict, # 建议的转换配置 } \"\"\" 3.2 检测维度 ┌─────────────────────────────────────────────────────────────────────────┐\r│ 宽表检测维度 │\r├─────────────────────────────────────────────────────────────────────────┤\r│ │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ 1. 年份列检测 │ │\r│ │ 列名可直接转 int，且落在 [1900, 2100] │ │\r│ │ 例：2020, 2021, 2022, 2023, 2024 │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r│ │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ 2. 日期字符串列检测 │ │\r│ │ 匹配正则：2023Q1, Jan-2023, 2024-01 等 │ │\r│ │ 例：2020Q1, 2020Q2, 2021Q1, 2021Q2 │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r│ │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ 3. Unnamed 列检测 │ │\r│ │ 列名以 \"Unnamed:\" 开头，通常是导出时丢失的索引列 │ │\r│ │ 例：Unnamed: 0, Unnamed: 1 │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r│ │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ 4. 全 NaN 列检测 │ │\r│ │ 整列都是空值，通常是导出时的空白列 │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r│ │\r│ ┌─────────────────────────────────────────────────────────────────┐ │\r│ │ 5. 表头行错位检测 │ │\r│ │ 大多数列名是 Unnamed，但首行数据看起来更像列名 │ │\r│ └─────────────────────────────────────────────────────────────────┘ │\r│ │\r└─────────────────────────────────────────────────────────────────────────┘ 3.3 置信度计算 # 置信度计算逻辑 confidence = 0.0 # 时间列占比 if n_time \u003e= 3: time_ratio = n_time / n_cols confidence += 0.5 if time_ratio \u003e 0.7 else (0.3 if time_ratio \u003e 0.4 else 0.1) # 文本列数量 if n_text_obj == 1: confidence += 0.3 # 单一维度列，典型宽表 elif n_text_obj \u003e 1: confidence += 0.1 # 多维度列 # 行数较少（宽表特征） if len(df) \u003c 200: confidence += 0.2 confidence = min(confidence, 1.0) 四、结构归一化 4.1 normalize() 方法 def normalize(self, df: pd.DataFrame, config: Optional[Dict] = None) -\u003e Tuple[pd.DataFrame, Dict]: \"\"\" 结构归一化 Args: df: 原始 DataFrame config: 用户确认的转换配置（来自 UI），None 表示自动无损清理 Returns: (df_out, report) 元组 \"\"\" 4.2 自动无损清理 当 config=None 时，自动执行无损操作：\nif config is None: detection = self.detect_structure(df) # 1. 删除全 NaN 列 nan_cols = detection.get(\"nan_cols\", []) if nan_cols: df = df.drop(columns=nan_cols) # 2. 重命名 Unnamed 列 inferred = detection.get(\"inferred_names\", {}) if inferred: df = df.rename(columns=inferred) return df, {\"action\": \"auto_clean\", \"details\": [...]} 4.3 宽表转长表（melt） 当检测到宽表且用户确认后：\nif action == \"melt\": df = df.melt( id_vars=id_vars_final, # 维度列（如省份） value_vars=value_vars, # 时间列（如 2020, 2021...） var_name=\"年份\", # 新列名：时间维度 value_name=\"值\", # 新列名：数值 ) 转换示例：\n宽表：\r┌──────────┬──────┬──────┬──────┐\r│ 省份 │ 2022 │ 2023 │ 2024 │\r├──────────┼──────┼──────┼──────┤\r│ 北京 │ 100 │ 120 │ 150 │\r│ 上海 │ 200 │ 220 │ 250 │\r└──────────┴──────┴──────┴──────┘\r↓ melt 转换 ↓\r长表：\r┌──────────┬──────┬──────┐\r│ 省份 │ 年份 │ 值 │\r├──────────┼──────┼──────┤\r│ 北京 │ 2022 │ 100 │\r│ 北京 │ 2023 │ 120 │\r│ 北京 │ 2024 │ 150 │\r│ 上海 │ 2022 │ 200 │\r│ 上海 │ 2023 │ 220 │\r│ 上海 │ 2024 │ 250 │\r└──────────┴──────┴──────┘ 4.4 表头行校正 处理 Excel 导出时表头前有说明行的情况：\n# 检测：大多数列名是 Unnamed，但首行数据看起来更像列名 unnamed_ratio = sum(1 for c in df.columns if str(c).startswith(\"Unnamed:\")) / n_cols if unnamed_ratio \u003e 0.4: row0_str_count = sum(1 for v in df.iloc[0] if isinstance(v, str) and v.strip()) if row0_str_count / n_cols \u003e 0.25: suggested_header_row = 0 # 首行应作为列名 # 执行校正 if header_row is not None: new_cols = [str(v).strip() for v in df.iloc[header_row]] df = df.iloc[header_row + 1:].reset_index(drop=True) df.columns = new_cols 五、异常值处理 5.1 IQR 方法 使用四分位距（Interquartile Range）检测异常值：\ndef _handle_outliers(self, df: pd.DataFrame, strategy: str = \"cap\") -\u003e pd.DataFrame: \"\"\" IQR 法检测并处理数值列中的异常值 Args: df: DataFrame strategy: \"cap\" 截断 | \"drop\" 删除 \"\"\" for col in numeric_cols: q1, q3 = series.quantile(0.25), series.quantile(0.75) iqr = q3 - q1 lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr if strategy == \"cap\": df[col] = df[col].clip(lower=lower, upper=upper) elif strategy == \"drop\": df = df[(df[col] \u003e= lower) \u0026 (df[col] \u003c= upper)] 5.2 异常值判定标准 ┌─────────────────────────────────────────────────────────────────────────┐\r│ IQR 异常值判定 │\r├─────────────────────────────────────────────────────────────────────────┤\r│ │\r│ 数据分布： │\r│ │\r│ ──────────┬──────────┬──────────┬──────────┬─────────── │\r│ │ │ │ │ │\r│ lower Q1 median Q3 upper │\r│ │ │ │ │ │\r│ Q1-1.5×IQR │ │ │ Q3+1.5×IQR │\r│ │ │ │ │ │\r│ ──────────┴──────────┴──────────┴──────────┴─────────── │\r│ │\r│ 正常范围：[Q1 - 1.5×IQR, Q3 + 1.5×IQR] │\r│ 异常值：\u003c lower 或 \u003e upper │\r│ │\r│ 处理策略： │\r│ - cap: 将异常值截断到边界值（保留数据行） │\r│ - drop: 删除含异常值的行（减少数据量） │\r│ │\r└─────────────────────────────────────────────────────────────────────────┘ 六、一站式预处理升级 6.1 prepare() 方法升级 def prepare( self, df: pd.DataFrame, query: Optional[str] = None, use_llm_suggestions: bool = True, table_config: Optional[Dict] = None, # 新增：用户确认的宽表配置 ) -\u003e tuple: \"\"\" 一站式预处理 流程： normalize → clean → outliers → suggest_derived → generate_derived Returns: (df_cleaned, cleaning_report) 元组 \"\"\" 6.2 完整流程 def prepare(self, df, query, use_llm_suggestions, table_config): self._cleaning_report = {} # Step 0: 结构归一化（宽表→长表等） df, norm_report = self.normalize(df, table_config) self._cleaning_report[\"normalize\"] = norm_report # Step 1: 基础清洗（去重、类型修正、缺失值处理） df = self.clean(df) # Step 2: 异常值处理（IQR cap） df = self._handle_outliers(df, strategy=\"cap\") # Step 3: LLM 衍生属性建议 suggestions = [] if use_llm_suggestions and self.client and query: suggestions = self.suggest_derived(df, query) # Step 4: 生成衍生属性 df = self.generate_derived(df, suggestions=suggestions) return df, self._cleaning_report 6.3 清洗报告示例 { \"normalize\": { \"action\": \"melt\", \"details\": [ \"重设表头: 使用第 0 行作为列名\", \"删除指定列: ['Unnamed: 5']\", \"宽表转长表完成: 150行×3列\" ] }, \"clean\": { \"duplicates_dropped\": 5, \"type_conversions\": [\"'销售额' 转为数值型\"], \"missing_filled\": [\"'地区'(缺失率3.2%, 填充方式:众数('华东'))\"], \"columns_dropped\": [], \"shape_before\": \"50行×6列\", \"shape_after\": \"45行×5列\" }, \"outliers\": [ \"'销售额': 3个异常值已截断至 [1000, 50000]\" ], \"llm_suggestions_applied\": 2 } 七、实际应用场景 7.1 场景一：年度数据宽表 原始数据：\n┌──────────┬──────┬──────┬──────┬──────┬──────┐\r│ Unnamed │ 2020 │ 2021 │ 2022 │ 2023 │ 2024 │\r├──────────┼──────┼──────┼──────┼──────┼──────┤\r│ 北京 │ 100 │ 120 │ 150 │ 180 │ 200 │\r│ 上海 │ 200 │ 220 │ 250 │ 280 │ 300 │\r│ 广东 │ 150 │ 170 │ 190 │ 210 │ 230 │\r└──────────┴──────┴──────┴──────┴──────┴──────┘ 检测结果：\n{ \"needs_attention\": True, \"confidence\": 0.9, \"format\": \"wide_year\", \"year_cols\": [\"2020\", \"2021\", \"2022\", \"2023\", \"2024\"], \"unnamed_cols\": [\"Unnamed: 0\"], \"inferred_names\": {\"Unnamed: 0\": \"省份\"}, \"suggested_config\": { \"action\": \"melt\", \"id_vars\": [\"Unnamed: 0\"], \"value_vars\": [\"2020\", \"2021\", \"2022\", \"2023\", \"2024\"], \"var_name\": \"年份\", \"value_name\": \"值\", \"rename_id_var\": \"省份\" } } 转换后：\n┌──────────┬──────┬──────┐\r│ 省份 │ 年份 │ 值 │\r├──────────┼──────┼──────┤\r│ 北京 │ 2020 │ 100 │\r│ 北京 │ 2021 │ 120 │\r│ ... │ ... │ ... │\r└──────────┴──────┴──────┘ 7.2 场景二：季度数据宽表 原始数据：\n┌──────────┬─────────┬─────────┬─────────┬─────────┐\r│ 产品 │ 2023Q1 │ 2023Q2 │ 2023Q3 │ 2023Q4 │\r├──────────┼─────────┼─────────┼─────────┼─────────┤\r│ A类 │ 1000 │ 1200 │ 1500 │ 1800 │\r│ B类 │ 2000 │ 2200 │ 2500 │ 2800 │\r└──────────┴─────────┴─────────┴─────────┴─────────┘ 检测结果：\n{ \"format\": \"wide_date\", \"date_str_cols\": [\"2023Q1\", \"2023Q2\", \"2023Q3\", \"2023Q4\"], \"suggested_config\": { \"action\": \"melt\", \"var_name\": \"时间\", \"value_name\": \"值\" } } 7.3 场景三：表头行错位 原始数据：\n┌──────────┬──────────┬──────────┬──────────┐\r│ Unnamed │ Unnamed │ Unnamed │ Unnamed │\r├──────────┼──────────┼──────────┼──────────┤\r│ 地区 │ 产品 │ 销售额 │ 利润 │ ← 真正的列名\r├──────────┼──────────┼──────────┼──────────┤\r│ 华东 │ A类 │ 1000 │ 200 │\r│ 华南 │ B类 │ 2000 │ 400 │\r└──────────┴──────────┴──────────┴──────────┘ 检测结果：\n{ \"suggested_header_row\": 0, # 首行应作为列名 } 校正后：\n┌──────────┬──────────┬──────────┬──────────┐\r│ 地区 │ 产品 │ 销售额 │ 利润 │\r├──────────┼──────────┼──────────┼──────────┤\r│ 华东 │ A类 │ 1000 │ 200 │\r│ 华南 │ B类 │ 2000 │ 400 │\r└──────────┴──────────┴──────────┴──────────┘ 八、总结与展望 8.1 本次升级总结 方面 升级前 升级后 宽表处理 ❌ 不支持 ✅ 自动检测 + 智能转换 异常值 ❌ 不处理 ✅ IQR 检测 + 截断 列名推断 ❌ 无 ✅ 根据内容推断语义名 表头校正 ❌ 无 ✅ 自动检测错位表头 流程完整性 3 步 5 步 8.2 技术亮点 零 LLM 调用检测：detect_structure() 纯规则检测，无延迟 置信度评估：量化检测结果可信度，辅助用户决策 无损优先：自动清理只执行无损操作，有损操作需用户确认 完整报告：每步操作都有详细日志，便于追溯 8.3 后续规划 功能 说明 优先级 多级宽表支持 支持多个维度列的宽表转换 🟡 中 自定义分箱规则 用户可配置分箱边界 🟡 中 数据质量评分 综合评估数据质量 🟢 低 增量预处理 支持数据追加时的增量处理 🟢 低 本次升级让 OpsMind 的数据预处理能力从\"简单清洗\"进化为\"智能结构化\"，能够自动识别和处理复杂的数据格式问题，大大提升了数据分析的效率和准确性。\n本文由 OpsMind 技术团队撰写，转载请注明出处。\n",
-  "wordCount" : "1508",
-  "inLanguage": "en",
-  "datePublished": "2026-02-25T10:00:00+08:00",
-  "dateModified": "2026-02-25T10:00:00+08:00",
-  "author":{
-    "@type": "Person",
-    "name": "wwxdsg"
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>OpsMind 数据预处理模块升级：从简单清洗到智能结构化 | wwxdsg的个人博客</title><meta name="keywords" content="数据预处理,宽表转换,智能推断,LLM增强"><meta name="author" content="wwxdsg"><meta name="copyright" content="wwxdsg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="OpsMind 数据预处理模块升级：从简单清洗到智能结构化"><meta name="application-name" content="OpsMind 数据预处理模块升级：从简单清洗到智能结构化"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="OpsMind 数据预处理模块升级：从简单清洗到智能结构化"><meta property="og:url" content="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/index.html"><meta property="og:site_name" content="wwxdsg的个人博客"><meta property="og:description" content="分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://okelekaf01-cmd.github.io/favicon.ico"><meta property="article:author" content="wwxdsg"><meta property="article:tag" content="[&quot;博客&quot;,&quot;技术博客&quot;,&quot;AI&quot;,&quot;Agent&quot;,&quot;Hugo&quot;,&quot;Hexo&quot;]"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://okelekaf01-cmd.github.io/favicon.ico"><meta name="description" content="分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: ,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
   },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/"
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
   },
-  "publisher": {
-    "@type": "Organization",
-    "name": "wwxdsg的个人博客",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://okelekaf01-cmd.github.io/favicon.ico"
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: wwxdsg","link":"链接: ","source":"来源: wwxdsg的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.css'
     }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'wwxdsg的个人博客',
+  title: 'OpsMind 数据预处理模块升级：从简单清洗到智能结构化',
+  postAI: '',
+  pageFillDescription: '一、背景与问题, 1.1 原有预处理能力, 1.2 遇到的问题, 1.3 其他痛点, 二、新增功能概览, 2.1 功能矩阵, 2.2 预处理流程升级, 三、宽表结构检测, 3.1 检测逻辑, 3.2 检测维度, 3.3 置信度计算, 四、结构归一化, 4.1 normalize() 方法, 4.2 自动无损清理, 4.3 宽表转长表（melt）, 4.4 表头行校正, 五、异常值处理, 5.1 IQR 方法, 5.2 异常值判定标准, 六、一站式预处理升级, 6.1 prepare() 方法升级, 6.2 完整流程, 6.3 清洗报告示例, 七、实际应用场景, 7.1 场景一：年度数据宽表, 7.2 场景二：季度数据宽表, 7.3 场景三：表头行错位, 八、总结与展望, 8.1 本次升级总结, 8.2 技术亮点, 8.3 后续规划一背景与问题原有预处理能力的数据预处理模块已具备以下能力功能方法说明数据诊断缺失率重复行类型异常检测基础清洗去重类型修正缺失值填充衍生属性年龄段分箱日期维度展开建议根据查询意图建议衍生规则遇到的问题在实际使用中我们发现了一个常见的数据格式问题宽表结构典型宽表问题原始数据宽表北京上海广东问题年份作为列名无法按时间维度分析列名无语义难以理解无法直接绘制趋势图需要年份作为行期望格式长表省份年份值北京北京其他痛点异常值干扰极端值影响统计分析和图表展示表头行错位导出时表头前有说明行导致列名解析错误列导出数据丢失列名难以理解数据语义二新增功能概览功能矩阵功能方法说明新增数据诊断缺失率重复行类型异常基础清洗去重类型修正缺失值填充宽表检测检测年份列日期列列结构归一化宽表长表表头校正异常值处理方法截断异常值列名推断根据内容推断语义名称衍生属性年龄段日期维度建议智能衍生建议一站式预处理全流程整合升级预处理流程升级升级前升级后新增新增检测宽表宽表转长表表头行校正三宽表结构检测检测逻辑轻量级宽表结构检测无调用是否需要用户关注检测置信度年份列名列表日期字符串列名列表非时间文本列名全列名列名推断的列名映射建议的转换配置检测维度宽表检测维度年份列检测列名可直接转且落在例日期字符串列检测匹配正则等例列检测列名以开头通常是导出时丢失的索引列例全列检测整列都是空值通常是导出时的空白列表头行错位检测大多数列名是但首行数据看起来更像列名置信度计算置信度计算逻辑时间列占比文本列数量单一维度列典型宽表多维度列行数较少宽表特征四结构归一化方法结构归一化原始用户确认的转换配置来自表示自动无损清理元组自动无损清理当时自动执行无损操作删除全列重命名列宽表转长表当检测到宽表且用户确认后维度列如省份时间列如年份新列名时间维度值新列名数值转换示例宽表省份北京上海转换长表省份年份值北京北京北京上海上海上海表头行校正处理导出时表头前有说明行的情况检测大多数列名是但首行数据看起来更像列名首行应作为列名执行校正五异常值处理方法使用四分位距检测异常值法检测并处理数值列中的异常值截断删除异常值判定标准异常值判定数据分布正常范围异常值或处理策略将异常值截断到边界值保留数据行删除含异常值的行减少数据量六一站式预处理升级方法升级新增用户确认的宽表配置一站式预处理流程元组完整流程结构归一化宽表长表等基础清洗去重类型修正缺失值处理异常值处理衍生属性建议生成衍生属性清洗报告示例重设表头使用第行作为列名删除指定列宽表转长表完成行列销售额转为数值型地区缺失率填充方式众数华东行列行列销售额个异常值已截断至七实际应用场景场景一年度数据宽表原始数据北京上海广东检测结果省份年份值省份转换后省份年份值北京北京场景二季度数据宽表原始数据产品类类检测结果时间值场景三表头行错位原始数据地区产品销售额利润真正的列名华东类华南类检测结果首行应作为列名校正后地区产品销售额利润华东类华南类八总结与展望本次升级总结方面升级前升级后宽表处理不支持自动检测智能转换异常值不处理检测截断列名推断无根据内容推断语义名表头校正无自动检测错位表头流程完整性步步技术亮点零调用检测纯规则检测无延迟置信度评估量化检测结果可信度辅助用户决策无损优先自动清理只执行无损操作有损操作需用户确认完整报告每步操作都有详细日志便于追溯后续规划功能说明优先级多级宽表支持支持多个维度列的宽表转换中自定义分箱规则用户可配置分箱边界中数据质量评分综合评估数据质量低增量预处理支持数据追加时的增量处理低本次升级让的数据预处理能力从简单清洗进化为智能结构化能够自动识别和处理复杂的数据格式问题大大提升了数据分析的效率和准确性本文由技术团队撰写转载请注明出处',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-03-19 10:27:04',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 8.1.1"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
   }
 }
-</script>
-</head>
-<body id="top">
-    <header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="https://okelekaf01-cmd.github.io/" accesskey="h" title="wwxdsg的个人博客 (Alt + H)">wwxdsg的个人博客</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <ul id="menu">
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/" title="主页">
-                    <span>主页</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/projects/" title="个人项目">
-                    <span>个人项目</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/opsmind/" title="OpsMind开发">
-                    <span>OpsMind开发</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/internship/" title="实习记录">
-                    <span>实习记录</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://okelekaf01-cmd.github.io/notes/" title="学习笔记">
-                    <span>学习笔记</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
-<main class="main">
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
 
-<article class="post-single">
-  <header class="post-header">
-    
-    <h1 class="post-title entry-hint-parent">
-      OpsMind 数据预处理模块升级：从简单清洗到智能结构化
-    </h1>
-    <div class="post-description">
-      分享OpsMind数据预处理模块从简单清洗到智能结构化的升级历程，包括宽表检测、结构归一化等核心功能
-    </div>
-    <div class="post-meta"><span title='2026-02-25 10:00:00 +0800 CST'>February 25, 2026</span>&nbsp;·&nbsp;<span>wwxdsg</span>
-
-</div>
-  </header> 
-  <div class="post-content"><h2 id="一背景与问题">一、背景与问题<a hidden class="anchor" aria-hidden="true" href="#一背景与问题">#</a></h2>
-<h3 id="11-原有预处理能力">1.1 原有预处理能力<a hidden class="anchor" aria-hidden="true" href="#11-原有预处理能力">#</a></h3>
-<p>OpsMind 的数据预处理模块已具备以下能力：</p>
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">wwxdsg的个人博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.05rem;">AI<sup>1</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 1.05rem;">Agent<sup>1</sup></a><a href="/tags/DeepSeek/" style="font-size: 1.05rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 1.05rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 1.05rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 1.05rem;">LLM<sup>1</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 1.05rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 1.05rem;">LLM应用<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 1.05rem;">Tool Calling<sup>1</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 1.05rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.05rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 1.05rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 1.05rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>1</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 1.05rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 1.05rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 1.05rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 1.05rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 1.05rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">数据预处理<sup>1</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 1.05rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 1.05rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 1.05rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">架构设计<sup>2</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.05rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 1.05rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 1.05rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 1.05rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/02/"><span class="card-archive-list-date">二月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>数据预处理</span></a><a class="article-meta__tags" href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>宽表转换</span></a><a class="article-meta__tags" href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>智能推断</span></a><a class="article-meta__tags" href="/tags/LLM%E5%A2%9E%E5%BC%BA/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>LLM增强</span></a></span></div></div><h1 class="post-title" itemprop="name headline">OpsMind 数据预处理模块升级：从简单清洗到智能结构化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2026-02-24T18:00:00.000Z" title="发表于 2026-02-25 02:00:00">2026-02-25</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2026-03-19T02:27:04.206Z" title="更新于 2026-03-19 10:27:04">2026-03-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为中国"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>中国</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src=""></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/"><header><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" tabindex="-1" itemprop="url">数据预处理</a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" tabindex="-1" itemprop="url">宽表转换</a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" tabindex="-1" itemprop="url">智能推断</a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" tabindex="-1" itemprop="url">LLM增强</a><h1 id="CrawlerTitle" itemprop="name headline">OpsMind 数据预处理模块升级：从简单清洗到智能结构化</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">wwxdsg</span><time itemprop="dateCreated datePublished" datetime="2026-02-24T18:00:00.000Z" title="发表于 2026-02-25 02:00:00">2026-02-25</time><time itemprop="dateCreated datePublished" datetime="2026-03-19T02:27:04.206Z" title="更新于 2026-03-19 10:27:04">2026-03-19</time></header><h2 id="一、背景与问题"><a href="#一、背景与问题" class="headerlink" title="一、背景与问题"></a>一、背景与问题</h2><h3 id="1-1-原有预处理能力"><a href="#1-1-原有预处理能力" class="headerlink" title="1.1 原有预处理能力"></a>1.1 原有预处理能力</h3><p>OpsMind 的数据预处理模块已具备以下能力：</p>
 <table>
-  <thead>
-      <tr>
-          <th>功能</th>
-          <th>方法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>数据诊断</td>
-          <td><code>diagnose()</code></td>
-          <td>缺失率、重复行、类型异常检测</td>
-      </tr>
-      <tr>
-          <td>基础清洗</td>
-          <td><code>clean()</code></td>
-          <td>去重、类型修正、缺失值填充</td>
-      </tr>
-      <tr>
-          <td>衍生属性</td>
-          <td><code>generate_derived()</code></td>
-          <td>年龄段分箱、日期维度展开</td>
-      </tr>
-      <tr>
-          <td>LLM 建议</td>
-          <td><code>suggest_derived()</code></td>
-          <td>根据查询意图建议衍生规则</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="12-遇到的问题">1.2 遇到的问题<a hidden class="anchor" aria-hidden="true" href="#12-遇到的问题">#</a></h3>
-<p>在实际使用中，我们发现了一个常见的数据格式问题：<strong>宽表结构</strong>。</p>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────────────────┐
-│                        典型宽表问题                                      │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│   原始数据（宽表）：                                                      │
-│   ┌──────────┬──────┬──────┬──────┬──────┬──────┐                      │
-│   │ Unnamed  │ 2020 │ 2021 │ 2022 │ 2023 │ 2024 │                      │
-│   ├──────────┼──────┼──────┼──────┼──────┼──────┤                      │
-│   │ 北京     │ 100  │ 120  │ 150  │ 180  │ 200  │                      │
-│   │ 上海     │ 200  │ 220  │ 250  │ 280  │ 300  │                      │
-│   │ 广东     │ 150  │ 170  │ 190  │ 210  │ 230  │                      │
-│   └──────────┴──────┴──────┴──────┴──────┴──────┘                      │
-│                                                                          │
-│   问题：                                                                  │
-│   1. 年份作为列名，无法按时间维度分析                                      │
-│   2. Unnamed 列名无语义，难以理解                                         │
-│   3. 无法直接绘制趋势图（需要年份作为行）                                  │
-│                                                                          │
-│   期望格式（长表）：                                                      │
-│   ┌──────────┬──────┬──────┐                                            │
-│   │ 省份     │ 年份 │ 值   │                                            │
-│   ├──────────┼──────┼──────┤                                            │
-│   │ 北京     │ 2020 │ 100  │                                            │
-│   │ 北京     │ 2021 │ 120  │                                            │
-│   │ ...      │ ...  │ ...  │                                            │
-│   └──────────┴──────┴──────┘                                            │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
-</code></pre><h3 id="13-其他痛点">1.3 其他痛点<a hidden class="anchor" aria-hidden="true" href="#13-其他痛点">#</a></h3>
-<ol>
+<thead>
+<tr>
+<th>功能</th>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据诊断</td>
+<td><code>diagnose()</code></td>
+<td>缺失率、重复行、类型异常检测</td>
+</tr>
+<tr>
+<td>基础清洗</td>
+<td><code>clean()</code></td>
+<td>去重、类型修正、缺失值填充</td>
+</tr>
+<tr>
+<td>衍生属性</td>
+<td><code>generate_derived()</code></td>
+<td>年龄段分箱、日期维度展开</td>
+</tr>
+<tr>
+<td>LLM 建议</td>
+<td><code>suggest_derived()</code></td>
+<td>根据查询意图建议衍生规则</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-遇到的问题"><a href="#1-2-遇到的问题" class="headerlink" title="1.2 遇到的问题"></a>1.2 遇到的问题</h3><p>在实际使用中，我们发现了一个常见的数据格式问题：<strong>宽表结构</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        典型宽表问题                                      │</span><br><span class="line">├─────────────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                          │</span><br><span class="line">│   原始数据（宽表）：                                                      │</span><br><span class="line">│   ┌──────────┬──────┬──────┬──────┬──────┬──────┐                      │</span><br><span class="line">│   │ Unnamed  │ 2020 │ 2021 │ 2022 │ 2023 │ 2024 │                      │</span><br><span class="line">│   ├──────────┼──────┼──────┼──────┼──────┼──────┤                      │</span><br><span class="line">│   │ 北京     │ 100  │ 120  │ 150  │ 180  │ 200  │                      │</span><br><span class="line">│   │ 上海     │ 200  │ 220  │ 250  │ 280  │ 300  │                      │</span><br><span class="line">│   │ 广东     │ 150  │ 170  │ 190  │ 210  │ 230  │                      │</span><br><span class="line">│   └──────────┴──────┴──────┴──────┴──────┴──────┘                      │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   问题：                                                                  │</span><br><span class="line">│   1. 年份作为列名，无法按时间维度分析                                      │</span><br><span class="line">│   2. Unnamed 列名无语义，难以理解                                         │</span><br><span class="line">│   3. 无法直接绘制趋势图（需要年份作为行）                                  │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   期望格式（长表）：                                                      │</span><br><span class="line">│   ┌──────────┬──────┬──────┐                                            │</span><br><span class="line">│   │ 省份     │ 年份 │ 值   │                                            │</span><br><span class="line">│   ├──────────┼──────┼──────┤                                            │</span><br><span class="line">│   │ 北京     │ 2020 │ 100  │                                            │</span><br><span class="line">│   │ 北京     │ 2021 │ 120  │                                            │</span><br><span class="line">│   │ ...      │ ...  │ ...  │                                            │</span><br><span class="line">│   └──────────┴──────┴──────┘                                            │</span><br><span class="line">│                                                                          │</span><br><span class="line">└─────────────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-其他痛点"><a href="#1-3-其他痛点" class="headerlink" title="1.3 其他痛点"></a>1.3 其他痛点</h3><ol>
 <li><strong>异常值干扰</strong>：极端值影响统计分析和图表展示</li>
 <li><strong>表头行错位</strong>：Excel 导出时表头前有说明行，导致列名解析错误</li>
 <li><strong>Unnamed 列</strong>：导出数据丢失列名，难以理解数据语义</li>
 </ol>
 <hr>
-<h2 id="二新增功能概览">二、新增功能概览<a hidden class="anchor" aria-hidden="true" href="#二新增功能概览">#</a></h2>
-<h3 id="21-功能矩阵">2.1 功能矩阵<a hidden class="anchor" aria-hidden="true" href="#21-功能矩阵">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>功能</th>
-          <th>方法</th>
-          <th>说明</th>
-          <th>新增</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>数据诊断</td>
-          <td><code>diagnose()</code></td>
-          <td>缺失率、重复行、类型异常</td>
-          <td>-</td>
-      </tr>
-      <tr>
-          <td>基础清洗</td>
-          <td><code>clean()</code></td>
-          <td>去重、类型修正、缺失值填充</td>
-          <td>-</td>
-      </tr>
-      <tr>
-          <td><strong>宽表检测</strong></td>
-          <td><code>detect_structure()</code></td>
-          <td>检测年份列、日期列、Unnamed列</td>
-          <td>✅</td>
-      </tr>
-      <tr>
-          <td><strong>结构归一化</strong></td>
-          <td><code>normalize()</code></td>
-          <td>宽表→长表、表头校正</td>
-          <td>✅</td>
-      </tr>
-      <tr>
-          <td><strong>异常值处理</strong></td>
-          <td><code>_handle_outliers()</code></td>
-          <td>IQR 方法截断异常值</td>
-          <td>✅</td>
-      </tr>
-      <tr>
-          <td><strong>列名推断</strong></td>
-          <td><code>_infer_column_name()</code></td>
-          <td>根据内容推断语义名称</td>
-          <td>✅</td>
-      </tr>
-      <tr>
-          <td>衍生属性</td>
-          <td><code>generate_derived()</code></td>
-          <td>年龄段、日期维度</td>
-          <td>-</td>
-      </tr>
-      <tr>
-          <td>LLM 建议</td>
-          <td><code>suggest_derived()</code></td>
-          <td>智能衍生建议</td>
-          <td>-</td>
-      </tr>
-      <tr>
-          <td>一站式预处理</td>
-          <td><code>prepare()</code></td>
-          <td>全流程整合</td>
-          <td>升级</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="22-预处理流程升级">2.2 预处理流程升级<a hidden class="anchor" aria-hidden="true" href="#22-预处理流程升级">#</a></h3>
-<pre tabindex="0"><code>升级前：
-┌─────────┐    ┌─────────┐    ┌─────────────┐
-│  clean  │ →  │ suggest │ →  │  generate   │
-│         │    │ derived │    │  derived    │
-└─────────┘    └─────────┘    └─────────────┘
+<h2 id="二、新增功能概览"><a href="#二、新增功能概览" class="headerlink" title="二、新增功能概览"></a>二、新增功能概览</h2><h3 id="2-1-功能矩阵"><a href="#2-1-功能矩阵" class="headerlink" title="2.1 功能矩阵"></a>2.1 功能矩阵</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>方法</th>
+<th>说明</th>
+<th>新增</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据诊断</td>
+<td><code>diagnose()</code></td>
+<td>缺失率、重复行、类型异常</td>
+<td>-</td>
+</tr>
+<tr>
+<td>基础清洗</td>
+<td><code>clean()</code></td>
+<td>去重、类型修正、缺失值填充</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>宽表检测</strong></td>
+<td><code>detect_structure()</code></td>
+<td>检测年份列、日期列、Unnamed列</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>结构归一化</strong></td>
+<td><code>normalize()</code></td>
+<td>宽表→长表、表头校正</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>异常值处理</strong></td>
+<td><code>_handle_outliers()</code></td>
+<td>IQR 方法截断异常值</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>列名推断</strong></td>
+<td><code>_infer_column_name()</code></td>
+<td>根据内容推断语义名称</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>衍生属性</td>
+<td><code>generate_derived()</code></td>
+<td>年龄段、日期维度</td>
+<td>-</td>
+</tr>
+<tr>
+<td>LLM 建议</td>
+<td><code>suggest_derived()</code></td>
+<td>智能衍生建议</td>
+<td>-</td>
+</tr>
+<tr>
+<td>一站式预处理</td>
+<td><code>prepare()</code></td>
+<td>全流程整合</td>
+<td>升级</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-预处理流程升级"><a href="#2-2-预处理流程升级" class="headerlink" title="2.2 预处理流程升级"></a>2.2 预处理流程升级</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">升级前：</span><br><span class="line">┌─────────┐    ┌─────────┐    ┌─────────────┐</span><br><span class="line">│  clean  │ →  │ suggest │ →  │  generate   │</span><br><span class="line">│         │    │ derived │    │  derived    │</span><br><span class="line">└─────────┘    └─────────┘    └─────────────┘</span><br><span class="line"></span><br><span class="line">升级后：</span><br><span class="line">┌───────────┐    ┌─────────┐    ┌───────────┐    ┌─────────┐    ┌─────────────┐</span><br><span class="line">│ normalize │ →  │  clean  │ →  │  outliers │ →  │ suggest │ →  │  generate   │</span><br><span class="line">│ (新增)    │    │         │    │  (新增)    │    │ derived │    │  derived    │</span><br><span class="line">└───────────┘    └─────────┘    └───────────┘    └─────────┘    └─────────────┘</span><br><span class="line">     │</span><br><span class="line">     ├── detect_structure() 检测宽表</span><br><span class="line">     ├── melt_wide_table() 宽表转长表</span><br><span class="line">     └── 表头行校正</span><br></pre></td></tr></table></figure>
 
-升级后：
-┌───────────┐    ┌─────────┐    ┌───────────┐    ┌─────────┐    ┌─────────────┐
-│ normalize │ →  │  clean  │ →  │  outliers │ →  │ suggest │ →  │  generate   │
-│ (新增)    │    │         │    │  (新增)    │    │ derived │    │  derived    │
-└───────────┘    └─────────┘    └───────────┘    └─────────┘    └─────────────┘
-     │
-     ├── detect_structure() 检测宽表
-     ├── melt_wide_table() 宽表转长表
-     └── 表头行校正
-</code></pre><hr>
-<h2 id="三宽表结构检测">三、宽表结构检测<a hidden class="anchor" aria-hidden="true" href="#三宽表结构检测">#</a></h2>
-<h3 id="31-检测逻辑">3.1 检测逻辑<a hidden class="anchor" aria-hidden="true" href="#31-检测逻辑">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">detect_structure</span>(self, df: pd<span style="color:#f92672">.</span>DataFrame) <span style="color:#f92672">-&gt;</span> Dict[str, Any]:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    轻量级宽表结构检测（无 LLM 调用）
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            needs_attention: bool,      # 是否需要用户关注
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            confidence: float,          # 检测置信度 (0-1)
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            format: str,                # &#34;wide_year&#34; | &#34;wide_date&#34; | &#34;normal&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            year_cols: List[str],       # 年份列名列表
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            date_str_cols: List[str],   # 日期字符串列名列表
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            text_cols: List[str],       # 非时间文本列名
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            nan_cols: List[str],        # 全 NaN 列名
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            unnamed_cols: List[str],    # Unnamed 列名
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            inferred_names: Dict,       # 推断的列名映射
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            suggested_config: Dict,     # 建议的转换配置
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-</span></span></code></pre></div><h3 id="32-检测维度">3.2 检测维度<a hidden class="anchor" aria-hidden="true" href="#32-检测维度">#</a></h3>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────────────────┐
-│                        宽表检测维度                                      │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │ 1. 年份列检测                                                    │   │
-│   │    列名可直接转 int，且落在 [1900, 2100]                         │   │
-│   │    例：2020, 2021, 2022, 2023, 2024                             │   │
-│   └─────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │ 2. 日期字符串列检测                                              │   │
-│   │    匹配正则：2023Q1, Jan-2023, 2024-01 等                       │   │
-│   │    例：2020Q1, 2020Q2, 2021Q1, 2021Q2                           │   │
-│   └─────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │ 3. Unnamed 列检测                                                │   │
-│   │    列名以 &#34;Unnamed:&#34; 开头，通常是导出时丢失的索引列              │   │
-│   │    例：Unnamed: 0, Unnamed: 1                                    │   │
-│   └─────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │ 4. 全 NaN 列检测                                                 │   │
-│   │    整列都是空值，通常是导出时的空白列                            │   │
-│   └─────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────┐   │
-│   │ 5. 表头行错位检测                                                │   │
-│   │    大多数列名是 Unnamed，但首行数据看起来更像列名                │   │
-│   └─────────────────────────────────────────────────────────────────┘   │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
-</code></pre><h3 id="33-置信度计算">3.3 置信度计算<a hidden class="anchor" aria-hidden="true" href="#33-置信度计算">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 置信度计算逻辑</span>
-</span></span><span style="display:flex;"><span>confidence <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 时间列占比</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> n_time <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">3</span>:
-</span></span><span style="display:flex;"><span>    time_ratio <span style="color:#f92672">=</span> n_time <span style="color:#f92672">/</span> n_cols
-</span></span><span style="display:flex;"><span>    confidence <span style="color:#f92672">+=</span> <span style="color:#ae81ff">0.5</span> <span style="color:#66d9ef">if</span> time_ratio <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.7</span> <span style="color:#66d9ef">else</span> (<span style="color:#ae81ff">0.3</span> <span style="color:#66d9ef">if</span> time_ratio <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.4</span> <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0.1</span>)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 文本列数量</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> n_text_obj <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
-</span></span><span style="display:flex;"><span>        confidence <span style="color:#f92672">+=</span> <span style="color:#ae81ff">0.3</span>  <span style="color:#75715e"># 单一维度列，典型宽表</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">elif</span> n_text_obj <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
-</span></span><span style="display:flex;"><span>        confidence <span style="color:#f92672">+=</span> <span style="color:#ae81ff">0.1</span>  <span style="color:#75715e"># 多维度列</span>
-</span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 行数较少（宽表特征）</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(df) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">200</span>:
-</span></span><span style="display:flex;"><span>        confidence <span style="color:#f92672">+=</span> <span style="color:#ae81ff">0.2</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>confidence <span style="color:#f92672">=</span> min(confidence, <span style="color:#ae81ff">1.0</span>)
-</span></span></code></pre></div><hr>
-<h2 id="四结构归一化">四、结构归一化<a hidden class="anchor" aria-hidden="true" href="#四结构归一化">#</a></h2>
-<h3 id="41-normalize-方法">4.1 normalize() 方法<a hidden class="anchor" aria-hidden="true" href="#41-normalize-方法">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">normalize</span>(self, df: pd<span style="color:#f92672">.</span>DataFrame,
-</span></span><span style="display:flex;"><span>              config: Optional[Dict] <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>) <span style="color:#f92672">-&gt;</span> Tuple[pd<span style="color:#f92672">.</span>DataFrame, Dict]:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    结构归一化
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        df: 原始 DataFrame
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        config: 用户确认的转换配置（来自 UI），None 表示自动无损清理
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        (df_out, report) 元组
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-</span></span></code></pre></div><h3 id="42-自动无损清理">4.2 自动无损清理<a hidden class="anchor" aria-hidden="true" href="#42-自动无损清理">#</a></h3>
-<p>当 <code>config=None</code> 时，自动执行无损操作：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> config <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
-</span></span><span style="display:flex;"><span>    detection <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>detect_structure(df)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1. 删除全 NaN 列</span>
-</span></span><span style="display:flex;"><span>    nan_cols <span style="color:#f92672">=</span> detection<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;nan_cols&#34;</span>, [])
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> nan_cols:
-</span></span><span style="display:flex;"><span>        df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>drop(columns<span style="color:#f92672">=</span>nan_cols)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 2. 重命名 Unnamed 列</span>
-</span></span><span style="display:flex;"><span>    inferred <span style="color:#f92672">=</span> detection<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;inferred_names&#34;</span>, {})
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> inferred:
-</span></span><span style="display:flex;"><span>        df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>rename(columns<span style="color:#f92672">=</span>inferred)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> df, {<span style="color:#e6db74">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;auto_clean&#34;</span>, <span style="color:#e6db74">&#34;details&#34;</span>: [<span style="color:#f92672">...</span>]}
-</span></span></code></pre></div><h3 id="43-宽表转长表melt">4.3 宽表转长表（melt）<a hidden class="anchor" aria-hidden="true" href="#43-宽表转长表melt">#</a></h3>
-<p>当检测到宽表且用户确认后：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;melt&#34;</span>:
-</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>melt(
-</span></span><span style="display:flex;"><span>        id_vars<span style="color:#f92672">=</span>id_vars_final,      <span style="color:#75715e"># 维度列（如省份）</span>
-</span></span><span style="display:flex;"><span>        value_vars<span style="color:#f92672">=</span>value_vars,       <span style="color:#75715e"># 时间列（如 2020, 2021...）</span>
-</span></span><span style="display:flex;"><span>        var_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;年份&#34;</span>,             <span style="color:#75715e"># 新列名：时间维度</span>
-</span></span><span style="display:flex;"><span>        value_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;值&#34;</span>,             <span style="color:#75715e"># 新列名：数值</span>
-</span></span><span style="display:flex;"><span>    )
-</span></span></code></pre></div><p><strong>转换示例</strong>：</p>
-<pre tabindex="0"><code>宽表：
-┌──────────┬──────┬──────┬──────┐
-│ 省份     │ 2022 │ 2023 │ 2024 │
-├──────────┼──────┼──────┼──────┤
-│ 北京     │ 100  │ 120  │ 150  │
-│ 上海     │ 200  │ 220  │ 250  │
-└──────────┴──────┴──────┴──────┘
+<hr>
+<h2 id="三、宽表结构检测"><a href="#三、宽表结构检测" class="headerlink" title="三、宽表结构检测"></a>三、宽表结构检测</h2><h3 id="3-1-检测逻辑"><a href="#3-1-检测逻辑" class="headerlink" title="3.1 检测逻辑"></a>3.1 检测逻辑</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">detect_structure</span>(<span class="params">self, df: pd.DataFrame</span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    轻量级宽表结构检测（无 LLM 调用）</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        &#123;</span></span><br><span class="line"><span class="string">            needs_attention: bool,      # 是否需要用户关注</span></span><br><span class="line"><span class="string">            confidence: float,          # 检测置信度 (0-1)</span></span><br><span class="line"><span class="string">            format: str,                # &quot;wide_year&quot; | &quot;wide_date&quot; | &quot;normal&quot;</span></span><br><span class="line"><span class="string">            year_cols: List[str],       # 年份列名列表</span></span><br><span class="line"><span class="string">            date_str_cols: List[str],   # 日期字符串列名列表</span></span><br><span class="line"><span class="string">            text_cols: List[str],       # 非时间文本列名</span></span><br><span class="line"><span class="string">            nan_cols: List[str],        # 全 NaN 列名</span></span><br><span class="line"><span class="string">            unnamed_cols: List[str],    # Unnamed 列名</span></span><br><span class="line"><span class="string">            inferred_names: Dict,       # 推断的列名映射</span></span><br><span class="line"><span class="string">            suggested_config: Dict,     # 建议的转换配置</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
 
-↓ melt 转换 ↓
+<h3 id="3-2-检测维度"><a href="#3-2-检测维度" class="headerlink" title="3.2 检测维度"></a>3.2 检测维度</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        宽表检测维度                                      │</span><br><span class="line">├─────────────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                          │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────────────┐   │</span><br><span class="line">│   │ 1. 年份列检测                                                    │   │</span><br><span class="line">│   │    列名可直接转 int，且落在 [1900, 2100]                         │   │</span><br><span class="line">│   │    例：2020, 2021, 2022, 2023, 2024                             │   │</span><br><span class="line">│   └─────────────────────────────────────────────────────────────────┘   │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────────────┐   │</span><br><span class="line">│   │ 2. 日期字符串列检测                                              │   │</span><br><span class="line">│   │    匹配正则：2023Q1, Jan-2023, 2024-01 等                       │   │</span><br><span class="line">│   │    例：2020Q1, 2020Q2, 2021Q1, 2021Q2                           │   │</span><br><span class="line">│   └─────────────────────────────────────────────────────────────────┘   │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────────────┐   │</span><br><span class="line">│   │ 3. Unnamed 列检测                                                │   │</span><br><span class="line">│   │    列名以 &quot;Unnamed:&quot; 开头，通常是导出时丢失的索引列              │   │</span><br><span class="line">│   │    例：Unnamed: 0, Unnamed: 1                                    │   │</span><br><span class="line">│   └─────────────────────────────────────────────────────────────────┘   │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────────────┐   │</span><br><span class="line">│   │ 4. 全 NaN 列检测                                                 │   │</span><br><span class="line">│   │    整列都是空值，通常是导出时的空白列                            │   │</span><br><span class="line">│   └─────────────────────────────────────────────────────────────────┘   │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   ┌─────────────────────────────────────────────────────────────────┐   │</span><br><span class="line">│   │ 5. 表头行错位检测                                                │   │</span><br><span class="line">│   │    大多数列名是 Unnamed，但首行数据看起来更像列名                │   │</span><br><span class="line">│   └─────────────────────────────────────────────────────────────────┘   │</span><br><span class="line">│                                                                          │</span><br><span class="line">└─────────────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
 
-长表：
-┌──────────┬──────┬──────┐
-│ 省份     │ 年份 │ 值   │
-├──────────┼──────┼──────┤
-│ 北京     │ 2022 │ 100  │
-│ 北京     │ 2023 │ 120  │
-│ 北京     │ 2024 │ 150  │
-│ 上海     │ 2022 │ 200  │
-│ 上海     │ 2023 │ 220  │
-│ 上海     │ 2024 │ 250  │
-└──────────┴──────┴──────┘
-</code></pre><h3 id="44-表头行校正">4.4 表头行校正<a hidden class="anchor" aria-hidden="true" href="#44-表头行校正">#</a></h3>
-<p>处理 Excel 导出时表头前有说明行的情况：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 检测：大多数列名是 Unnamed，但首行数据看起来更像列名</span>
-</span></span><span style="display:flex;"><span>unnamed_ratio <span style="color:#f92672">=</span> sum(<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> df<span style="color:#f92672">.</span>columns <span style="color:#66d9ef">if</span> str(c)<span style="color:#f92672">.</span>startswith(<span style="color:#e6db74">&#34;Unnamed:&#34;</span>)) <span style="color:#f92672">/</span> n_cols
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> unnamed_ratio <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.4</span>:
-</span></span><span style="display:flex;"><span>    row0_str_count <span style="color:#f92672">=</span> sum(<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> v <span style="color:#f92672">in</span> df<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>] <span style="color:#66d9ef">if</span> isinstance(v, str) <span style="color:#f92672">and</span> v<span style="color:#f92672">.</span>strip())
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> row0_str_count <span style="color:#f92672">/</span> n_cols <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.25</span>:
-</span></span><span style="display:flex;"><span>        suggested_header_row <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>  <span style="color:#75715e"># 首行应作为列名</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 执行校正</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> header_row <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
-</span></span><span style="display:flex;"><span>    new_cols <span style="color:#f92672">=</span> [str(v)<span style="color:#f92672">.</span>strip() <span style="color:#66d9ef">for</span> v <span style="color:#f92672">in</span> df<span style="color:#f92672">.</span>iloc[header_row]]
-</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>iloc[header_row <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>:]<span style="color:#f92672">.</span>reset_index(drop<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-</span></span><span style="display:flex;"><span>    df<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> new_cols
-</span></span></code></pre></div><hr>
-<h2 id="五异常值处理">五、异常值处理<a hidden class="anchor" aria-hidden="true" href="#五异常值处理">#</a></h2>
-<h3 id="51-iqr-方法">5.1 IQR 方法<a hidden class="anchor" aria-hidden="true" href="#51-iqr-方法">#</a></h3>
-<p>使用四分位距（Interquartile Range）检测异常值：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_handle_outliers</span>(self, df: pd<span style="color:#f92672">.</span>DataFrame, strategy: str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cap&#34;</span>) <span style="color:#f92672">-&gt;</span> pd<span style="color:#f92672">.</span>DataFrame:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IQR 法检测并处理数值列中的异常值
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        df: DataFrame
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        strategy: &#34;cap&#34; 截断 | &#34;drop&#34; 删除
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> col <span style="color:#f92672">in</span> numeric_cols:
-</span></span><span style="display:flex;"><span>        q1, q3 <span style="color:#f92672">=</span> series<span style="color:#f92672">.</span>quantile(<span style="color:#ae81ff">0.25</span>), series<span style="color:#f92672">.</span>quantile(<span style="color:#ae81ff">0.75</span>)
-</span></span><span style="display:flex;"><span>        iqr <span style="color:#f92672">=</span> q3 <span style="color:#f92672">-</span> q1
-</span></span><span style="display:flex;"><span>        lower, upper <span style="color:#f92672">=</span> q1 <span style="color:#f92672">-</span> <span style="color:#ae81ff">1.5</span> <span style="color:#f92672">*</span> iqr, q3 <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.5</span> <span style="color:#f92672">*</span> iqr
-</span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> strategy <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;cap&#34;</span>:
-</span></span><span style="display:flex;"><span>            df[col] <span style="color:#f92672">=</span> df[col]<span style="color:#f92672">.</span>clip(lower<span style="color:#f92672">=</span>lower, upper<span style="color:#f92672">=</span>upper)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> strategy <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;drop&#34;</span>:
-</span></span><span style="display:flex;"><span>            df <span style="color:#f92672">=</span> df[(df[col] <span style="color:#f92672">&gt;=</span> lower) <span style="color:#f92672">&amp;</span> (df[col] <span style="color:#f92672">&lt;=</span> upper)]
-</span></span></code></pre></div><h3 id="52-异常值判定标准">5.2 异常值判定标准<a hidden class="anchor" aria-hidden="true" href="#52-异常值判定标准">#</a></h3>
-<pre tabindex="0"><code>┌─────────────────────────────────────────────────────────────────────────┐
-│                        IQR 异常值判定                                    │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│   数据分布：                                                             │
-│                                                                          │
-│   ──────────┬──────────┬──────────┬──────────┬───────────              │
-│             │          │          │          │                          │
-│           lower       Q1        median      Q3       upper              │
-│             │          │          │          │                          │
-│          Q1-1.5×IQR    │          │          │    Q3+1.5×IQR            │
-│             │          │          │          │                          │
-│   ──────────┴──────────┴──────────┴──────────┴───────────              │
-│                                                                          │
-│   正常范围：[Q1 - 1.5×IQR, Q3 + 1.5×IQR]                                │
-│   异常值：&lt; lower 或 &gt; upper                                            │
-│                                                                          │
-│   处理策略：                                                             │
-│   - cap: 将异常值截断到边界值（保留数据行）                              │
-│   - drop: 删除含异常值的行（减少数据量）                                 │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
-</code></pre><hr>
-<h2 id="六一站式预处理升级">六、一站式预处理升级<a hidden class="anchor" aria-hidden="true" href="#六一站式预处理升级">#</a></h2>
-<h3 id="61-prepare-方法升级">6.1 prepare() 方法升级<a hidden class="anchor" aria-hidden="true" href="#61-prepare-方法升级">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">prepare</span>(
-</span></span><span style="display:flex;"><span>    self,
-</span></span><span style="display:flex;"><span>    df: pd<span style="color:#f92672">.</span>DataFrame,
-</span></span><span style="display:flex;"><span>    query: Optional[str] <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
-</span></span><span style="display:flex;"><span>    use_llm_suggestions: bool <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>,
-</span></span><span style="display:flex;"><span>    table_config: Optional[Dict] <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,  <span style="color:#75715e"># 新增：用户确认的宽表配置</span>
-</span></span><span style="display:flex;"><span>) <span style="color:#f92672">-&gt;</span> tuple:
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    一站式预处理
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    流程：
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    normalize → clean → outliers → suggest_derived → generate_derived
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        (df_cleaned, cleaning_report) 元组
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-</span></span></code></pre></div><h3 id="62-完整流程">6.2 完整流程<a hidden class="anchor" aria-hidden="true" href="#62-完整流程">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">prepare</span>(self, df, query, use_llm_suggestions, table_config):
-</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>_cleaning_report <span style="color:#f92672">=</span> {}
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 0: 结构归一化（宽表→长表等）</span>
-</span></span><span style="display:flex;"><span>    df, norm_report <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>normalize(df, table_config)
-</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>_cleaning_report[<span style="color:#e6db74">&#34;normalize&#34;</span>] <span style="color:#f92672">=</span> norm_report
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 1: 基础清洗（去重、类型修正、缺失值处理）</span>
-</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>clean(df)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 2: 异常值处理（IQR cap）</span>
-</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_handle_outliers(df, strategy<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cap&#34;</span>)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 3: LLM 衍生属性建议</span>
-</span></span><span style="display:flex;"><span>    suggestions <span style="color:#f92672">=</span> []
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> use_llm_suggestions <span style="color:#f92672">and</span> self<span style="color:#f92672">.</span>client <span style="color:#f92672">and</span> query:
-</span></span><span style="display:flex;"><span>        suggestions <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>suggest_derived(df, query)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 4: 生成衍生属性</span>
-</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>generate_derived(df, suggestions<span style="color:#f92672">=</span>suggestions)
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> df, self<span style="color:#f92672">.</span>_cleaning_report
-</span></span></code></pre></div><h3 id="63-清洗报告示例">6.3 清洗报告示例<a hidden class="anchor" aria-hidden="true" href="#63-清洗报告示例">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;normalize&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;melt&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;details&#34;</span>: [
-</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;重设表头: 使用第 0 行作为列名&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;删除指定列: [&#39;Unnamed: 5&#39;]&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;宽表转长表完成: 150行×3列&#34;</span>
-</span></span><span style="display:flex;"><span>        ]
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;clean&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;duplicates_dropped&#34;</span>: <span style="color:#ae81ff">5</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;type_conversions&#34;</span>: [<span style="color:#e6db74">&#34;&#39;销售额&#39; 转为数值型&#34;</span>],
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;missing_filled&#34;</span>: [<span style="color:#e6db74">&#34;&#39;地区&#39;(缺失率3.2%, 填充方式:众数(&#39;华东&#39;))&#34;</span>],
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;columns_dropped&#34;</span>: [],
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;shape_before&#34;</span>: <span style="color:#e6db74">&#34;50行×6列&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;shape_after&#34;</span>: <span style="color:#e6db74">&#34;45行×5列&#34;</span>
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;outliers&#34;</span>: [
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#39;销售额&#39;: 3个异常值已截断至 [1000, 50000]&#34;</span>
-</span></span><span style="display:flex;"><span>    ],
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;llm_suggestions_applied&#34;</span>: <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><hr>
-<h2 id="七实际应用场景">七、实际应用场景<a hidden class="anchor" aria-hidden="true" href="#七实际应用场景">#</a></h2>
-<h3 id="71-场景一年度数据宽表">7.1 场景一：年度数据宽表<a hidden class="anchor" aria-hidden="true" href="#71-场景一年度数据宽表">#</a></h3>
-<p><strong>原始数据</strong>：</p>
-<pre tabindex="0"><code>┌──────────┬──────┬──────┬──────┬──────┬──────┐
-│ Unnamed  │ 2020 │ 2021 │ 2022 │ 2023 │ 2024 │
-├──────────┼──────┼──────┼──────┼──────┼──────┤
-│ 北京     │ 100  │ 120  │ 150  │ 180  │ 200  │
-│ 上海     │ 200  │ 220  │ 250  │ 280  │ 300  │
-│ 广东     │ 150  │ 170  │ 190  │ 210  │ 230  │
-└──────────┴──────┴──────┴──────┴──────┴──────┘
-</code></pre><p><strong>检测结果</strong>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;needs_attention&#34;</span>: <span style="color:#66d9ef">True</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;confidence&#34;</span>: <span style="color:#ae81ff">0.9</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;wide_year&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;year_cols&#34;</span>: [<span style="color:#e6db74">&#34;2020&#34;</span>, <span style="color:#e6db74">&#34;2021&#34;</span>, <span style="color:#e6db74">&#34;2022&#34;</span>, <span style="color:#e6db74">&#34;2023&#34;</span>, <span style="color:#e6db74">&#34;2024&#34;</span>],
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;unnamed_cols&#34;</span>: [<span style="color:#e6db74">&#34;Unnamed: 0&#34;</span>],
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;inferred_names&#34;</span>: {<span style="color:#e6db74">&#34;Unnamed: 0&#34;</span>: <span style="color:#e6db74">&#34;省份&#34;</span>},
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;suggested_config&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;melt&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;id_vars&#34;</span>: [<span style="color:#e6db74">&#34;Unnamed: 0&#34;</span>],
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;value_vars&#34;</span>: [<span style="color:#e6db74">&#34;2020&#34;</span>, <span style="color:#e6db74">&#34;2021&#34;</span>, <span style="color:#e6db74">&#34;2022&#34;</span>, <span style="color:#e6db74">&#34;2023&#34;</span>, <span style="color:#e6db74">&#34;2024&#34;</span>],
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;var_name&#34;</span>: <span style="color:#e6db74">&#34;年份&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;value_name&#34;</span>: <span style="color:#e6db74">&#34;值&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;rename_id_var&#34;</span>: <span style="color:#e6db74">&#34;省份&#34;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><strong>转换后</strong>：</p>
-<pre tabindex="0"><code>┌──────────┬──────┬──────┐
-│ 省份     │ 年份 │ 值   │
-├──────────┼──────┼──────┤
-│ 北京     │ 2020 │ 100  │
-│ 北京     │ 2021 │ 120  │
-│ ...      │ ...  │ ...  │
-└──────────┴──────┴──────┘
-</code></pre><h3 id="72-场景二季度数据宽表">7.2 场景二：季度数据宽表<a hidden class="anchor" aria-hidden="true" href="#72-场景二季度数据宽表">#</a></h3>
-<p><strong>原始数据</strong>：</p>
-<pre tabindex="0"><code>┌──────────┬─────────┬─────────┬─────────┬─────────┐
-│ 产品     │ 2023Q1  │ 2023Q2  │ 2023Q3  │ 2023Q4  │
-├──────────┼─────────┼─────────┼─────────┼─────────┤
-│ A类      │ 1000    │ 1200    │ 1500    │ 1800    │
-│ B类      │ 2000    │ 2200    │ 2500    │ 2800    │
-└──────────┴─────────┴─────────┴─────────┴─────────┘
-</code></pre><p><strong>检测结果</strong>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;wide_date&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;date_str_cols&#34;</span>: [<span style="color:#e6db74">&#34;2023Q1&#34;</span>, <span style="color:#e6db74">&#34;2023Q2&#34;</span>, <span style="color:#e6db74">&#34;2023Q3&#34;</span>, <span style="color:#e6db74">&#34;2023Q4&#34;</span>],
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;suggested_config&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;melt&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;var_name&#34;</span>: <span style="color:#e6db74">&#34;时间&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;value_name&#34;</span>: <span style="color:#e6db74">&#34;值&#34;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="73-场景三表头行错位">7.3 场景三：表头行错位<a hidden class="anchor" aria-hidden="true" href="#73-场景三表头行错位">#</a></h3>
-<p><strong>原始数据</strong>：</p>
-<pre tabindex="0"><code>┌──────────┬──────────┬──────────┬──────────┐
-│ Unnamed  │ Unnamed  │ Unnamed  │ Unnamed  │
-├──────────┼──────────┼──────────┼──────────┤
-│ 地区     │ 产品     │ 销售额   │ 利润     │  ← 真正的列名
-├──────────┼──────────┼──────────┼──────────┤
-│ 华东     │ A类      │ 1000     │ 200      │
-│ 华南     │ B类      │ 2000     │ 400      │
-└──────────┴──────────┴──────────┴──────────┘
-</code></pre><p><strong>检测结果</strong>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;suggested_header_row&#34;</span>: <span style="color:#ae81ff">0</span>,  <span style="color:#75715e"># 首行应作为列名</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><strong>校正后</strong>：</p>
-<pre tabindex="0"><code>┌──────────┬──────────┬──────────┬──────────┐
-│ 地区     │ 产品     │ 销售额   │ 利润     │
-├──────────┼──────────┼──────────┼──────────┤
-│ 华东     │ A类      │ 1000     │ 200      │
-│ 华南     │ B类      │ 2000     │ 400      │
-└──────────┴──────────┴──────────┴──────────┘
-</code></pre><hr>
-<h2 id="八总结与展望">八、总结与展望<a hidden class="anchor" aria-hidden="true" href="#八总结与展望">#</a></h2>
-<h3 id="81-本次升级总结">8.1 本次升级总结<a hidden class="anchor" aria-hidden="true" href="#81-本次升级总结">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>方面</th>
-          <th>升级前</th>
-          <th>升级后</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>宽表处理</strong></td>
-          <td>❌ 不支持</td>
-          <td>✅ 自动检测 + 智能转换</td>
-      </tr>
-      <tr>
-          <td><strong>异常值</strong></td>
-          <td>❌ 不处理</td>
-          <td>✅ IQR 检测 + 截断</td>
-      </tr>
-      <tr>
-          <td><strong>列名推断</strong></td>
-          <td>❌ 无</td>
-          <td>✅ 根据内容推断语义名</td>
-      </tr>
-      <tr>
-          <td><strong>表头校正</strong></td>
-          <td>❌ 无</td>
-          <td>✅ 自动检测错位表头</td>
-      </tr>
-      <tr>
-          <td><strong>流程完整性</strong></td>
-          <td>3 步</td>
-          <td>5 步</td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="82-技术亮点">8.2 技术亮点<a hidden class="anchor" aria-hidden="true" href="#82-技术亮点">#</a></h3>
-<ol>
+<h3 id="3-3-置信度计算"><a href="#3-3-置信度计算" class="headerlink" title="3.3 置信度计算"></a>3.3 置信度计算</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 置信度计算逻辑</span></span><br><span class="line">confidence = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 时间列占比</span></span><br><span class="line"><span class="keyword">if</span> n_time &gt;= <span class="number">3</span>:</span><br><span class="line">    time_ratio = n_time / n_cols</span><br><span class="line">    confidence += <span class="number">0.5</span> <span class="keyword">if</span> time_ratio &gt; <span class="number">0.7</span> <span class="keyword">else</span> (<span class="number">0.3</span> <span class="keyword">if</span> time_ratio &gt; <span class="number">0.4</span> <span class="keyword">else</span> <span class="number">0.1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 文本列数量</span></span><br><span class="line">    <span class="keyword">if</span> n_text_obj == <span class="number">1</span>:</span><br><span class="line">        confidence += <span class="number">0.3</span>  <span class="comment"># 单一维度列，典型宽表</span></span><br><span class="line">    <span class="keyword">elif</span> n_text_obj &gt; <span class="number">1</span>:</span><br><span class="line">        confidence += <span class="number">0.1</span>  <span class="comment"># 多维度列</span></span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 行数较少（宽表特征）</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(df) &lt; <span class="number">200</span>:</span><br><span class="line">        confidence += <span class="number">0.2</span></span><br><span class="line"></span><br><span class="line">confidence = <span class="built_in">min</span>(confidence, <span class="number">1.0</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、结构归一化"><a href="#四、结构归一化" class="headerlink" title="四、结构归一化"></a>四、结构归一化</h2><h3 id="4-1-normalize-方法"><a href="#4-1-normalize-方法" class="headerlink" title="4.1 normalize() 方法"></a>4.1 normalize() 方法</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">normalize</span>(<span class="params">self, df: pd.DataFrame,</span></span><br><span class="line"><span class="params">              config: <span class="type">Optional</span>[<span class="type">Dict</span>] = <span class="literal">None</span></span>) -&gt; <span class="type">Tuple</span>[pd.DataFrame, <span class="type">Dict</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    结构归一化</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        df: 原始 DataFrame</span></span><br><span class="line"><span class="string">        config: 用户确认的转换配置（来自 UI），None 表示自动无损清理</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        (df_out, report) 元组</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-自动无损清理"><a href="#4-2-自动无损清理" class="headerlink" title="4.2 自动无损清理"></a>4.2 自动无损清理</h3><p>当 <code>config=None</code> 时，自动执行无损操作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> config <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    detection = <span class="variable language_">self</span>.detect_structure(df)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 1. 删除全 NaN 列</span></span><br><span class="line">    nan_cols = detection.get(<span class="string">&quot;nan_cols&quot;</span>, [])</span><br><span class="line">    <span class="keyword">if</span> nan_cols:</span><br><span class="line">        df = df.drop(columns=nan_cols)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 重命名 Unnamed 列</span></span><br><span class="line">    inferred = detection.get(<span class="string">&quot;inferred_names&quot;</span>, &#123;&#125;)</span><br><span class="line">    <span class="keyword">if</span> inferred:</span><br><span class="line">        df = df.rename(columns=inferred)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> df, &#123;<span class="string">&quot;action&quot;</span>: <span class="string">&quot;auto_clean&quot;</span>, <span class="string">&quot;details&quot;</span>: [...]&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-宽表转长表（melt）"><a href="#4-3-宽表转长表（melt）" class="headerlink" title="4.3 宽表转长表（melt）"></a>4.3 宽表转长表（melt）</h3><p>当检测到宽表且用户确认后：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> action == <span class="string">&quot;melt&quot;</span>:</span><br><span class="line">    df = df.melt(</span><br><span class="line">        id_vars=id_vars_final,      <span class="comment"># 维度列（如省份）</span></span><br><span class="line">        value_vars=value_vars,       <span class="comment"># 时间列（如 2020, 2021...）</span></span><br><span class="line">        var_name=<span class="string">&quot;年份&quot;</span>,             <span class="comment"># 新列名：时间维度</span></span><br><span class="line">        value_name=<span class="string">&quot;值&quot;</span>,             <span class="comment"># 新列名：数值</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p><strong>转换示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">宽表：</span><br><span class="line">┌──────────┬──────┬──────┬──────┐</span><br><span class="line">│ 省份     │ 2022 │ 2023 │ 2024 │</span><br><span class="line">├──────────┼──────┼──────┼──────┤</span><br><span class="line">│ 北京     │ 100  │ 120  │ 150  │</span><br><span class="line">│ 上海     │ 200  │ 220  │ 250  │</span><br><span class="line">└──────────┴──────┴──────┴──────┘</span><br><span class="line"></span><br><span class="line">↓ melt 转换 ↓</span><br><span class="line"></span><br><span class="line">长表：</span><br><span class="line">┌──────────┬──────┬──────┐</span><br><span class="line">│ 省份     │ 年份 │ 值   │</span><br><span class="line">├──────────┼──────┼──────┤</span><br><span class="line">│ 北京     │ 2022 │ 100  │</span><br><span class="line">│ 北京     │ 2023 │ 120  │</span><br><span class="line">│ 北京     │ 2024 │ 150  │</span><br><span class="line">│ 上海     │ 2022 │ 200  │</span><br><span class="line">│ 上海     │ 2023 │ 220  │</span><br><span class="line">│ 上海     │ 2024 │ 250  │</span><br><span class="line">└──────────┴──────┴──────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-表头行校正"><a href="#4-4-表头行校正" class="headerlink" title="4.4 表头行校正"></a>4.4 表头行校正</h3><p>处理 Excel 导出时表头前有说明行的情况：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检测：大多数列名是 Unnamed，但首行数据看起来更像列名</span></span><br><span class="line">unnamed_ratio = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> c <span class="keyword">in</span> df.columns <span class="keyword">if</span> <span class="built_in">str</span>(c).startswith(<span class="string">&quot;Unnamed:&quot;</span>)) / n_cols</span><br><span class="line"><span class="keyword">if</span> unnamed_ratio &gt; <span class="number">0.4</span>:</span><br><span class="line">    row0_str_count = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> v <span class="keyword">in</span> df.iloc[<span class="number">0</span>] <span class="keyword">if</span> <span class="built_in">isinstance</span>(v, <span class="built_in">str</span>) <span class="keyword">and</span> v.strip())</span><br><span class="line">    <span class="keyword">if</span> row0_str_count / n_cols &gt; <span class="number">0.25</span>:</span><br><span class="line">        suggested_header_row = <span class="number">0</span>  <span class="comment"># 首行应作为列名</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行校正</span></span><br><span class="line"><span class="keyword">if</span> header_row <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    new_cols = [<span class="built_in">str</span>(v).strip() <span class="keyword">for</span> v <span class="keyword">in</span> df.iloc[header_row]]</span><br><span class="line">    df = df.iloc[header_row + <span class="number">1</span>:].reset_index(drop=<span class="literal">True</span>)</span><br><span class="line">    df.columns = new_cols</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、异常值处理"><a href="#五、异常值处理" class="headerlink" title="五、异常值处理"></a>五、异常值处理</h2><h3 id="5-1-IQR-方法"><a href="#5-1-IQR-方法" class="headerlink" title="5.1 IQR 方法"></a>5.1 IQR 方法</h3><p>使用四分位距（Interquartile Range）检测异常值：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_handle_outliers</span>(<span class="params">self, df: pd.DataFrame, strategy: <span class="built_in">str</span> = <span class="string">&quot;cap&quot;</span></span>) -&gt; pd.DataFrame:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    IQR 法检测并处理数值列中的异常值</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        df: DataFrame</span></span><br><span class="line"><span class="string">        strategy: &quot;cap&quot; 截断 | &quot;drop&quot; 删除</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> numeric_cols:</span><br><span class="line">        q1, q3 = series.quantile(<span class="number">0.25</span>), series.quantile(<span class="number">0.75</span>)</span><br><span class="line">        iqr = q3 - q1</span><br><span class="line">        lower, upper = q1 - <span class="number">1.5</span> * iqr, q3 + <span class="number">1.5</span> * iqr</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> strategy == <span class="string">&quot;cap&quot;</span>:</span><br><span class="line">            df[col] = df[col].clip(lower=lower, upper=upper)</span><br><span class="line">        <span class="keyword">elif</span> strategy == <span class="string">&quot;drop&quot;</span>:</span><br><span class="line">            df = df[(df[col] &gt;= lower) &amp; (df[col] &lt;= upper)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-异常值判定标准"><a href="#5-2-异常值判定标准" class="headerlink" title="5.2 异常值判定标准"></a>5.2 异常值判定标准</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        IQR 异常值判定                                    │</span><br><span class="line">├─────────────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                          │</span><br><span class="line">│   数据分布：                                                             │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   ──────────┬──────────┬──────────┬──────────┬───────────              │</span><br><span class="line">│             │          │          │          │                          │</span><br><span class="line">│           lower       Q1        median      Q3       upper              │</span><br><span class="line">│             │          │          │          │                          │</span><br><span class="line">│          Q1-1.5×IQR    │          │          │    Q3+1.5×IQR            │</span><br><span class="line">│             │          │          │          │                          │</span><br><span class="line">│   ──────────┴──────────┴──────────┴──────────┴───────────              │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   正常范围：[Q1 - 1.5×IQR, Q3 + 1.5×IQR]                                │</span><br><span class="line">│   异常值：&lt; lower 或 &gt; upper                                            │</span><br><span class="line">│                                                                          │</span><br><span class="line">│   处理策略：                                                             │</span><br><span class="line">│   - cap: 将异常值截断到边界值（保留数据行）                              │</span><br><span class="line">│   - drop: 删除含异常值的行（减少数据量）                                 │</span><br><span class="line">│                                                                          │</span><br><span class="line">└─────────────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、一站式预处理升级"><a href="#六、一站式预处理升级" class="headerlink" title="六、一站式预处理升级"></a>六、一站式预处理升级</h2><h3 id="6-1-prepare-方法升级"><a href="#6-1-prepare-方法升级" class="headerlink" title="6.1 prepare() 方法升级"></a>6.1 prepare() 方法升级</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">prepare</span>(<span class="params"></span></span><br><span class="line"><span class="params">    self,</span></span><br><span class="line"><span class="params">    df: pd.DataFrame,</span></span><br><span class="line"><span class="params">    query: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    use_llm_suggestions: <span class="built_in">bool</span> = <span class="literal">True</span>,</span></span><br><span class="line"><span class="params">    table_config: <span class="type">Optional</span>[<span class="type">Dict</span>] = <span class="literal">None</span>,  <span class="comment"># 新增：用户确认的宽表配置</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">tuple</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    一站式预处理</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    流程：</span></span><br><span class="line"><span class="string">    normalize → clean → outliers → suggest_derived → generate_derived</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        (df_cleaned, cleaning_report) 元组</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-完整流程"><a href="#6-2-完整流程" class="headerlink" title="6.2 完整流程"></a>6.2 完整流程</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">prepare</span>(<span class="params">self, df, query, use_llm_suggestions, table_config</span>):</span><br><span class="line">    <span class="variable language_">self</span>._cleaning_report = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 0: 结构归一化（宽表→长表等）</span></span><br><span class="line">    df, norm_report = <span class="variable language_">self</span>.normalize(df, table_config)</span><br><span class="line">    <span class="variable language_">self</span>._cleaning_report[<span class="string">&quot;normalize&quot;</span>] = norm_report</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 1: 基础清洗（去重、类型修正、缺失值处理）</span></span><br><span class="line">    df = <span class="variable language_">self</span>.clean(df)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 2: 异常值处理（IQR cap）</span></span><br><span class="line">    df = <span class="variable language_">self</span>._handle_outliers(df, strategy=<span class="string">&quot;cap&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 3: LLM 衍生属性建议</span></span><br><span class="line">    suggestions = []</span><br><span class="line">    <span class="keyword">if</span> use_llm_suggestions <span class="keyword">and</span> <span class="variable language_">self</span>.client <span class="keyword">and</span> query:</span><br><span class="line">        suggestions = <span class="variable language_">self</span>.suggest_derived(df, query)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 4: 生成衍生属性</span></span><br><span class="line">    df = <span class="variable language_">self</span>.generate_derived(df, suggestions=suggestions)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> df, <span class="variable language_">self</span>._cleaning_report</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-清洗报告示例"><a href="#6-3-清洗报告示例" class="headerlink" title="6.3 清洗报告示例"></a>6.3 清洗报告示例</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;normalize&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;action&quot;</span>: <span class="string">&quot;melt&quot;</span>,</span><br><span class="line">        <span class="string">&quot;details&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;重设表头: 使用第 0 行作为列名&quot;</span>,</span><br><span class="line">            <span class="string">&quot;删除指定列: [&#x27;Unnamed: 5&#x27;]&quot;</span>,</span><br><span class="line">            <span class="string">&quot;宽表转长表完成: 150行×3列&quot;</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;clean&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;duplicates_dropped&quot;</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">&quot;type_conversions&quot;</span>: [<span class="string">&quot;&#x27;销售额&#x27; 转为数值型&quot;</span>],</span><br><span class="line">        <span class="string">&quot;missing_filled&quot;</span>: [<span class="string">&quot;&#x27;地区&#x27;(缺失率3.2%, 填充方式:众数(&#x27;华东&#x27;))&quot;</span>],</span><br><span class="line">        <span class="string">&quot;columns_dropped&quot;</span>: [],</span><br><span class="line">        <span class="string">&quot;shape_before&quot;</span>: <span class="string">&quot;50行×6列&quot;</span>,</span><br><span class="line">        <span class="string">&quot;shape_after&quot;</span>: <span class="string">&quot;45行×5列&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;outliers&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;&#x27;销售额&#x27;: 3个异常值已截断至 [1000, 50000]&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;llm_suggestions_applied&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、实际应用场景"><a href="#七、实际应用场景" class="headerlink" title="七、实际应用场景"></a>七、实际应用场景</h2><h3 id="7-1-场景一：年度数据宽表"><a href="#7-1-场景一：年度数据宽表" class="headerlink" title="7.1 场景一：年度数据宽表"></a>7.1 场景一：年度数据宽表</h3><p><strong>原始数据</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──────────┬──────┬──────┬──────┬──────┬──────┐</span><br><span class="line">│ Unnamed  │ 2020 │ 2021 │ 2022 │ 2023 │ 2024 │</span><br><span class="line">├──────────┼──────┼──────┼──────┼──────┼──────┤</span><br><span class="line">│ 北京     │ 100  │ 120  │ 150  │ 180  │ 200  │</span><br><span class="line">│ 上海     │ 200  │ 220  │ 250  │ 280  │ 300  │</span><br><span class="line">│ 广东     │ 150  │ 170  │ 190  │ 210  │ 230  │</span><br><span class="line">└──────────┴──────┴──────┴──────┴──────┴──────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>检测结果</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;needs_attention&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">    <span class="string">&quot;confidence&quot;</span>: <span class="number">0.9</span>,</span><br><span class="line">    <span class="string">&quot;format&quot;</span>: <span class="string">&quot;wide_year&quot;</span>,</span><br><span class="line">    <span class="string">&quot;year_cols&quot;</span>: [<span class="string">&quot;2020&quot;</span>, <span class="string">&quot;2021&quot;</span>, <span class="string">&quot;2022&quot;</span>, <span class="string">&quot;2023&quot;</span>, <span class="string">&quot;2024&quot;</span>],</span><br><span class="line">    <span class="string">&quot;unnamed_cols&quot;</span>: [<span class="string">&quot;Unnamed: 0&quot;</span>],</span><br><span class="line">    <span class="string">&quot;inferred_names&quot;</span>: &#123;<span class="string">&quot;Unnamed: 0&quot;</span>: <span class="string">&quot;省份&quot;</span>&#125;,</span><br><span class="line">    <span class="string">&quot;suggested_config&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;action&quot;</span>: <span class="string">&quot;melt&quot;</span>,</span><br><span class="line">        <span class="string">&quot;id_vars&quot;</span>: [<span class="string">&quot;Unnamed: 0&quot;</span>],</span><br><span class="line">        <span class="string">&quot;value_vars&quot;</span>: [<span class="string">&quot;2020&quot;</span>, <span class="string">&quot;2021&quot;</span>, <span class="string">&quot;2022&quot;</span>, <span class="string">&quot;2023&quot;</span>, <span class="string">&quot;2024&quot;</span>],</span><br><span class="line">        <span class="string">&quot;var_name&quot;</span>: <span class="string">&quot;年份&quot;</span>,</span><br><span class="line">        <span class="string">&quot;value_name&quot;</span>: <span class="string">&quot;值&quot;</span>,</span><br><span class="line">        <span class="string">&quot;rename_id_var&quot;</span>: <span class="string">&quot;省份&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>转换后</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──────────┬──────┬──────┐</span><br><span class="line">│ 省份     │ 年份 │ 值   │</span><br><span class="line">├──────────┼──────┼──────┤</span><br><span class="line">│ 北京     │ 2020 │ 100  │</span><br><span class="line">│ 北京     │ 2021 │ 120  │</span><br><span class="line">│ ...      │ ...  │ ...  │</span><br><span class="line">└──────────┴──────┴──────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-场景二：季度数据宽表"><a href="#7-2-场景二：季度数据宽表" class="headerlink" title="7.2 场景二：季度数据宽表"></a>7.2 场景二：季度数据宽表</h3><p><strong>原始数据</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──────────┬─────────┬─────────┬─────────┬─────────┐</span><br><span class="line">│ 产品     │ 2023Q1  │ 2023Q2  │ 2023Q3  │ 2023Q4  │</span><br><span class="line">├──────────┼─────────┼─────────┼─────────┼─────────┤</span><br><span class="line">│ A类      │ 1000    │ 1200    │ 1500    │ 1800    │</span><br><span class="line">│ B类      │ 2000    │ 2200    │ 2500    │ 2800    │</span><br><span class="line">└──────────┴─────────┴─────────┴─────────┴─────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>检测结果</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;format&quot;</span>: <span class="string">&quot;wide_date&quot;</span>,</span><br><span class="line">    <span class="string">&quot;date_str_cols&quot;</span>: [<span class="string">&quot;2023Q1&quot;</span>, <span class="string">&quot;2023Q2&quot;</span>, <span class="string">&quot;2023Q3&quot;</span>, <span class="string">&quot;2023Q4&quot;</span>],</span><br><span class="line">    <span class="string">&quot;suggested_config&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;action&quot;</span>: <span class="string">&quot;melt&quot;</span>,</span><br><span class="line">        <span class="string">&quot;var_name&quot;</span>: <span class="string">&quot;时间&quot;</span>,</span><br><span class="line">        <span class="string">&quot;value_name&quot;</span>: <span class="string">&quot;值&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-场景三：表头行错位"><a href="#7-3-场景三：表头行错位" class="headerlink" title="7.3 场景三：表头行错位"></a>7.3 场景三：表头行错位</h3><p><strong>原始数据</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──────────┬──────────┬──────────┬──────────┐</span><br><span class="line">│ Unnamed  │ Unnamed  │ Unnamed  │ Unnamed  │</span><br><span class="line">├──────────┼──────────┼──────────┼──────────┤</span><br><span class="line">│ 地区     │ 产品     │ 销售额   │ 利润     │  ← 真正的列名</span><br><span class="line">├──────────┼──────────┼──────────┼──────────┤</span><br><span class="line">│ 华东     │ A类      │ 1000     │ 200      │</span><br><span class="line">│ 华南     │ B类      │ 2000     │ 400      │</span><br><span class="line">└──────────┴──────────┴──────────┴──────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>检测结果</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;suggested_header_row&quot;</span>: <span class="number">0</span>,  <span class="comment"># 首行应作为列名</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>校正后</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──────────┬──────────┬──────────┬──────────┐</span><br><span class="line">│ 地区     │ 产品     │ 销售额   │ 利润     │</span><br><span class="line">├──────────┼──────────┼──────────┼──────────┤</span><br><span class="line">│ 华东     │ A类      │ 1000     │ 200      │</span><br><span class="line">│ 华南     │ B类      │ 2000     │ 400      │</span><br><span class="line">└──────────┴──────────┴──────────┴──────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、总结与展望"><a href="#八、总结与展望" class="headerlink" title="八、总结与展望"></a>八、总结与展望</h2><h3 id="8-1-本次升级总结"><a href="#8-1-本次升级总结" class="headerlink" title="8.1 本次升级总结"></a>8.1 本次升级总结</h3><table>
+<thead>
+<tr>
+<th>方面</th>
+<th>升级前</th>
+<th>升级后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>宽表处理</strong></td>
+<td>❌ 不支持</td>
+<td>✅ 自动检测 + 智能转换</td>
+</tr>
+<tr>
+<td><strong>异常值</strong></td>
+<td>❌ 不处理</td>
+<td>✅ IQR 检测 + 截断</td>
+</tr>
+<tr>
+<td><strong>列名推断</strong></td>
+<td>❌ 无</td>
+<td>✅ 根据内容推断语义名</td>
+</tr>
+<tr>
+<td><strong>表头校正</strong></td>
+<td>❌ 无</td>
+<td>✅ 自动检测错位表头</td>
+</tr>
+<tr>
+<td><strong>流程完整性</strong></td>
+<td>3 步</td>
+<td>5 步</td>
+</tr>
+</tbody></table>
+<h3 id="8-2-技术亮点"><a href="#8-2-技术亮点" class="headerlink" title="8.2 技术亮点"></a>8.2 技术亮点</h3><ol>
 <li><strong>零 LLM 调用检测</strong>：<code>detect_structure()</code> 纯规则检测，无延迟</li>
 <li><strong>置信度评估</strong>：量化检测结果可信度，辅助用户决策</li>
 <li><strong>无损优先</strong>：自动清理只执行无损操作，有损操作需用户确认</li>
 <li><strong>完整报告</strong>：每步操作都有详细日志，便于追溯</li>
 </ol>
-<h3 id="83-后续规划">8.3 后续规划<a hidden class="anchor" aria-hidden="true" href="#83-后续规划">#</a></h3>
-<table>
-  <thead>
-      <tr>
-          <th>功能</th>
-          <th>说明</th>
-          <th>优先级</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>多级宽表支持</td>
-          <td>支持多个维度列的宽表转换</td>
-          <td>🟡 中</td>
-      </tr>
-      <tr>
-          <td>自定义分箱规则</td>
-          <td>用户可配置分箱边界</td>
-          <td>🟡 中</td>
-      </tr>
-      <tr>
-          <td>数据质量评分</td>
-          <td>综合评估数据质量</td>
-          <td>🟢 低</td>
-      </tr>
-      <tr>
-          <td>增量预处理</td>
-          <td>支持数据追加时的增量处理</td>
-          <td>🟢 低</td>
-      </tr>
-  </tbody>
-</table>
+<h3 id="8-3-后续规划"><a href="#8-3-后续规划" class="headerlink" title="8.3 后续规划"></a>8.3 后续规划</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>说明</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>多级宽表支持</td>
+<td>支持多个维度列的宽表转换</td>
+<td>🟡 中</td>
+</tr>
+<tr>
+<td>自定义分箱规则</td>
+<td>用户可配置分箱边界</td>
+<td>🟡 中</td>
+</tr>
+<tr>
+<td>数据质量评分</td>
+<td>综合评估数据质量</td>
+<td>🟢 低</td>
+</tr>
+<tr>
+<td>增量预处理</td>
+<td>支持数据追加时的增量处理</td>
+<td>🟢 低</td>
+</tr>
+</tbody></table>
 <hr>
-<p>本次升级让 OpsMind 的数据预处理能力从&quot;简单清洗&quot;进化为&quot;智能结构化&quot;，能够自动识别和处理复杂的数据格式问题，大大提升了数据分析的效率和准确性。</p>
+<p>本次升级让 OpsMind 的数据预处理能力从”简单清洗”进化为”智能结构化”，能够自动识别和处理复杂的数据格式问题，大大提升了数据分析的效率和准确性。</p>
 <hr>
 <p><em>本文由 OpsMind 技术团队撰写，转载请注明出处。</em></p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/about/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/favicon.ico" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/favicon.ico" title="头像" alt="头像"></a><div class="post-copyright__author_name">wwxdsg</div><div class="post-copyright__author_desc">记录技术学习与生活思考的个人空间</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/')">OpsMind 数据预处理模块升级：从简单清洗到智能结构化</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=OpsMind 数据预处理模块升级：从简单清洗到智能结构化&amp;url=https://okelekaf01-cmd.github.io/opsmind/blog8_preprocessor_upgrade/&amp;pic=" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://okelekaf01-cmd.github.io" target="_blank">wwxdsg的个人博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>数据预处理<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>宽表转换<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>智能推断<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/LLM%E5%A2%9E%E5%BC%BA/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>LLM增强<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="/favicon.ico" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/opsmind/blog7_engineering_milestone/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">OpsMind 项目工程化里程碑：测试体系与 UI 组件化</div></div></a></div><div class="next-post pull-right"><a href="/opsmind/blog9_technical_discoveries/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">从需求出发的技术发现：我与 AI 架构的三次重逢</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/favicon.ico" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">持续记录 AI 开发、工程实践与学习笔记</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><h1 class="author-info__name">wwxdsg</h1><div class="author-info__desc">记录技术学习与生活思考的个人空间</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/okelekaf01-cmd" target="_blank" title="GitHub"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的个人博客，这里主要记录项目开发与技术思考。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">一、背景与问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%8E%9F%E6%9C%89%E9%A2%84%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原有预处理能力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 遇到的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%85%B6%E4%BB%96%E7%97%9B%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 其他痛点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%B0%E5%A2%9E%E5%8A%9F%E8%83%BD%E6%A6%82%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text">二、新增功能概览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8A%9F%E8%83%BD%E7%9F%A9%E9%98%B5"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 功能矩阵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%A2%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%E5%8D%87%E7%BA%A7"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 预处理流程升级</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%BD%E8%A1%A8%E7%BB%93%E6%9E%84%E6%A3%80%E6%B5%8B"><span class="toc-number">3.</span> <span class="toc-text">三、宽表结构检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%A3%80%E6%B5%8B%E9%80%BB%E8%BE%91"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 检测逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%A3%80%E6%B5%8B%E7%BB%B4%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 检测维度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%BD%AE%E4%BF%A1%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 置信度计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BB%93%E6%9E%84%E5%BD%92%E4%B8%80%E5%8C%96"><span class="toc-number">4.</span> <span class="toc-text">四、结构归一化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-normalize-%E6%96%B9%E6%B3%95"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 normalize() 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%87%AA%E5%8A%A8%E6%97%A0%E6%8D%9F%E6%B8%85%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 自动无损清理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%AE%BD%E8%A1%A8%E8%BD%AC%E9%95%BF%E8%A1%A8%EF%BC%88melt%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 宽表转长表（melt）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E8%A1%A8%E5%A4%B4%E8%A1%8C%E6%A0%A1%E6%AD%A3"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 表头行校正</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">五、异常值处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-IQR-%E6%96%B9%E6%B3%95"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 IQR 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%BC%82%E5%B8%B8%E5%80%BC%E5%88%A4%E5%AE%9A%E6%A0%87%E5%87%86"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 异常值判定标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%80%E7%AB%99%E5%BC%8F%E9%A2%84%E5%A4%84%E7%90%86%E5%8D%87%E7%BA%A7"><span class="toc-number">6.</span> <span class="toc-text">六、一站式预处理升级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-prepare-%E6%96%B9%E6%B3%95%E5%8D%87%E7%BA%A7"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 prepare() 方法升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 完整流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E6%B8%85%E6%B4%97%E6%8A%A5%E5%91%8A%E7%A4%BA%E4%BE%8B"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 清洗报告示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">7.</span> <span class="toc-text">七、实际应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E5%9C%BA%E6%99%AF%E4%B8%80%EF%BC%9A%E5%B9%B4%E5%BA%A6%E6%95%B0%E6%8D%AE%E5%AE%BD%E8%A1%A8"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 场景一：年度数据宽表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E5%9C%BA%E6%99%AF%E4%BA%8C%EF%BC%9A%E5%AD%A3%E5%BA%A6%E6%95%B0%E6%8D%AE%E5%AE%BD%E8%A1%A8"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 场景二：季度数据宽表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E5%9C%BA%E6%99%AF%E4%B8%89%EF%BC%9A%E8%A1%A8%E5%A4%B4%E8%A1%8C%E9%94%99%E4%BD%8D"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 场景三：表头行错位</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%80%BB%E7%BB%93%E4%B8%8E%E5%B1%95%E6%9C%9B"><span class="toc-number">8.</span> <span class="toc-text">八、总结与展望</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E6%9C%AC%E6%AC%A1%E5%8D%87%E7%BA%A7%E6%80%BB%E7%BB%93"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 本次升级总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E6%8A%80%E6%9C%AF%E4%BA%AE%E7%82%B9"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 技术亮点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E5%90%8E%E7%BB%AD%E8%A7%84%E5%88%92"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 后续规划</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog9_technical_discoveries/" title="从需求出发的技术发现：我与 AI 架构的三次重逢">从需求出发的技术发现：我与 AI 架构的三次重逢</a><time datetime="2026-02-28T18:00:00.000Z" title="发表于 2026-03-01 02:00:00">2026-03-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog8_preprocessor_upgrade/" title="OpsMind 数据预处理模块升级：从简单清洗到智能结构化">OpsMind 数据预处理模块升级：从简单清洗到智能结构化</a><time datetime="2026-02-24T18:00:00.000Z" title="发表于 2026-02-25 02:00:00">2026-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog7_engineering_milestone/" title="OpsMind 项目工程化里程碑：测试体系与 UI 组件化">OpsMind 项目工程化里程碑：测试体系与 UI 组件化</a><time datetime="2026-02-19T18:00:00.000Z" title="发表于 2026-02-20 02:00:00">2026-02-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog6_refactoring_methodology/" title="OpsMind 图表模块重构">OpsMind 图表模块重构</a><time datetime="2026-02-14T18:00:00.000Z" title="发表于 2026-02-15 02:00:00">2026-02-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/opsmind/blog5_llm_implementation/" title="LLM 在 OpsMind 项目中的技术实现详解">LLM 在 OpsMind 项目中的技术实现详解</a><time datetime="2026-02-09T18:00:00.000Z" title="发表于 2026-02-10 02:00:00">2026-02-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="footer_custom_text">基于 Hexo 与 AnZhiYu 主题构建</div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2026 By <a class="footer-bar-link" href="/about/" title="wwxdsg" target="_blank">wwxdsg</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io" title="Hexo">Hexo</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">31</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://hexo.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 0.88rem;">AI<sup>1</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 0.88rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 0.88rem;">Agent<sup>1</sup></a><a href="/tags/DeepSeek/" style="font-size: 0.88rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 0.88rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 0.88rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 0.88rem;">LLM<sup>1</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 0.88rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 0.88rem;">LLM应用<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 0.88rem;">Tool Calling<sup>1</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 0.88rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 0.88rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 0.88rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 0.88rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 0.88rem;">工程化<sup>1</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 0.88rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 0.88rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 0.88rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 0.88rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 0.88rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">数据预处理<sup>1</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 0.88rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 0.88rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 0.88rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 0.88rem;">架构设计<sup>2</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 0.88rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 0.88rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 0.88rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 0.88rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;undefined&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://cdn.cbd.int/qrcodejs@1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
 
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
 
-  </div>
-
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="https://okelekaf01-cmd.github.io/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/">数据预处理</a></li>
-      <li><a href="https://okelekaf01-cmd.github.io/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/">宽表转换</a></li>
-      <li><a href="https://okelekaf01-cmd.github.io/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/">智能推断</a></li>
-      <li><a href="https://okelekaf01-cmd.github.io/tags/llm%E5%A2%9E%E5%BC%BA/">LLM增强</a></li>
-    </ul>
-  </footer>
-</article>
-    </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="https://okelekaf01-cmd.github.io/">wwxdsg的个人博客</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu');
-    if (menu) {
-        
-        const scrollPosition = localStorage.getItem("menu-scroll-position");
-        if (scrollPosition) {
-            menu.scrollLeft = parseInt(scrollPosition, 10);
-        }
-        
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
     }
+  }
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
+  typeof typed === 'object' && typed.destroy()
 
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
 
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
 
-</script>
-</body>
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
 
-</html>
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

@@ -1,0 +1,181 @@
+menu:
+  导航:
+    首页: / || anzhiyu-icon-house
+    归档: /archives/ || anzhiyu-icon-box-archive
+    分类: /categories/ || anzhiyu-icon-shapes
+    标签: /tags/ || anzhiyu-icon-tags
+  专题:
+    项目: /projects/ || anzhiyu-icon-code
+    OpsMind: /opsmind/ || anzhiyu-icon-robot
+    学习笔记: /notes/ || anzhiyu-icon-book
+    实习记录: /internship/ || anzhiyu-icon-briefcase
+  关于:
+    关于我: /about/ || anzhiyu-icon-paper-plane
+
+nav:
+  enable: false
+  menu: []
+
+social:
+  GitHub: https://github.com/okelekaf01-cmd || anzhiyu-icon-github
+
+favicon: /favicon.ico
+
+avatar:
+  img: /favicon.ico
+  effect: true
+
+index_img: false
+default_top_img: false
+disable_top_img: false
+
+cover:
+  index_enable: true
+  aside_enable: true
+  archives_enable: true
+  position: left
+
+local_search:
+  enable: true
+  preload: true
+
+subtitle:
+  enable: true
+  effect: true
+  source: false
+  sub:
+    - 持续记录 AI 开发、工程化实践与学习笔记
+
+home_top:
+  enable: true
+  title: 技术探索
+  subTitle: 持续生长
+  siteText: wwxdsg
+  category:
+    - name: OpsMind
+      path: /opsmind/
+      shadow: var(--anzhiyu-shadow-blue)
+      class: blue
+      icon: anzhiyu-icon-robot
+    - name: 学习笔记
+      path: /notes/
+      shadow: var(--anzhiyu-shadow-green)
+      class: green
+      icon: anzhiyu-icon-book
+    - name: 个人项目
+      path: /projects/
+      shadow: var(--anzhiyu-shadow-red)
+      class: red
+      icon: anzhiyu-icon-code
+  default_descr: 记录项目、方法论和真实开发中的技术思考。
+
+site_verification: false
+
+toc:
+  post: true
+  page: true
+  number: true
+  expand: false
+  style_simple: false
+
+post_meta:
+  page:
+    date_type: created
+    date_format: simple
+    categories: true
+    tags: true
+    label: false
+  post:
+    date_type: both
+    date_format: date
+    categories: true
+    tags: true
+    label: true
+    unread: false
+
+index_post_content:
+  method: 2
+  length: 220
+
+copy:
+  enable: true
+  copyright:
+    enable: false
+    limit_count: 50
+
+article_double_row: true
+
+aside:
+  enable: true
+  hide: false
+  button: true
+  mobile: true
+  position: right
+  card_author:
+    enable: true
+    description: 持续记录 AI 开发、工程实践与学习笔记
+    name_link: /about/
+  card_announcement:
+    enable: true
+    content: 欢迎来到我的个人博客，这里主要记录项目开发与技术思考。
+  card_weixin:
+    enable: false
+  card_categories:
+    enable: true
+    limit: 8
+  card_recent_post:
+    enable: true
+    limit: 5
+
+newest_comments:
+  enable: false
+
+runtimeshow:
+  enable: false
+
+nav_music: false
+
+post_head_ai_description: false
+
+peoplecanvas: false
+
+console:
+  enable: false
+
+universe:
+  enable: false
+
+footer:
+  owner:
+    enable: true
+    since: 2026
+  custom_text: 基于 Hexo 与 AnZhiYu 主题构建
+  runtime:
+    enable: false
+  footerBar:
+    enable: true
+    authorLink: /about/
+    cc:
+      enable: false
+      link: /copyright
+    linkList:
+      - link: https://github.com/anzhiyu-c/hexo-theme-anzhiyu
+        text: 主题
+      - link: https://hexo.io
+        text: Hexo
+
+post_copyright:
+  enable: true
+  decode: false
+  author_href: /about/
+  location: 中国
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  avatarSinks: false
+  copyright_author_link: /about/
+
+reward:
+  enable: false
+
+wordcount:
+  enable: false
