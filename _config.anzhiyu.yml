@@ -124,6 +124,21 @@ aside:
   card_categories:
     enable: true
     limit: 8
+    expand: true
+  card_tags:
+    enable: true
+    limit: 40
+    color: false
+  card_archives:
+    enable: true
+    type: monthly
+    format: MMMM YYYY
+    order: -1
+    limit: 8
+  card_webinfo:
+    enable: true
+    post_count: true
+    last_push_date: false
   card_recent_post:
     enable: true
     limit: 5
@@ -132,7 +147,23 @@ newest_comments:
   enable: false
 
 runtimeshow:
-  enable: false
+  enable: true
+  publish_date: 2026/01/01 00:00:00
+
+busuanzi:
+  site_uv: true
+  site_pv: true
+  page_pv: false
+
+sidebar:
+  site_data:
+    archive: true
+    tag: true
+    category: true
+  menus_items: true
+  tags_cloud: true
+  display_mode: true
+  nav_menu_project: false
 
 nav_music: false
 
@@ -145,6 +176,10 @@ console:
 
 universe:
   enable: false
+
+inject:
+  bottom:
+    - <script src="/js/custom.js"></script>
 
 footer:
   owner:
