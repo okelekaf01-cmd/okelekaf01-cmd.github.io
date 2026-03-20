@@ -14,7 +14,7 @@ permalink: /internship/studio-motion-devlog-2026-03-19/
 ![Studio Motion Devlog Cover](/img/covers/studio-motion-devlog-2026-03-19.svg)
 
 <div class="internship-profile-card">
-  <img class="internship-profile-card__avatar" src="/img/avatar/profile-avatar.jpg" alt="wwxdsg avatar">
+  <img class="internship-profile-card__avatar" src="/img/avatar/profile-avatar-square.jpg" alt="wwxdsg avatar">
   <div class="internship-profile-card__body">
     <span class="internship-profile-card__label">实习开发日志作者</span>
     <a class="internship-profile-card__name" href="/about/">wwxdsg</a>

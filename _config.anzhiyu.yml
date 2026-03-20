@@ -23,8 +23,13 @@ social:
 favicon: /favicon.ico
 
 avatar:
-  img: /img/avatar/profile-avatar.jpg
+  img: /img/avatar/profile-avatar-square.jpg
   effect: true
+
+preloader:
+  enable: true
+  source: 3
+  avatar: /img/avatar/profile-avatar-square.jpg
 
 index_img: false
 default_top_img: false
@@ -39,6 +44,9 @@ cover:
 local_search:
   enable: true
   preload: true
+
+lazyload:
+  enable: false
 
 subtitle:
   enable: true
@@ -71,7 +79,7 @@ home_top:
   banner:
     tips: 关于作者
     title: wwxdsg
-    image: /img/avatar/profile-avatar.jpg
+    image: /img/avatar/profile-avatar-square.jpg
     link: /about/
   default_descr: 记录项目、方法论和真实开发中的技术思考。
 
@@ -183,6 +191,8 @@ universe:
   enable: false
 
 inject:
+  head:
+    - <link rel="stylesheet" href="/css/custom.css">
   bottom:
     - <script src="/js/custom.js"></script>
 

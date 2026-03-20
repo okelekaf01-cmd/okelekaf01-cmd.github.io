@@ -2,6 +2,8 @@
 title: "预设代码、Skill 与 MCP"
 date: 2026-01-26T10:00:00+08:00
 draft: false
+top_img: /img/covers/blog2-preset-skill-mcp.svg
+cover: /img/covers/blog2-preset-skill-mcp.svg
 tags: ["AI", "架构设计", "技术模式"]
 categories: ["技术文章"]
 author: "wwxdsg"

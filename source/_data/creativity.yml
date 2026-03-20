@@ -1,0 +1,13 @@
+- creativity_list:
+    - name: OpenAI
+      color: "#10a37f"
+      icon: "https://cdn.simpleicons.org/openai/ffffff"
+    - name: TypeScript
+      color: "#3178c6"
+      icon: "https://cdn.simpleicons.org/typescript/ffffff"
+    - name: React
+      color: "#149eca"
+      icon: "https://cdn.simpleicons.org/react/ffffff"
+    - name: GitHub
+      color: "#24292f"
+      icon: "https://cdn.simpleicons.org/github/ffffff"

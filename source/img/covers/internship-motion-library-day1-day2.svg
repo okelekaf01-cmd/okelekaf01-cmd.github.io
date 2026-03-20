@@ -1,70 +1,45 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0B1B2B"/>
-      <stop offset="0.55" stop-color="#123A4A"/>
-      <stop offset="1" stop-color="#1B5E5A"/>
+    <linearGradient id="bg" x1="40" y1="20" x2="1560" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4ED3A3"/>
+      <stop offset="1" stop-color="#5B9BFF"/>
     </linearGradient>
-    <linearGradient id="accentA" x1="210" y1="120" x2="1010" y2="720" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#32C5FF" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="#9BFFB1" stop-opacity="0.25"/>
+    <linearGradient id="bg-inner-motionBot" x1="1074" y1="184" x2="1326" y2="436" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4ED3A3"/>
+      <stop offset="1" stop-color="#5B9BFF"/>
     </linearGradient>
-    <linearGradient id="accentB" x1="410" y1="760" x2="1390" y2="180" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7CE7FF" stop-opacity="0.38"/>
-      <stop offset="1" stop-color="#7BFFC8" stop-opacity="0.12"/>
-    </linearGradient>
-    <filter id="blurA" x="-120" y="-120" width="1840" height="1140" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="42"/>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(430 170) rotate(15) scale(470 240)">
+      <stop stop-color="#B4FFF1" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#B4FFF1" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow-motionBot" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#173B54" flood-opacity="0.22"/>
     </filter>
   </defs>
-
-  <rect width="1600" height="900" fill="url(#bg)"/>
-  <g opacity="0.24">
-    <path d="M0 120H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 220H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 320H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 420H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 520H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 620H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 720H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M0 820H1600" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M180 0V900" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M380 0V900" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M580 0V900" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M780 0V900" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M980 0V900" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M1180 0V900" stroke="#84C8D9" stroke-width="1"/>
-    <path d="M1380 0V900" stroke="#84C8D9" stroke-width="1"/>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 200H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
   </g>
-
-  <g filter="url(#blurA)">
-    <ellipse cx="480" cy="250" rx="290" ry="190" fill="url(#accentA)"/>
-    <ellipse cx="1220" cy="650" rx="360" ry="220" fill="url(#accentB)"/>
+  <text x="120" y="318" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Motion</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Library</text>
+  <text x="126" y="548" fill="#ECFFFB" font-size="48" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">Architecture / Parameters / Layout / Debugging</text>
+  
+  <rect x="120" y="642" width="332" height="64" rx="32" fill="rgba(255,255,255,0.18)"/>
+  <text x="164" y="685" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Internship Notes</text>
+  
+  
+  <g filter="url(#shadow-motionBot)">
+    <rect x="1040" y="150" width="320" height="320" rx="56" fill="#FFFDFC"/>
   </g>
-
-  <rect x="132" y="126" width="1336" height="648" rx="24" fill="rgba(8,16,28,0.36)" stroke="rgba(132,200,217,0.45)" stroke-width="2"/>
-  <rect x="176" y="188" width="526" height="84" rx="12" fill="rgba(10,27,43,0.58)" stroke="rgba(124,231,255,0.45)"/>
-  <text x="204" y="242" fill="#D8F6FF" font-size="44" font-family="Arial, Helvetica, sans-serif" font-weight="700">INTERNSHIP BUILD LOG</text>
-
-  <text x="176" y="372" fill="#F0FDFF" font-size="78" font-family="Arial, Helvetica, sans-serif" font-weight="800">MOTION LIBRARY</text>
-  <text x="176" y="452" fill="#A8EFFF" font-size="58" font-family="Arial, Helvetica, sans-serif" font-weight="700">SYSTEM TO ENGINEERING</text>
-
-  <rect x="176" y="510" width="430" height="68" rx="12" fill="rgba(17,70,85,0.64)" stroke="rgba(124,231,255,0.5)"/>
-  <text x="206" y="554" fill="#DFFAFF" font-size="30" font-family="Arial, Helvetica, sans-serif" font-weight="700">DAY 1-2 PRACTICE REVIEW</text>
-
-  <g opacity="0.86">
-    <circle cx="1140" cy="252" r="118" fill="none" stroke="#7CE7FF" stroke-width="2"/>
-    <circle cx="1140" cy="252" r="86" fill="none" stroke="#7CE7FF" stroke-opacity="0.62" stroke-width="2"/>
-    <circle cx="1140" cy="252" r="52" fill="none" stroke="#9BFFB1" stroke-opacity="0.62" stroke-width="2"/>
-    <path d="M1018 252H1262" stroke="#7CE7FF" stroke-opacity="0.62"/>
-    <path d="M1140 130V374" stroke="#7CE7FF" stroke-opacity="0.62"/>
-  </g>
-
-  <g opacity="0.9">
-    <rect x="938" y="512" width="430" height="198" rx="16" fill="rgba(7,24,38,0.58)" stroke="rgba(155,255,177,0.42)" stroke-width="2"/>
-    <text x="970" y="570" fill="#BDFCDC" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="700">CORE TOPICS</text>
-    <text x="970" y="618" fill="#E9FFFF" font-size="24" font-family="Arial, Helvetica, sans-serif">- Parameterized overlays</text>
-    <text x="970" y="652" fill="#E9FFFF" font-size="24" font-family="Arial, Helvetica, sans-serif">- MotionLayer positioning</text>
-    <text x="970" y="686" fill="#E9FFFF" font-size="24" font-family="Arial, Helvetica, sans-serif">- Tokenized timing system</text>
-  </g>
+  <rect x="1074" y="184" width="252" height="252" rx="36" fill="url(#bg-inner-motionBot)" opacity="0.16"/>
+  <rect x="1130" y="232" width="84" height="84" rx="20" fill="#1FAF8D"/>
+  <rect x="1228" y="232" width="84" height="84" rx="20" fill="#4B6DFF"/>
+  <rect x="1130" y="342" width="182" height="78" rx="18" fill="#163D58" opacity="0.86"/>
+  <rect x="1166" y="268" width="12" height="12" rx="6" fill="#FFFFFF"/>
+  <rect x="1264" y="268" width="12" height="12" rx="6" fill="#FFFFFF"/>
+  <rect x="1166" y="377" width="112" height="12" rx="6" fill="#FFFFFF" opacity="0.92"/>
 </svg>

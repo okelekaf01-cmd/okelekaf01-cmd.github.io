@@ -1,0 +1,91 @@
+- name: wwxdsg
+  subtitle: 写代码，也写一点发呆、听歌和慢慢生活的痕迹
+  avatarImg: /img/avatar/profile-avatar-square.jpg
+  description: 我喜欢把复杂的事情理顺，也愿意给生活留一些没那么有用、但很可爱的空间。
+  helloAbout: 这里不只放技术，也放我在日常里慢慢长出来的判断、偏好和情绪。
+  avatarSkills:
+    left:
+      - 写代码
+      - 记灵感
+    right:
+      - 听歌
+      - 散步
+  aboutsiteTips:
+    tips: 我在写什么
+    title1: 把正在经历的事
+    title2: 写成可以回头再看的东西
+    word:
+      - 技术记录
+      - 生活片段
+      - 灵感碎片
+  skillsTips:
+    tips: 现在的重心
+    title: 认真做事，也认真生活
+  careers:
+    tips: 最近在练习
+    title: 想慢慢长稳的几件事
+    item: []
+    list:
+      - desc: 把复杂需求讲清楚
+        color: "#5b8def"
+      - desc: 做出顺手、耐看的界面
+        color: "#37b48a"
+      - desc: 把工作和生活都写下来
+        color: "#f0a34b"
+      - desc: 保持表达欲和好奇心
+        color: "#e6709b"
+    img: /img/covers/studio-motion-devlog-2026-03-19.svg
+  map:
+    title: 最近更想靠近的是
+    StrengthenTitle: 清晰、松弛，还有一点点可爱的表达
+    background: /img/covers/internship-motion-library-day1-day2.svg
+    backgroundDark: /img/covers/studio-motion-devlog-2026-03-19.svg
+  selfInfo:
+    selfInfoTips1: 博客建立于
+    selfInfoContentYear: 2026
+    selfInfoTips2: 想留下的内容
+    selfInfoContent2: 技术 / 生活 / 偏好 / 小发现
+    selfInfoTips3: 当前状态
+    selfInfoContent3: 一边成长，一边把日子过得具体
+  personalities:
+    tips: 我的方式
+    author_name: 做事风格
+    personality_type: 慢热，但认真
+    personality_type_color: "#5f7ce3"
+    photo_url: /img/avatar/profile-avatar-square.jpg
+    personality_img: /img/avatar/profile-avatar-square.jpg
+    name_url: /about/
+  maxim:
+    maxim_tips: 一句话原则
+    maxim_top: 不着急把自己定义死
+    maxim_bottom: 先把感受和经验留下来
+  buff:
+    buff_tips: 做事偏好
+    buff_top: 先想清楚，再慢慢做漂亮
+    buff_bottom: 技术和生活都一样
+  game:
+    game_tips: 最近状态
+    game_title: 慢慢把自己养顺
+    game_uid: 在写博客，也在学着保留休息、音乐和一些无用但珍贵的时间
+    game_bg: /img/covers/studio-motion-devlog-2026-03-19.svg
+  comic:
+    comic_tips: 最近偏爱的内容
+    comic_title: 最近会让我开心的东西
+    comic_list:
+      - name: 耳机里的夜晚
+        href: /notes/
+        cover: /img/covers/internship-motion-library-day1-day2.svg
+      - name: 慢慢长大的博客
+        href: /internship/
+        cover: /img/covers/studio-motion-devlog-2026-03-19.svg
+  music:
+    music_tips: 还有别的我
+    music_title: 去看一些更轻松的记录
+    music_link: /notes/
+    music_desc: 去翻翻那些不那么紧绷、也不那么像工作汇报的内容
+    music_bg: /img/covers/internship-motion-library-day1-day2.svg
+  like:
+    like_tips: 现在最喜欢做的事
+    like_title: 把复杂的东西讲清楚
+    like_bottom: 也包括那些说不清楚的心情、偏好和生活里的细小瞬间
+    like_bg: /img/covers/studio-motion-devlog-2026-03-19.svg

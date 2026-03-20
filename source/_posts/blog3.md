@@ -2,6 +2,8 @@
 title: "从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思"
 date: 2026-01-31T10:00:00+08:00
 draft: false
+top_img: /img/covers/blog3-chart-recommender.svg
+cover: /img/covers/blog3-chart-recommender.svg
 tags: ["数据可视化", "LLM应用", "架构设计"]
 categories: ["技术文章"]
 author: "wwxdsg"

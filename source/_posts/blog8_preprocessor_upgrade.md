@@ -2,6 +2,8 @@
 title: "OpsMind 数据预处理模块升级：从简单清洗到智能结构化"
 date: 2026-02-25T10:00:00+08:00
 draft: false
+top_img: /img/covers/blog8-preprocessor-upgrade.svg
+cover: /img/covers/blog8-preprocessor-upgrade.svg
 tags: ["数据预处理", "宽表转换", "智能推断", "LLM增强"]
 categories: ["技术文章"]
 author: "wwxdsg"

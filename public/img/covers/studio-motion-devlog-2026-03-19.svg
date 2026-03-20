@@ -1,61 +1,43 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0A1827"/>
-      <stop offset="0.5" stop-color="#12344A"/>
-      <stop offset="1" stop-color="#1E5A58"/>
+    <linearGradient id="bg" x1="40" y1="20" x2="1560" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5843FF"/>
+      <stop offset="1" stop-color="#FF5D8E"/>
     </linearGradient>
-    <linearGradient id="lineA" x1="220" y1="180" x2="1320" y2="760" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#55D8FF" stop-opacity="0.58"/>
-      <stop offset="1" stop-color="#88FFBE" stop-opacity="0.2"/>
+    <linearGradient id="bg-inner-motionBot" x1="1074" y1="184" x2="1326" y2="436" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5843FF"/>
+      <stop offset="1" stop-color="#FF5D8E"/>
     </linearGradient>
-    <linearGradient id="lineB" x1="1440" y1="120" x2="940" y2="760" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6BE9FF" stop-opacity="0.45"/>
-      <stop offset="1" stop-color="#7CFFC7" stop-opacity="0.1"/>
-    </linearGradient>
-    <filter id="blur" x="-120" y="-120" width="1840" height="1140" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="40"/>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 170) rotate(15) scale(430 230)">
+      <stop stop-color="#FFD1EA" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#FFD1EA" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow-studioBot" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#331C78" flood-opacity="0.22"/>
     </filter>
   </defs>
-
-  <rect width="1600" height="900" fill="url(#bg)"/>
-
-  <g opacity="0.2">
-    <path d="M0 110H1600M0 210H1600M0 310H1600M0 410H1600M0 510H1600M0 610H1600M0 710H1600M0 810H1600" stroke="#9BD6E6"/>
-    <path d="M170 0V900M370 0V900M570 0V900M770 0V900M970 0V900M1170 0V900M1370 0V900" stroke="#9BD6E6"/>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 200H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
   </g>
-
-  <g filter="url(#blur)">
-    <ellipse cx="430" cy="250" rx="300" ry="190" fill="url(#lineA)"/>
-    <ellipse cx="1210" cy="650" rx="360" ry="230" fill="url(#lineB)"/>
+  <text x="120" y="318" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Studio</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Motion</text>
+  <text x="126" y="548" fill="#FFF0F7" font-size="48" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">Crash Fix / UI Cleanup / Positioning / Interaction</text>
+  
+  <rect x="120" y="642" width="224" height="64" rx="32" fill="rgba(255,255,255,0.18)"/>
+  <text x="164" y="685" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Dev Log</text>
+  
+  
+  <g filter="url(#shadow-studioBot)">
+    <rect x="1040" y="150" width="320" height="320" rx="56" fill="#FFFDFC"/>
   </g>
-
-  <rect x="120" y="110" width="1360" height="680" rx="26" fill="rgba(7,17,30,0.35)" stroke="rgba(134,208,224,0.5)" stroke-width="2"/>
-
-  <rect x="176" y="172" width="520" height="74" rx="12" fill="rgba(12,34,50,0.58)" stroke="rgba(107,233,255,0.5)"/>
-  <text x="208" y="220" fill="#DDF9FF" font-size="38" font-family="Arial, Helvetica, sans-serif" font-weight="700">DEVELOPMENT LOG · 2026-03-19</text>
-
-  <text x="176" y="336" fill="#F2FDFF" font-size="72" font-family="Arial, Helvetica, sans-serif" font-weight="800">STUDIO MOTION SYSTEM</text>
-  <text x="176" y="408" fill="#AEEFFF" font-size="52" font-family="Arial, Helvetica, sans-serif" font-weight="700">ARCHITECTURE, BUG FIXING, INTERACTION</text>
-
-  <rect x="176" y="464" width="520" height="62" rx="10" fill="rgba(18,76,86,0.65)" stroke="rgba(124,255,199,0.5)"/>
-  <text x="206" y="506" fill="#E6FFFB" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="700">STABILITY TO DIRECT MANIPULATION</text>
-
-  <g opacity="0.92">
-    <rect x="922" y="188" width="432" height="264" rx="14" fill="rgba(8,27,42,0.62)" stroke="rgba(108,233,255,0.45)" stroke-width="2"/>
-    <rect x="958" y="226" width="360" height="204" rx="10" fill="rgba(11,37,56,0.52)" stroke="rgba(124,255,199,0.35)"/>
-    <rect x="1022" y="274" width="232" height="108" rx="8" fill="rgba(17,79,90,0.45)" stroke="#8EF1FF" stroke-width="2"/>
-    <circle cx="1022" cy="274" r="8" fill="#8EF1FF"/>
-    <circle cx="1254" cy="274" r="8" fill="#8EF1FF"/>
-    <circle cx="1022" cy="382" r="8" fill="#8EF1FF"/>
-    <circle cx="1254" cy="382" r="8" fill="#8EF1FF"/>
-  </g>
-
-  <g opacity="0.95">
-    <rect x="922" y="514" width="432" height="218" rx="14" fill="rgba(7,26,40,0.62)" stroke="rgba(124,255,199,0.45)" stroke-width="2"/>
-    <text x="954" y="566" fill="#C7FFE7" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="700">TODAY'S FOCUS</text>
-    <text x="954" y="612" fill="#E9FFFF" font-size="24" font-family="Arial, Helvetica, sans-serif">- Crash fix (audio fallback)</text>
-    <text x="954" y="648" fill="#E9FFFF" font-size="24" font-family="Arial, Helvetica, sans-serif">- UI cleanup (single entry)</text>
-    <text x="954" y="684" fill="#E9FFFF" font-size="24" font-family="Arial, Helvetica, sans-serif">- Drag-based layer geometry</text>
-  </g>
+  <circle cx="1200" cy="310" r="98" fill="#4E32C0"/>
+  <path d="M1156 260H1242L1221 299H1258V368H1138V299H1178L1156 260Z" fill="#FFC341"/>
+  <rect x="1228" y="262" width="30" height="106" rx="8" fill="#FF4D7A"/>
+  <rect x="1176" y="303" width="28" height="18" rx="9" fill="#FFFFFF"/>
+  <rect x="1216" y="303" width="28" height="18" rx="9" fill="#FFFFFF"/>
 </svg>

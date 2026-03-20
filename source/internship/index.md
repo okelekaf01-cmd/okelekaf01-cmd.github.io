@@ -8,7 +8,7 @@ comments: false
 这里汇总实习期间的开发日志、问题定位与阶段复盘。
 
 <div class="internship-profile-card">
-  <img class="internship-profile-card__avatar" src="/img/avatar/profile-avatar.jpg" alt="wwxdsg avatar">
+  <img class="internship-profile-card__avatar" src="/img/avatar/profile-avatar-square.jpg" alt="wwxdsg avatar">
   <div class="internship-profile-card__body">
     <span class="internship-profile-card__label">实习记录作者</span>
     <a class="internship-profile-card__name" href="/about/">wwxdsg</a>

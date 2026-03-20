@@ -1,0 +1,43 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="40" y1="20" x2="1560" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16C1B9"/>
+      <stop offset="1" stop-color="#2B6CFF"/>
+    </linearGradient>
+    <linearGradient id="bg-inner-motionBot" x1="1074" y1="184" x2="1326" y2="436" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16C1B9"/>
+      <stop offset="1" stop-color="#2B6CFF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(420 160) rotate(15) scale(430 230)">
+      <stop stop-color="#D2FFFF" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#D2FFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow-lineChart" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#18436A" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 200H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
+  </g>
+  <text x="120" y="318" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Chart</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Agent</text>
+  <text x="126" y="548" fill="#EFFFFF" font-size="48" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">Questioning / Recommendation / Reflection</text>
+  
+  <rect x="120" y="642" width="340" height="64" rx="32" fill="rgba(255,255,255,0.18)"/>
+  <text x="164" y="685" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Visualization Notes</text>
+  
+  
+  <g filter="url(#shadow-lineChart)">
+    <rect x="1040" y="150" width="320" height="320" rx="56" fill="#FFFDFC"/>
+  </g>
+  <path d="M1098 394L1156 308L1214 362L1280 258" stroke="#2B6CFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="1098" cy="394" r="16" fill="#16C1B9"/>
+  <circle cx="1156" cy="308" r="16" fill="#16C1B9"/>
+  <circle cx="1214" cy="362" r="16" fill="#16C1B9"/>
+  <circle cx="1280" cy="258" r="16" fill="#16C1B9"/>
+</svg>
