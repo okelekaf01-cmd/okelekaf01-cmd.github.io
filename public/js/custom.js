@@ -1,4 +1,13 @@
 (function () {
+  const removeThemePromo = () => {
+    document.getElementById("popup-window")?.remove();
+    document.getElementById("todayCard")?.remove();
+  };
+
+  removeThemePromo();
+  document.addEventListener("DOMContentLoaded", removeThemePromo);
+  document.addEventListener("pjax:complete", removeThemePromo);
+
   const quoteEl = document.getElementById("daily-quote");
   if (!quoteEl) return;
 
@@ -20,4 +29,3 @@
       if (fromEl) fromEl.textContent = "";
     });
 })();
-

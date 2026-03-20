@@ -13,6 +13,15 @@ permalink: /internship/motion-library-day1-day2/
 
 ![Motion Library Cover](/img/covers/internship-motion-library-day1-day2.svg)
 
+<div class="internship-profile-card">
+  <img class="internship-profile-card__avatar" src="/img/avatar/profile-avatar.jpg" alt="wwxdsg avatar">
+  <div class="internship-profile-card__body">
+    <span class="internship-profile-card__label">实习复盘作者</span>
+    <a class="internship-profile-card__name" href="/about/">wwxdsg</a>
+    <p class="internship-profile-card__desc">关注 AI 开发、工程实践与可复用动效系统设计。</p>
+  </div>
+</div>
+
 这篇复盘只讲两件事：**架构怎么设计**，**Bug 怎么定位并修掉**。
 
 我这两天做的，不是“写了几个动画组件”，而是把动效能力从素材堆叠升级成可演进的系统。

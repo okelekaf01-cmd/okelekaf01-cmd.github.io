@@ -13,6 +13,15 @@ permalink: /internship/studio-motion-devlog-2026-03-19/
 
 ![Studio Motion Devlog Cover](/img/covers/studio-motion-devlog-2026-03-19.svg)
 
+<div class="internship-profile-card">
+  <img class="internship-profile-card__avatar" src="/img/avatar/profile-avatar.jpg" alt="wwxdsg avatar">
+  <div class="internship-profile-card__body">
+    <span class="internship-profile-card__label">实习开发日志作者</span>
+    <a class="internship-profile-card__name" href="/about/">wwxdsg</a>
+    <p class="internship-profile-card__desc">记录 Studio 动效系统、交互细节与工程排障过程。</p>
+  </div>
+</div>
+
 今天这轮开发我主要做了四件事：稳定性修复、工程整理、UI 清理、定位交互升级。  
 这篇日志只保留技术主线，不展开分支状态和业务流程。
 

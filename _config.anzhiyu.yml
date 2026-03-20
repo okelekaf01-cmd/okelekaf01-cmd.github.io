@@ -23,7 +23,7 @@ social:
 favicon: /favicon.ico
 
 avatar:
-  img: /favicon.ico
+  img: /img/avatar/profile-avatar.jpg
   effect: true
 
 index_img: false
