@@ -48,10 +48,13 @@
     selfInfoTips3: 当前状态
     selfInfoContent3: 一边成长，一边把日子过得具体
   personalities:
-    tips: 我的方式
-    author_name: 做事风格
-    personality_type: 慢热，但认真
-    personality_type_color: "#5f7ce3"
+    tips: MBTI
+    author_name: 我是
+    personality_type: ENTP
+    personality_type_color: "#ff8b63"
+    personality_desc: 点子很多，喜欢新鲜感，也想把表达做得更有趣一点
+    question_text: 对此抱有疑问？
+    question_url: /about/entp/
     photo_url: /img/avatar/profile-avatar-square.jpg
     personality_img: /img/avatar/profile-avatar-square.jpg
     name_url: /about/
