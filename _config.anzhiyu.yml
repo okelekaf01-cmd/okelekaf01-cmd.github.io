@@ -68,6 +68,11 @@ home_top:
       shadow: var(--anzhiyu-shadow-red)
       class: red
       icon: anzhiyu-icon-code
+  banner:
+    tips: 关于作者
+    title: wwxdsg
+    image: /img/avatar/profile-avatar.jpg
+    link: /about/
   default_descr: 记录项目、方法论和真实开发中的技术思考。
 
 site_verification: false

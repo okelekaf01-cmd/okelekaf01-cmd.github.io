@@ -1,12 +1,11 @@
 (function () {
-  const removeThemePromo = () => {
+  const removeThemePopup = () => {
     document.getElementById("popup-window")?.remove();
-    document.getElementById("todayCard")?.remove();
   };
 
-  removeThemePromo();
-  document.addEventListener("DOMContentLoaded", removeThemePromo);
-  document.addEventListener("pjax:complete", removeThemePromo);
+  removeThemePopup();
+  document.addEventListener("DOMContentLoaded", removeThemePopup);
+  document.addEventListener("pjax:complete", removeThemePopup);
 
   const quoteEl = document.getElementById("daily-quote");
   if (!quoteEl) return;

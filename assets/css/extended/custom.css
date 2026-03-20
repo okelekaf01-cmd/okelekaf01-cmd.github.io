@@ -144,7 +144,6 @@
     }
 }
 
-#popup-window,
-#todayCard {
+#popup-window {
     display: none !important;
 }
