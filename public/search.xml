@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>当 Agent 开始扮演 PM、前后端，我看见了真正的开发现场</title>
+      <link href="//notes/agent-dev-simulation/"/>
+      <url>//notes/agent-dev-simulation/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/img/covers/agent-dev-simulation.svg" alt="Agent Dev Simulation Cover"></p><p>最近我做了一件很有意思的事：不只是让 agent 写代码，而是让他们按真实团队的路径协作。A 当后端，B&#x2F;C 当两个前端，PM 负责拍板和同步。我本来以为会看到一串整齐的任务推进，结果看到的却是另一个更真实的东西：<strong>软件开发里最难的，从来不只是代码，而是接口、依赖、文档和时序。</strong></p><h2 id="第一幕：真正的开发不是“开工”，而是先冻结协议"><a href="#第一幕：真正的开发不是“开工”，而是先冻结协议" class="headerlink" title="第一幕：真正的开发不是“开工”，而是先冻结协议"></a>第一幕：真正的开发不是“开工”，而是先冻结协议</h2><p>PM 的第一条通知就很像真实团队站会：</p><blockquote><p>后端 A 已完成 P0，接口层就绪，B&#x2F;C 可开始对接。</p></blockquote><p>听起来一切顺利，下一句却立刻把现实感拉满：</p><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">status -&gt; intent -&gt; token×N -&gt; charts (optional) -&gt; tables (optional) -&gt; done</span><br></pre></td></tr></table></figure><p>SSE 事件顺序被固定，历史消息接口也被明确要求在会话切换时重新拉取，不能偷懒用内存缓存。更绝的是，<code>process_query()</code> 的 token 还是“模拟流式”，按 20 个字符一包切割，前端不能默认后端真的在逐 token 推送。</p><p>这段特别打动我，因为它很像真实项目里最常见的那类约束：<strong>看起来只是实现细节，实际上却是前端状态机能不能站住的地基。</strong></p><h2 id="第二幕：最像现实的一刻，不是接口没写，而是文档写错了"><a href="#第二幕：最像现实的一刻，不是接口没写，而是文档写错了" class="headerlink" title="第二幕：最像现实的一刻，不是接口没写，而是文档写错了"></a>第二幕：最像现实的一刻，不是接口没写，而是文档写错了</h2><p>真正让我笑出来的是 C 的核验反馈。TA 没有先急着写组件，而是先拿通知去对代码，结果直接抓出两处不一致：</p><ul><li>上传接口不是 <code>POST /api/files/upload?session_id={id}</code>，实际是 <code>POST /api/upload</code>，而且 <code>session_id</code> 要放在 <code>FormData</code> 里。</li><li>PM 说图表和表格 HTML 都统一走 <code>/api/charts/{filename}</code>，但代码里表格仍然是内联 HTML，方案根本没落地。</li></ul><p>这几乎就是所有联调现场的缩影。项目里最危险的不是“没人想过”，而是<strong>大家都以为已经定了，实际上代码还没跟上</strong>。</p><p>所以 C 的结论也特别真实：<code>TableViewer</code> 暂停，等 A 把后端改成真正的文件方案后再继续。不是消极，而是避免前端基于错误前提继续堆实现。</p><p>后面还有一段我很想保留下来，因为它把这次协作里另一种很好的气质也演出来了：不是谁声音大谁赢，而是<strong>谁更贴近契约，谁就暂时不动</strong>。</p><p>文件上传接口就是一个典型例子。B 在 <code>lib/api.ts</code> 里调用的是 <code>POST /api/files/upload</code>，而 A 实际实现的是 <code>POST /api/upload</code>。追到最后，问题根子不是 B，也不完全是 A，而是 PM 最早的通知没有追踪到后端真实落地的路径。</p><p>但更关键的是 PM 后面的处理方式很干净：</p><blockquote><p>这是 PM 的失误。</p><p>决定：A 改，B 不动。</p></blockquote><p>我很喜欢这两句，因为它们非常理性，也非常高效。PM 没有模糊地说“大家再对一下”，而是直接把责任归位，再给出最小改动路径：A 去给路由补 <code>prefix=&quot;/files&quot;</code>，或者直接把 <code>@router.post(&quot;/upload&quot;)</code> 改成 <code>@router.post(&quot;/files/upload&quot;)</code>，改完跑 <code>test_curl.sh</code> 回 PM。</p><p>这其实特别像成熟团队的沟通方式。承认自己通知写错了，不会削弱权威，反而会让项目更快往前走。因为一旦拍板足够明确，B 不需要重写，A 也不需要猜，所有人都能立刻继续干活。</p><h2 id="第三幕：真正的阻塞，往往长得像一个很小的组件"><a href="#第三幕：真正的阻塞，往往长得像一个很小的组件" class="headerlink" title="第三幕：真正的阻塞，往往长得像一个很小的组件"></a>第三幕：真正的阻塞，往往长得像一个很小的组件</h2><p>这次模拟里我最喜欢的一句话是：</p><blockquote><p>C 的 ErrorBanner 是 B 的前置依赖。</p></blockquote><p>太真实了。一个听起来很边缘的小组件，居然卡在 <code>StreamingMessage</code> 之前，直接决定了另一个人的节奏。另一句也很有团队味：</p><blockquote><p><code>types/index.ts</code> + <code>AppContext.tsx</code> 必须在进入 P2 前冻结并提交，C 的 <code>FileUploadZone</code> 在等这个。</p></blockquote><p>很多时候，开发进度不是被“大功能”卡住的，而是被那些很基础、但必须先稳定下来的公共契约卡住的。类型、上下文、错误态、状态机，这些东西不 flashy，却直接决定了协作成本。</p><p>而且他们不是泛泛地说“先把组件给我”，是真的会像项目群里那样留下硬邦邦的交接备注：</p><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">ErrorBannerProps</span> &#123;</span><br><span class="line">  <span class="attr">message</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">onDismiss</span>?: <span class="function">() =&gt;</span> <span class="built_in">void</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">ToolCall</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">status</span>: <span class="string">&#x27;running&#x27;</span> | <span class="string">&#x27;done&#x27;</span> | <span class="string">&#x27;error&#x27;</span></span><br><span class="line">  <span class="attr">errorMsg</span>?: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>然后再补一句责任切割：</p><blockquote><p>B 的 ChatPanel 组装 <code>tools[]</code> 数组，传给 <code>ToolCallCard</code>，我不管状态来源。</p></blockquote><p>这句我看到的时候真的笑了，因为它特别像真实协作里的那种强硬但高效的表达。不是不配合，而是<strong>先把接口边界钉死，谁产出数据、谁消费数据、谁不背锅，说清楚再继续。</strong></p><h2 id="第四幕：最真实的结尾，往往不是“完成”，而是“等-PM-拍板”"><a href="#第四幕：最真实的结尾，往往不是“完成”，而是“等-PM-拍板”" class="headerlink" title="第四幕：最真实的结尾，往往不是“完成”，而是“等 PM 拍板”"></a>第四幕：最真实的结尾，往往不是“完成”，而是“等 PM 拍板”</h2><p>这次最好的一点，是它没有硬把故事写成一个圆满结局，而是老老实实留下了两个待裁定问题：</p><ol><li>前端 <code>ChartItem</code> 类型和后端实现不一致，到底是后端补字段，还是前端缩类型。</li><li><code>tool</code> 事件三轮沟通后依然不存在，<code>ToolCallCard</code> 这期到底做不做。</li></ol><p>这反而让我觉得更像真实项目。因为现实开发里，经常不是“技术不会做”，而是<strong>边界还没定、职责还没裁、所以所有人都只能在原地等一句明确的话。</strong></p><h2 id="最好笑也最专业的部分：不要互相甩锅"><a href="#最好笑也最专业的部分：不要互相甩锅" class="headerlink" title="最好笑也最专业的部分：不要互相甩锅"></a>最好笑也最专业的部分：不要互相甩锅</h2><p>PM 最后一条群发通知，我觉得可以直接打印出来贴在办公室：</p><blockquote><p>A 的接口测试脚本在 <code>tests/api/test_curl.sh</code>，B&#x2F;C 联调时遇到接口问题先跑这个脚本确认是后端问题还是前端问题，不要互相甩锅</p></blockquote><p>好笑是因为太像现实，专业也是因为太像现实。真正成熟的团队不会把“谁的问题”当作第一反应，而是先建立一个共同的排错基线。<code>curl</code> 脚本在这里不只是测试工具，更像协作秩序的一部分。</p><h2 id="这次实验让我重新理解了-Agent-的价值"><a href="#这次实验让我重新理解了-Agent-的价值" class="headerlink" title="这次实验让我重新理解了 Agent 的价值"></a>这次实验让我重新理解了 Agent 的价值</h2><p>原来我以为，让 agent 扮演不同角色，重点会落在“他们能不能把代码写出来”。但这次更有价值的地方恰恰不是代码，而是他们把开发现场里那些经常被低估的部分演出来了：</p><ul><li>PM 不是发需求的人，而是负责冻结接口、裁定冲突和压住节奏的人。</li><li>前端不是“等接口的人”，而是会反过来核对文档、追问事件模型、识别类型漂移的人。</li><li>阻塞也不是 bug 才算阻塞，未裁定的类型、缺失的事件、尚未冻结的 context，一样会让项目停下来。</li></ul><p>换句话说，这次我看到的不是“AI 在模拟开发”，而是<strong>AI 把开发里最真实的人类问题重新演了一遍。</strong></p><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>如果以后我还会继续玩这种多角色 agent 开发，我大概会更认真地设计三样东西：角色边界、交付门槛，以及谁有权拍板。</p><p>因为一旦这些东西清楚了，agent 输出就不只是“挺好玩”，而是真的开始像一个项目团队在工作了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Agent </tag>
+            
+            <tag> 工程协作 </tag>
+            
+            <tag> AI </tag>
+            
+            <tag> 接口联调 </tag>
+            
+            <tag> SSE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>开发日志｜Studio 动效系统：从崩溃修复到定位交互重构</title>
       <link href="//internship/studio-motion-devlog-2026-03-19/"/>
       <url>//internship/studio-motion-devlog-2026-03-19/</url>
@@ -24,13 +57,13 @@
             
             <tag> 实习记录 </tag>
             
-            <tag> Remotion </tag>
-            
             <tag> 动效系统 </tag>
             
             <tag> Bug定位 </tag>
             
             <tag> 交互设计 </tag>
+            
+            <tag> Remotion </tag>
             
         </tags>
       
@@ -61,11 +94,11 @@
             
             <tag> 实习记录 </tag>
             
-            <tag> Remotion </tag>
-            
             <tag> 动效系统 </tag>
             
             <tag> Bug定位 </tag>
+            
+            <tag> Remotion </tag>
             
         </tags>
       
@@ -90,11 +123,11 @@
       
         <tags>
             
+            <tag> Agent </tag>
+            
             <tag> AI架构 </tag>
             
             <tag> 技术发现 </tag>
-            
-            <tag> Agent </tag>
             
             <tag> Tool Calling </tag>
             
@@ -276,11 +309,11 @@
       
         <tags>
             
+            <tag> 架构设计 </tag>
+            
             <tag> 数据可视化 </tag>
             
             <tag> LLM应用 </tag>
-            
-            <tag> 架构设计 </tag>
             
         </tags>
       
@@ -305,9 +338,9 @@
       
         <tags>
             
-            <tag> 架构设计 </tag>
-            
             <tag> AI </tag>
+            
+            <tag> 架构设计 </tag>
             
             <tag> 技术模式 </tag>
             
