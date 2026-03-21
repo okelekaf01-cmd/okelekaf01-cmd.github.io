@@ -814,3 +814,176 @@ html.site-home-intro-leaving #home_top {
         gap: 10px;
     }
 }
+
+.essay-prose {
+    position: relative;
+    width: min(100%, 47rem);
+    margin: 0 auto;
+    padding: 0.5rem 0 1.25rem;
+}
+
+.essay-prose::before {
+    content: "";
+    position: absolute;
+    inset: -1.25rem -2rem auto;
+    height: 12rem;
+    border-radius: 40px;
+    background:
+        radial-gradient(circle at 18% 24%, rgba(78, 120, 255, 0.08), transparent 24%),
+        radial-gradient(circle at 78% 30%, rgba(255, 132, 150, 0.08), transparent 22%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.essay-prose > * {
+    position: relative;
+    z-index: 1;
+}
+
+#article-container .essay-prose p {
+    margin: 1.18rem 0;
+    color: rgba(52, 60, 74, 0.92);
+    font-size: 1.06rem;
+    line-height: 2.04;
+    letter-spacing: 0.02em;
+    text-indent: 2em;
+    text-wrap: pretty;
+}
+
+#article-container .essay-prose .essay-prose__lead {
+    margin: 0 0 1.6rem;
+    color: #2a3550;
+    font-size: 1.18rem;
+    font-weight: 600;
+    line-height: 2;
+    letter-spacing: 0.03em;
+    text-indent: 0;
+}
+
+#article-container .essay-prose .essay-prose__lead::first-letter {
+    float: left;
+    margin: 0.12em 0.32em 0 0;
+    color: #4963f0;
+    font-size: 2.6em;
+    line-height: 0.9;
+    text-indent: 0;
+}
+
+#article-container .essay-prose blockquote {
+    margin: 2.6rem auto 2.2rem;
+    padding: 1.5rem 1.8rem;
+    border: 0;
+    border-radius: 26px;
+    background:
+        linear-gradient(135deg, rgba(74, 101, 235, 0.08), rgba(255, 133, 160, 0.08)),
+        rgba(255, 255, 255, 0.72);
+    box-shadow: 0 18px 38px rgba(48, 63, 97, 0.08);
+}
+
+#article-container .essay-prose blockquote p {
+    margin: 0;
+    color: #253350;
+    font-size: 1.14rem;
+    font-weight: 600;
+    line-height: 1.9;
+    letter-spacing: 0.05em;
+    text-align: center;
+    text-indent: 0;
+}
+
+.essay-prose__pause {
+    margin: 2rem auto 1.8rem;
+    color: rgba(90, 99, 122, 0.42);
+    font-size: 1.1rem;
+    letter-spacing: 0.42em;
+    text-align: center;
+    user-select: none;
+}
+
+.essay-prose__stanza {
+    margin: 2.6rem 0 2rem;
+    padding: 1.35rem 1rem;
+}
+
+#article-container .essay-prose .essay-prose__stanza p {
+    margin: 0.9rem 0;
+    color: #293754;
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 2.08;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-indent: 0;
+}
+
+[data-theme="dark"] .essay-prose::before {
+    background:
+        radial-gradient(circle at 18% 24%, rgba(100, 127, 255, 0.15), transparent 24%),
+        radial-gradient(circle at 78% 30%, rgba(255, 132, 150, 0.14), transparent 22%);
+}
+
+[data-theme="dark"] #article-container .essay-prose p {
+    color: rgba(227, 233, 244, 0.9);
+}
+
+[data-theme="dark"] #article-container .essay-prose .essay-prose__lead {
+    color: #eef2ff;
+}
+
+[data-theme="dark"] #article-container .essay-prose .essay-prose__lead::first-letter {
+    color: #91a3ff;
+}
+
+[data-theme="dark"] #article-container .essay-prose blockquote {
+    background:
+        linear-gradient(135deg, rgba(90, 110, 240, 0.18), rgba(255, 133, 160, 0.14)),
+        rgba(25, 31, 46, 0.88);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="dark"] #article-container .essay-prose blockquote p,
+[data-theme="dark"] #article-container .essay-prose .essay-prose__stanza p {
+    color: #f3f5ff;
+}
+
+[data-theme="dark"] .essay-prose__pause {
+    color: rgba(214, 220, 236, 0.4);
+}
+
+@media (max-width: 768px) {
+    .essay-prose {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .essay-prose::before {
+        inset: -0.6rem -0.6rem auto;
+        height: 9rem;
+        border-radius: 28px;
+    }
+
+    #article-container .essay-prose p {
+        font-size: 1rem;
+        line-height: 1.98;
+    }
+
+    #article-container .essay-prose .essay-prose__lead {
+        font-size: 1.08rem;
+        line-height: 1.92;
+    }
+
+    #article-container .essay-prose .essay-prose__lead::first-letter {
+        margin-right: 0.22em;
+        font-size: 2.2em;
+    }
+
+    #article-container .essay-prose blockquote {
+        padding: 1.2rem 1rem;
+        border-radius: 20px;
+    }
+
+    #article-container .essay-prose blockquote p,
+    #article-container .essay-prose .essay-prose__stanza p {
+        font-size: 1rem;
+    }
+}

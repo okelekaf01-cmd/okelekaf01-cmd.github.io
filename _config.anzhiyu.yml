@@ -9,6 +9,7 @@ menu:
     项目: /projects/ || anzhiyu-icon-code
     OpsMind: /opsmind/ || anzhiyu-icon-robot
     学习笔记: /notes/ || anzhiyu-icon-book
+    闲言碎语: /fragments/ || anzhiyu-icon-quote
     实习记录: /internship/ || anzhiyu-icon-briefcase
   关于:
     关于我: /about/ || anzhiyu-icon-paper-plane
@@ -71,6 +72,11 @@ home_top:
       shadow: var(--anzhiyu-shadow-green)
       class: green
       icon: anzhiyu-icon-book
+    - name: 闲言碎语
+      path: /fragments/
+      shadow: var(--anzhiyu-shadow-yellow)
+      class: yellow
+      icon: anzhiyu-icon-quote
     - name: 个人项目
       path: /projects/
       shadow: var(--anzhiyu-shadow-red)

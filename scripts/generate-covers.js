@@ -141,6 +141,17 @@ const covers = [
     shadow: '#331C78',
     icon: 'studioBot',
   },
+  {
+    file: 'love-in-fluctuations.svg',
+    colors: ['#4361EE', '#FF7A8A'],
+    glow: { x: 1160, y: 180, color: '#FFD7E5', opacity: 0.20, rx: 430, ry: 230 },
+    title: ['Love', 'In Waves'],
+    subtitle: 'Emotion / Rhythm / Honesty / Boundaries',
+    badge: 'Fragments',
+    accent: '#FFF2F7',
+    shadow: '#33246B',
+    icon: 'heartWave',
+  },
 ];
 
 function esc(str) {
@@ -268,6 +279,14 @@ function drawIcon(icon, start, end) {
   <rect x="${left + 188}" y="${top + 112}" width="30" height="106" rx="8" fill="#FF4D7A"/>
   <rect x="${left + 136}" y="${top + 153}" width="28" height="18" rx="9" fill="#FFFFFF"/>
   <rect x="${left + 176}" y="${top + 153}" width="28" height="18" rx="9" fill="#FFFFFF"/>`;
+    case 'heartWave':
+      return `
+  ${iconFrame(icon)}
+  <path d="M${left + 82} ${top + 248}C${left + 118} ${top + 208}, ${left + 150} ${top + 218}, ${left + 180} ${top + 176}C${left + 202} ${top + 148}, ${left + 232} ${top + 128}, ${left + 278} ${top + 156}" stroke="${end}" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M${left + 82} ${top + 214}C${left + 120} ${top + 174}, ${left + 154} ${top + 184}, ${left + 184} ${top + 144}C${left + 206} ${top + 116}, ${left + 236} ${top + 98}, ${left + 278} ${top + 126}" stroke="${start}" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="0.82"/>
+  <path d="M${left + 160} ${top + 116}C${left + 148} ${top + 88}, ${left + 108} ${top + 88}, ${left + 108} ${top + 126}C${left + 108} ${top + 164}, ${left + 160} ${top + 194}, ${left + 160} ${top + 194}C${left + 160} ${top + 194}, ${left + 212} ${top + 164}, ${left + 212} ${top + 126}C${left + 212} ${top + 88}, ${left + 172} ${top + 88}, ${left + 160} ${top + 116}Z" fill="#FFFFFF"/>
+  <circle cx="${left + 96}" cy="${top + 266}" r="14" fill="#FFFFFF" opacity="0.92"/>
+  <circle cx="${left + 278}" cy="${top + 156}" r="16" fill="#FFFFFF" opacity="0.88"/>`;
     default:
       return `\n  ${iconFrame(icon)}`;
   }
