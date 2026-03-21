@@ -46,6 +46,16 @@
     display: block;
 }
 
+a.categoryButton.yellow {
+    background: linear-gradient(to right, #ffc247, #ff8f6b);
+    background-size: 200%;
+}
+
+[data-theme="dark"] a.categoryButton.yellow {
+    background: linear-gradient(to right, #d58b09, #cf5c3f);
+    background-size: 200%;
+}
+
 .internship-profile-card {
     --card-accent: #1f8a8a;
     --card-accent-soft: rgba(31, 138, 138, 0.14);
