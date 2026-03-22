@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/kb-dll-conflict-bugfix.svg
 cover: /img/covers/kb-dll-conflict-bugfix.svg
 tags: ["OpsMind", "Bug定位", "RAG", "知识库", "ChromaDB", "Windows"]
-categories: ["技术文章"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录 OpsMind 知识库入库失败问题的完整排查过程：从环境误判到 Windows DLL 冲突，再到切换 API embedding 模式的最小修复。"
 permalink: /opsmind/kb-dll-conflict-bugfix/

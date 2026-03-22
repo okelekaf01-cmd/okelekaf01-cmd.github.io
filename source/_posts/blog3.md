@@ -4,7 +4,7 @@ date: 2026-01-31T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog3-chart-recommender.svg
 cover: /img/covers/blog3-chart-recommender.svg
-tags: ["数据可视化", "LLM应用", "架构设计"]
+tags: ["OpsMind", "数据可视化", "LLM应用", "架构设计"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "探讨智能图表推荐系统中的追问机制设计，以及在真实脏数据场景下的实战反思"

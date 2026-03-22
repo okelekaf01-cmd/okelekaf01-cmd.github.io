@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/studio-motion-devlog-2026-03-19.svg
 cover: /img/covers/studio-motion-devlog-2026-03-19.svg
 tags: ["实习记录", "动效系统", "Bug定位", "交互设计", "Remotion", "工程化"]
-categories: ["实习记录"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录 Studio 动效系统在 2026-03-19 的关键工程进展：音频可视化崩溃修复、动效配置 UI 收敛、定位交互升级与新组件接入。"
 permalink: /internship/studio-motion-devlog-2026-03-19/

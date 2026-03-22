@@ -6,7 +6,7 @@ draft: false
 top_img: /img/covers/first-post-blog-launch.svg 
 cover: /img/covers/first-post-blog-launch.svg 
 tags: ["Hugo", "GitHub Pages", "技术折腾"] 
-categories: ["随笔"] 
+categories: ["开发日志"] 
 author: "wwxdsg" 
 description: "记录我第一次使用 Hugo + GitHub Actions 搭建个人博客的心路历程，以及那些踩过的坑。" 
 permalink: /notes/first-post/

@@ -13,7 +13,7 @@
       
       <categories>
           
-          <category> 闲言碎语 </category>
+          <category> 随笔 </category>
           
       </categories>
       
@@ -90,6 +90,8 @@
             
             <tag> AI </tag>
             
+            <tag> OpsMind </tag>
+            
             <tag> 项目管理 </tag>
             
             <tag> 复盘 </tag>
@@ -110,7 +112,7 @@
       
       <categories>
           
-          <category> 技术文章 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -145,7 +147,7 @@
       
       <categories>
           
-          <category> 技术文章 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -178,7 +180,7 @@
       
       <categories>
           
-          <category> 随笔 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -194,6 +196,8 @@
             <tag> 接口联调 </tag>
             
             <tag> SSE </tag>
+            
+            <tag> OpsMind </tag>
             
         </tags>
       
@@ -211,7 +215,7 @@
       
       <categories>
           
-          <category> 技术文章 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -244,7 +248,7 @@
       
       <categories>
           
-          <category> 技术文章 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -277,7 +281,7 @@
       
       <categories>
           
-          <category> 实习记录 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -312,7 +316,7 @@
       
       <categories>
           
-          <category> 实习记录 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -347,7 +351,7 @@
       
       <categories>
           
-          <category> 技术文章 </category>
+          <category> 开发日志 </category>
           
       </categories>
       
@@ -397,6 +401,8 @@
             
             <tag> Tool Calling </tag>
             
+            <tag> OpsMind </tag>
+            
         </tags>
       
     </entry>
@@ -427,6 +433,8 @@
             <tag> 智能推断 </tag>
             
             <tag> LLM增强 </tag>
+            
+            <tag> OpsMind </tag>
             
         </tags>
       
@@ -459,6 +467,8 @@
             
             <tag> 项目里程碑 </tag>
             
+            <tag> OpsMind </tag>
+            
         </tags>
       
     </entry>
@@ -489,6 +499,8 @@
             <tag> 方法论 </tag>
             
             <tag> 代码质量 </tag>
+            
+            <tag> OpsMind </tag>
             
         </tags>
       
@@ -521,6 +533,8 @@
             
             <tag> 代码分析 </tag>
             
+            <tag> OpsMind </tag>
+            
         </tags>
       
     </entry>
@@ -552,6 +566,8 @@
             
             <tag> 智能运营 </tag>
             
+            <tag> OpsMind </tag>
+            
         </tags>
       
     </entry>
@@ -580,6 +596,8 @@
             <tag> 数据可视化 </tag>
             
             <tag> LLM应用 </tag>
+            
+            <tag> OpsMind </tag>
             
         </tags>
       
@@ -610,6 +628,8 @@
             
             <tag> 技术模式 </tag>
             
+            <tag> OpsMind </tag>
+            
         </tags>
       
     </entry>
@@ -626,7 +646,7 @@
       
       <categories>
           
-          <category> 随笔 </category>
+          <category> 开发日志 </category>
           
       </categories>
       

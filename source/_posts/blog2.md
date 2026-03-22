@@ -4,7 +4,7 @@ date: 2026-01-26T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog2-preset-skill-mcp.svg
 cover: /img/covers/blog2-preset-skill-mcp.svg
-tags: ["AI", "架构设计", "技术模式"]
+tags: ["OpsMind", "AI", "架构设计", "技术模式"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "探讨AI应用开发中三种技术模式：预设代码、Skill和MCP的本质区别与适用场景"

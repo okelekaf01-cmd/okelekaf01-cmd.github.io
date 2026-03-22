@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/ui-redesign-day1-upload-flow.svg
 cover: /img/covers/ui-redesign-day1-upload-flow.svg
 tags: ["OpsMind", "UI重构", "文件上传", "数据预处理", "前后端联调"]
-categories: ["技术文章"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录这次 OpsMind UI 重构第一天最重要的工作：先修掉上传 500，再把宽表检测、Melt 配置和前端预览链路真正接起来。"
 permalink: /opsmind/ui-redesign-day1-upload-flow/

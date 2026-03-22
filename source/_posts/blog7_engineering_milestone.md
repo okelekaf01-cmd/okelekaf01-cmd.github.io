@@ -4,7 +4,7 @@ date: 2026-02-20T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog7-engineering-milestone.svg
 cover: /img/covers/blog7-engineering-milestone.svg
-tags: ["工程化", "测试", "UI组件化", "项目里程碑"]
+tags: ["OpsMind", "工程化", "测试", "UI组件化", "项目里程碑"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "记录OpsMind项目从功能开发到工程化建设的里程碑，包括测试体系、UI组件化和开发工具链完善"

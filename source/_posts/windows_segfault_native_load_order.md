@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/windows-segfault-native-load-order.svg
 cover: /img/covers/windows-segfault-native-load-order.svg
 tags: ["OpsMind", "Bug定位", "Windows", "FastAPI", "ChromaDB", "Segfault"]
-categories: ["技术文章"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录 OpsMind 前端重构联调期间一次后端 native 层崩溃的完整排查过程：从 exit code 139 到 hnswlib 与 numpy allocator 的加载顺序冲突。"
 permalink: /opsmind/windows-segfault-native-load-order/

@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/ui-redesign-day3-chat-polish.svg
 cover: /img/covers/ui-redesign-day3-chat-polish.svg
 tags: ["OpsMind", "UI重构", "聊天界面", "Markdown", "前端体验"]
-categories: ["技术文章"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录这次 OpsMind UI 重构第三天最有成就感的部分：消息区排版、零依赖 Markdown、侧边栏、状态栏和输入框这些真正决定手感的细节。"
 permalink: /opsmind/ui-redesign-day3-chat-polish/

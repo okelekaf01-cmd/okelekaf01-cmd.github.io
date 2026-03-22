@@ -4,7 +4,7 @@ date: 2026-02-15T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog6-chart-refactor.svg
 cover: /img/covers/blog6-chart-refactor.svg
-tags: ["重构", "配置驱动", "方法论", "代码质量"]
+tags: ["OpsMind", "重构", "配置驱动", "方法论", "代码质量"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "分享OpsMind图表模块从800行代码到清晰架构的重构方法论与实践经验"

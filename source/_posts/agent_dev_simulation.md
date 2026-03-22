@@ -4,8 +4,8 @@ date: 2026-03-21T10:30:00+08:00
 draft: false
 top_img: /img/covers/agent-dev-simulation.svg
 cover: /img/covers/agent-dev-simulation.svg
-tags: ["Agent", "工程协作", "AI", "接口联调", "SSE"]
-categories: ["随笔"]
+tags: ["OpsMind", "Agent", "工程协作", "AI", "接口联调", "SSE"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录一次让 Agent 模拟真实团队开发路径的实验：角色分工、接口对齐、文档漂移、依赖阻塞，以及那些比代码更像现实世界的瞬间。"
 permalink: /notes/agent-dev-simulation/

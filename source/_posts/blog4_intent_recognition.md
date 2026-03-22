@@ -4,7 +4,7 @@ date: 2026-02-05T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog4-intent-recognition.svg
 cover: /img/covers/blog4-intent-recognition.svg
-tags: ["意图识别", "LLM应用", "自然语言处理", "智能运营"]
+tags: ["OpsMind", "意图识别", "LLM应用", "自然语言处理", "智能运营"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "深入解析企业智能运营场景中的三维意图识别系统设计与实现"

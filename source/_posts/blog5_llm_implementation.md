@@ -4,7 +4,7 @@ date: 2026-02-10T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog5-llm-implementation.svg
 cover: /img/covers/blog5-llm-implementation.svg
-tags: ["LLM", "DeepSeek", "技术实现", "代码分析"]
+tags: ["OpsMind", "LLM", "DeepSeek", "技术实现", "代码分析"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "深入解析LLM在OpsMind项目中的角色定位、调用场景、Prompt工程实践及性能优化策略"

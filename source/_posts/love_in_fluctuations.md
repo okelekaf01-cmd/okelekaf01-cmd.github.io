@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/love-in-fluctuations.svg
 cover: /img/covers/love-in-fluctuations.svg
 tags: ["关系", "情绪", "成长", "自我觉察"]
-categories: ["闲言碎语"]
+categories: ["随笔"]
 author: "wwxdsg"
 description: "关于喜欢、波动、误判与真实表达的一次自我梳理。"
 permalink: /fragments/love-in-fluctuations/

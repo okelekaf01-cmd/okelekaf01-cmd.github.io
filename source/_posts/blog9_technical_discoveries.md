@@ -4,7 +4,7 @@ date: 2026-03-01T10:00:00+08:00
 draft: false
 top_img: /img/covers/blog9-technical-discoveries.svg
 cover: /img/covers/blog9-technical-discoveries.svg
-tags: ["AI架构", "技术发现", "Agent", "Tool Calling"]
+tags: ["OpsMind", "AI架构", "技术发现", "Agent", "Tool Calling"]
 categories: ["技术文章"]
 author: "wwxdsg"
 description: "分享在OpsMind项目开发中三次技术重逢的经历：预设代码与Skill、JSON输出与Tool Calling、自主判断与Agent"

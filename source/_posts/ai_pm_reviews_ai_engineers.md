@@ -4,7 +4,7 @@ date: 2026-03-22T18:00:00+08:00
 draft: false
 top_img: /img/covers/ai-pm-reviews-ai-engineers.svg
 cover: /img/covers/ai-pm-reviews-ai-engineers.svg
-tags: ["Agent", "AI", "工程协作", "项目管理", "复盘"]
+tags: ["OpsMind", "Agent", "AI", "工程协作", "项目管理", "复盘"]
 categories: ["随笔"]
 author: "wwxdsg"
 description: "记录一次很有意思的 AI 团队复盘：PM 判断 B 表现更好，A 不狡辩，B 反过来建议把提交前 curl 验证写进硬性门槛，整场对话成熟得有点不像互联网。"

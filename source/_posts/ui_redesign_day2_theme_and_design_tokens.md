@@ -5,7 +5,7 @@ draft: false
 top_img: /img/covers/ui-redesign-day2-theme-system.svg
 cover: /img/covers/ui-redesign-day2-theme-system.svg
 tags: ["OpsMind", "UI重构", "设计系统", "Dark Mode", "Theme"]
-categories: ["技术文章"]
+categories: ["开发日志"]
 author: "wwxdsg"
 description: "记录这次 OpsMind UI 重构第二天最满意的部分：把散落的颜色和样式抽成设计 token，再认真把暗色模式和浅色模式重做一遍。"
 permalink: /opsmind/ui-redesign-day2-theme-system/
