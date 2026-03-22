@@ -1,0 +1,390 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子 | wwxdsg的个人博客</title><meta name="keywords" content="OpsMind,UI重构,聊天界面,Markdown,前端体验"><meta name="author" content="wwxdsg"><meta name="copyright" content="wwxdsg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子"><meta name="application-name" content="OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子"><meta property="og:url" content="https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/index.html"><meta property="og:site_name" content="wwxdsg的个人博客"><meta property="og:description" content="记录这次 OpsMind UI 重构第三天最有成就感的部分：消息区排版、零依赖 Markdown、侧边栏、状态栏和输入框这些真正决定手感的细节。"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://okelekaf01-cmd.github.io/img/covers/ui-redesign-day3-chat-polish.svg"><meta property="article:author" content="wwxdsg"><meta property="article:tag" content="[&quot;博客&quot;,&quot;技术博客&quot;,&quot;AI&quot;,&quot;Agent&quot;,&quot;Hugo&quot;,&quot;Hexo&quot;]"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://okelekaf01-cmd.github.io/img/covers/ui-redesign-day3-chat-polish.svg"><meta name="description" content="记录这次 OpsMind UI 重构第三天最有成就感的部分：消息区排版、零依赖 Markdown、侧边栏、状态栏和输入框这些真正决定手感的细节。"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: ,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: wwxdsg","link":"链接: ","source":"来源: wwxdsg的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'wwxdsg的个人博客',
+  title: 'OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子',
+  postAI: '',
+  pageFillDescription: '我最先动的是阅读感, 没装 react-markdown那就自己写一个, 流式光标这个细节我最后也没放过, 侧边栏终于不再像一个拥挤的抽屉, 激活态、Hover 和按钮风格都要收一收, 状态栏和输入框是我最满意的两块小东西, 第三天结束时我最喜欢的是它终于有自己的气质如果说前两天分别解决了链路和体系那第三天终于轮到我最想做的那部分了把这个聊天界面一点一点磨到我自己真心喜欢这种喜欢不只是它看起来更现代而是你会明显感觉到页面终于开始顺手顺眼也顺逻辑很多改动单看都不算惊天动地字号从改到对话区从放到消息间距从拉到侧边栏从调到输入框阴影边框圆角全部重做但这件事常常就是这样真正决定质感的往往不是某一个设计大招而是一堆你愿意认真对待的小地方我最先动的是阅读感第三天里我最确定的一件事是消息区必须更像能读很久的地方而不是一个把字堆进去的容器所以我直接把几个核心参数都抬了一档正文用户消息输入框字号行高消息间距顶部留白对话区最大宽度这些数字表面上只是微调但组合起来阅读感会一下子变得很不一样我尤其喜欢外层滚动内层居中约束这个布局它会让聊天区域一下子从铺满屏幕的内容区变成真正被设计过的阅读区这种感觉很重要因为对话产品本质上是长时间阅读产品不是单次扫一眼的运营页没装那就自己写一个第三天另一个特别有意思的部分是我干脆手写了一个零依赖渲染器原因也很现实项目依赖受保护不能想加什么就加什么那与其卡在没有库不如自己写一个够用而且可控的版本我最后支持的语法其实已经覆盖了聊天场景里最常见的部分标题有序无序列表行内代码代码块粗体和斜体分割线段落空行实现方式也不是搞一个完整而是按聊天场景去做一套轻量状态机遇到多行列表和代码块时先缓存再在合适时机统一这种写法我很喜欢因为它很朴素也很贴场景它不是为了实现世界上最标准的而是为了让回复在这个产品里看起来足够自然流式光标这个细节我最后也没放过还有一个我特别想做好的点是流式消息最后那个闪烁光标如果它单独占一行会显得很笨如果它能嵌在最后一段文字末尾整个流式过程就会顺很多所以最后是用把光标塞回最后一个可渲染节点的里这个细节用户可能不会单独注意到但它确实会影响一种很微妙的感受系统到底是在打印一段文字还是在持续生成一句还没说完的话我希望它更像后者侧边栏终于不再像一个拥挤的抽屉第三天我也把侧边栏认真收拾了一遍最直观的变化当然是宽度调到但真正重要的不是它更宽了而是它终于有空间呼吸了对话项的字号圆角最小高度都往上调了一点马上就从能点变成了愿意点同时我还修了一个很容易被忽略但很影响观感的问题宽了以后里那三处历史宽度也得一起改不然抽屉动画和推入布局会出现溢出最后像一块侧边面板压到主内容上这种问题很像前端世界自己的冷笑话你以为自己在调美术结果最后抓到的是三个埋了很久的激活态和按钮风格都要收一收我对侧边栏还有个很明确的偏好它不应该一直在抢主内容的戏所以会话项的激活态我没有继续用很硬的而是改成那种更轻的背景差分新建对话按钮也从实心品牌色改成风格尽量减少侧边栏一打开先看到一大块醒目按钮的感觉这次越做越觉得一个成熟界面的克制感往往来自这种地方激活态不吼不喧宾夺主操作按钮只在需要时出现比如重命名删除按钮我最后就只让它在或删除确认态里显示不是因为写不出来常驻而是因为常驻真的很吵状态栏和输入框是我最满意的两块小东西原来的状态栏是三个带边框的卡片信息不是不能看但总有点为了告诉你状态专门搭了三块小牌子的感觉我后来把它们改成三条很轻的绿点表示正常灰点表示中性黄点表示警告没有大边框没有视觉噪音信息却更清楚了它看起来像退了一步实际是更成熟了一步输入框也是同样的思路这次我很想要那种更接近的药丸感所以把圆角直接抬到同时配上更柔和的边框和阴影再让整个输入区和消息区使用同样的宽度约束更重要的是我把输入字号固定到了这不仅是为了视觉统一也是在顺手避开对小字号输入框的自动缩放这种顺便把坑填了的感觉特别好你知道自己改的不只是外观而是把真实使用过程也一起照顾到了第三天结束时我最喜欢的是它终于有自己的气质前两天的工作更像是理性建设修补接口建做主题到了第三天整个界面才开始真正长出一点气质这种气质不是某个设计网站截图式的漂亮而是字看着舒服层级是顺的切主题不别扭聊天区能一直读下去侧边栏不吵输入框有分量但不笨重我后来回头看这三天最喜欢的其实就是第三天因为它最接近我一开始那个很模糊但很坚定的目标把从功能可用真的往我自己也会喜欢的产品感推一截而这种喜欢最后几乎都落在了细节上也许这就是工作里最让人上瘾的地方你花很多时间不是为了做出一个变化很大的页面而是为了把一个已经存在的界面慢慢修到它终于开始像它自己',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-03-22 18:21:23',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.1.1"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/avatar/profile-avatar-square.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">wwxdsg的个人博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fragments/"><i class="anzhiyufont anzhiyu-icon-quote faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.05rem;">AI<sup>3</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 1.05rem;">Agent<sup>3</sup></a><a href="/tags/Bug%E5%AE%9A%E4%BD%8D/" style="font-size: 1.05rem;">Bug定位<sup>4</sup></a><a href="/tags/DeepSeek/" style="font-size: 1.05rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 1.05rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 1.05rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 1.05rem;">LLM<sup>2</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 1.05rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 1.05rem;">LLM应用<sup>2</sup></a><a href="/tags/OpsMind/" style="font-size: 1.05rem;">OpsMind<sup>6</sup></a><a href="/tags/Remotion/" style="font-size: 1.05rem;">Remotion<sup>2</sup></a><a href="/tags/SSE/" style="font-size: 1.05rem;">SSE<sup>1</sup></a><a href="/tags/Tool-Calling/" style="font-size: 1.05rem;">Tool Calling<sup>2</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 1.05rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">交互设计<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.05rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 1.05rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%8A%A8%E6%95%88%E7%B3%BB%E7%BB%9F/" style="font-size: 1.05rem;">动效系统<sup>2</sup></a><a href="/tags/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" style="font-size: 1.05rem;">实习记录<sup>2</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 1.05rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>3</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/" style="font-size: 1.05rem;">工程协作<sup>2</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 1.05rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 1.05rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 1.05rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 1.05rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%81%94%E8%B0%83/" style="font-size: 1.05rem;">接口联调<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 1.05rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">数据预处理<sup>2</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 1.05rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 1.05rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 1.05rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">架构设计<sup>3</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.05rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 1.05rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 1.05rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 1.05rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">12</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/02/"><span class="card-archive-list-date">二月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/OpsMind/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>OpsMind</span></a><a class="article-meta__tags" href="/tags/UI%E9%87%8D%E6%9E%84/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>UI重构</span></a><a class="article-meta__tags" href="/tags/%E8%81%8A%E5%A4%A9%E7%95%8C%E9%9D%A2/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>聊天界面</span></a><a class="article-meta__tags" href="/tags/Markdown/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Markdown</span></a><a class="article-meta__tags" href="/tags/%E5%89%8D%E7%AB%AF%E4%BD%93%E9%AA%8C/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>前端体验</span></a></span></div></div><h1 class="post-title" itemprop="name headline">OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2026-03-21T18:00:00.000Z" title="发表于 2026-03-22 02:00:00">2026-03-22</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2026-03-22T10:21:23.269Z" title="更新于 2026-03-22 18:21:23">2026-03-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为中国"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>中国</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="/img/covers/ui-redesign-day3-chat-polish.svg"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/"><header><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a><a href="/tags/OpsMind/" tabindex="-1" itemprop="url">OpsMind</a><a href="/tags/UI%E9%87%8D%E6%9E%84/" tabindex="-1" itemprop="url">UI重构</a><a href="/tags/%E8%81%8A%E5%A4%A9%E7%95%8C%E9%9D%A2/" tabindex="-1" itemprop="url">聊天界面</a><a href="/tags/Markdown/" tabindex="-1" itemprop="url">Markdown</a><a href="/tags/%E5%89%8D%E7%AB%AF%E4%BD%93%E9%AA%8C/" tabindex="-1" itemprop="url">前端体验</a><h1 id="CrawlerTitle" itemprop="name headline">OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">wwxdsg</span><time itemprop="dateCreated datePublished" datetime="2026-03-21T18:00:00.000Z" title="发表于 2026-03-22 02:00:00">2026-03-22</time><time itemprop="dateCreated datePublished" datetime="2026-03-22T10:21:23.269Z" title="更新于 2026-03-22 18:21:23">2026-03-22</time></header><p><img src="/img/covers/ui-redesign-day3-chat-polish.svg" alt="OpsMind UI Redesign Day 3 Cover"></p>
+<p>如果说前两天分别解决了“链路”和“体系”，那第三天终于轮到我最想做的那部分了：</p>
+<p><strong>把这个聊天界面一点一点磨到我自己真心喜欢。</strong></p>
+<p>这种喜欢不只是“它看起来更现代”，而是你会明显感觉到，页面终于开始顺手、顺眼，也顺逻辑。</p>
+<p>很多改动单看都不算惊天动地：</p>
+<ul>
+<li>字号从 14px 改到 16px</li>
+<li>对话区从 720px 放到 760px</li>
+<li>消息间距从 16px 拉到 24px</li>
+<li>侧边栏从 248px 调到 288px</li>
+<li>输入框阴影、边框、圆角全部重做</li>
+</ul>
+<p>但 UI 这件事常常就是这样。<br>真正决定质感的，往往不是某一个“设计大招”，而是一堆你愿意认真对待的小地方。</p>
+<h2 id="我最先动的是阅读感"><a href="#我最先动的是阅读感" class="headerlink" title="我最先动的是阅读感"></a>我最先动的是阅读感</h2><p>第三天里，我最确定的一件事是：消息区必须更像“能读很久的地方”，而不是一个把字堆进去的容器。</p>
+<p>所以我直接把几个核心参数都抬了一档：</p>
+<ul>
+<li>AI 正文 14px → 16px</li>
+<li>用户消息 14px → 16px</li>
+<li>输入框字号 14px → 16px</li>
+<li>行高 1.7 → 1.8</li>
+<li>消息间距 16px → 24px</li>
+<li>顶部留白 20px → 32px</li>
+<li>对话区最大宽度 720px → 760px</li>
+</ul>
+<p>这些数字表面上只是微调，但组合起来，阅读感会一下子变得很不一样。</p>
+<p>我尤其喜欢“外层滚动 + 内层居中约束”这个布局：</p>
+<figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line">&lt;div style=&#123;&#123; <span class="attr">flex</span>: <span class="number">1</span>, <span class="attr">overflowY</span>: <span class="string">&#x27;auto&#x27;</span>, <span class="attr">padding</span>: <span class="string">&#x27;32px 24px 12px&#x27;</span> &#125;&#125;&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">maxWidth:</span> &#x27;<span class="attr">var</span>(<span class="attr">--chat-width</span>)&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">margin:</span> &#x27;<span class="attr">0</span> <span class="attr">auto</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">display:</span> &#x27;<span class="attr">flex</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">flexDirection:</span> &#x27;<span class="attr">column</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">gap:</span> &#x27;<span class="attr">24px</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  &#125;&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">    &#123;messages.map(...)&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>它会让聊天区域一下子从“铺满屏幕的内容区”变成“真正被设计过的阅读区”。</p>
+<p>这种感觉很重要。<br>因为对话产品本质上是长时间阅读产品，不是单次扫一眼的运营页。</p>
+<h2 id="没装-react-markdown，那就自己写一个"><a href="#没装-react-markdown，那就自己写一个" class="headerlink" title="没装 react-markdown，那就自己写一个"></a>没装 <code>react-markdown</code>，那就自己写一个</h2><p>第三天另一个特别有意思的部分，是我干脆手写了一个零依赖 Markdown 渲染器。</p>
+<p>原因也很现实：项目依赖受保护，不能想加什么就加什么。<br>那与其卡在“没有库”，不如自己写一个够用而且可控的版本。</p>
+<p>我最后支持的语法其实已经覆盖了聊天场景里最常见的部分：</p>
+<ul>
+<li>标题</li>
+<li>有序 &#x2F; 无序列表</li>
+<li>行内代码</li>
+<li>代码块</li>
+<li>粗体和斜体</li>
+<li>分割线</li>
+<li>段落空行</li>
+</ul>
+<p>实现方式也不是搞一个完整 parser，而是按聊天场景去做一套轻量状态机：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">listBuffer</span>: &#123; <span class="attr">type</span>: <span class="string">&#x27;ul&#x27;</span> | <span class="string">&#x27;ol&#x27;</span>; <span class="attr">items</span>: <span class="built_in">string</span>[] &#125; | <span class="literal">null</span> = <span class="literal">null</span></span><br><span class="line"><span class="keyword">let</span> <span class="attr">codeBuffer</span>: <span class="built_in">string</span>[] | <span class="literal">null</span> = <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+
+<p>遇到多行列表和代码块时先缓存，再在合适时机统一 flush。</p>
+<p>这种写法我很喜欢，因为它很朴素，也很贴场景。<br>它不是为了实现“世界上最标准的 Markdown”，而是为了让 AI 回复在这个产品里看起来足够自然。</p>
+<h2 id="流式光标这个细节，我最后也没放过"><a href="#流式光标这个细节，我最后也没放过" class="headerlink" title="流式光标这个细节，我最后也没放过"></a>流式光标这个细节，我最后也没放过</h2><p>还有一个我特别想做好的点，是流式消息最后那个闪烁光标。</p>
+<p>如果它单独占一行，会显得很笨；<br>如果它能嵌在最后一段文字末尾，整个流式过程就会顺很多。</p>
+<p>所以最后是用 <code>cloneElement</code> 把光标塞回最后一个可渲染节点的 children 里。</p>
+<p>这个细节用户可能不会单独注意到，但它确实会影响一种很微妙的感受：</p>
+<p>系统到底是在“打印一段文字”，还是在“持续生成一句还没说完的话”。</p>
+<p>我希望它更像后者。</p>
+<h2 id="侧边栏终于不再像一个拥挤的抽屉"><a href="#侧边栏终于不再像一个拥挤的抽屉" class="headerlink" title="侧边栏终于不再像一个拥挤的抽屉"></a>侧边栏终于不再像一个拥挤的抽屉</h2><p>第三天我也把侧边栏认真收拾了一遍。</p>
+<p>最直观的变化当然是宽度：248px 调到 288px。<br>但真正重要的不是它更宽了，而是它终于有空间呼吸了。</p>
+<p>对话项的字号、padding、圆角、最小高度都往上调了一点，马上就从“能点”变成了“愿意点”。</p>
+<p>同时我还修了一个很容易被忽略、但很影响观感的问题：<br><code>Sidebar.tsx</code> 宽了以后，<code>chat/layout.tsx</code> 里那三处历史宽度也得一起改。不然抽屉动画和推入布局会出现溢出，最后像一块侧边面板压到主内容上。</p>
+<p>这种问题很像前端世界自己的冷笑话：</p>
+<p>你以为自己在调美术，结果最后抓到的是三个埋了很久的 <code>260px</code>。</p>
+<h2 id="激活态、Hover-和按钮风格都要收一收"><a href="#激活态、Hover-和按钮风格都要收一收" class="headerlink" title="激活态、Hover 和按钮风格都要收一收"></a>激活态、Hover 和按钮风格都要收一收</h2><p>我对侧边栏还有个很明确的偏好：<br>它不应该一直在抢主内容的戏。</p>
+<p>所以会话项的激活态，我没有继续用很硬的 border，而是改成 Gemini 那种更轻的背景差分。</p>
+<p>新建对话按钮也从实心品牌色改成 ghost 风格，尽量减少“侧边栏一打开先看到一大块醒目按钮”的感觉。</p>
+<p>这次越做越觉得，一个成熟界面的克制感往往来自这种地方：</p>
+<ul>
+<li>激活态不吼</li>
+<li>hover 不喧宾夺主</li>
+<li>操作按钮只在需要时出现</li>
+</ul>
+<p>比如重命名 &#x2F; 删除按钮，我最后就只让它在 hover 或删除确认态里显示。<br>不是因为写不出来常驻，而是因为常驻真的很吵。</p>
+<h2 id="状态栏和输入框，是我最满意的两块小东西"><a href="#状态栏和输入框，是我最满意的两块小东西" class="headerlink" title="状态栏和输入框，是我最满意的两块小东西"></a>状态栏和输入框，是我最满意的两块小东西</h2><p>原来的状态栏是三个带边框的卡片，信息不是不能看，但总有点“为了告诉你状态，专门搭了三块小牌子”的感觉。</p>
+<p>我后来把它们改成三条很轻的 <code>dot + label + value</code>：</p>
+<ul>
+<li>绿点表示正常</li>
+<li>灰点表示中性</li>
+<li>黄点表示警告</li>
+</ul>
+<p>没有大边框，没有视觉噪音，信息却更清楚了。</p>
+<p>它看起来像退了一步，实际是更成熟了一步。</p>
+<p>输入框也是同样的思路。</p>
+<p>这次我很想要那种更接近 Claude 的药丸感，所以把圆角直接抬到 <code>22px</code>，同时配上更柔和的边框和阴影，再让整个输入区和消息区使用同样的宽度约束。</p>
+<p>更重要的是我把输入字号固定到了 16px。<br>这不仅是为了视觉统一，也是在顺手避开 iOS Safari 对小字号输入框的自动缩放。</p>
+<p>这种“顺便把坑填了”的感觉特别好。<br>你知道自己改的不只是外观，而是把真实使用过程也一起照顾到了。</p>
+<h2 id="第三天结束时，我最喜欢的是它终于有“自己的气质”"><a href="#第三天结束时，我最喜欢的是它终于有“自己的气质”" class="headerlink" title="第三天结束时，我最喜欢的是它终于有“自己的气质”"></a>第三天结束时，我最喜欢的是它终于有“自己的气质”</h2><p>前两天的工作更像是理性建设：</p>
+<ul>
+<li>修 bug</li>
+<li>补接口</li>
+<li>建 token</li>
+<li>做主题</li>
+</ul>
+<p>到了第三天，整个界面才开始真正长出一点气质。</p>
+<p>这种气质不是某个设计网站截图式的漂亮，而是：</p>
+<ul>
+<li>字看着舒服</li>
+<li>层级是顺的</li>
+<li>切主题不别扭</li>
+<li>聊天区能一直读下去</li>
+<li>侧边栏不吵</li>
+<li>输入框有分量但不笨重</li>
+</ul>
+<p>我后来回头看这三天，最喜欢的其实就是第三天。<br>因为它最接近我一开始那个很模糊但很坚定的目标：</p>
+<p><strong>把 OpsMind 从“功能可用”真的往“我自己也会喜欢的产品感”推一截。</strong></p>
+<p>而这种喜欢，最后几乎都落在了细节上。</p>
+<p>也许这就是 UI 工作里最让人上瘾的地方。<br>你花很多时间，不是为了做出一个“变化很大”的页面，而是为了把一个已经存在的界面，慢慢修到它终于开始像它自己。</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/about/" title="头像"><img class="post-copyright__author_img_back" src="/img/avatar/profile-avatar-square.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src="/img/avatar/profile-avatar-square.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">wwxdsg</div><div class="post-copyright__author_desc">记录技术学习与生活思考的个人空间</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/')">OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子&amp;url=https://okelekaf01-cmd.github.io/opsmind/ui-redesign-day3-chat-polish/&amp;pic=/img/covers/ui-redesign-day3-chat-polish.svg" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://okelekaf01-cmd.github.io" target="_blank">wwxdsg的个人博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/OpsMind/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>OpsMind<span class="tagsPageCount">6</span></a><a class="post-meta__box__tags" href="/tags/UI%E9%87%8D%E6%9E%84/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>UI重构<span class="tagsPageCount">3</span></a><a class="post-meta__box__tags" href="/tags/%E8%81%8A%E5%A4%A9%E7%95%8C%E9%9D%A2/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>聊天界面<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/Markdown/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Markdown<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E5%89%8D%E7%AB%AF%E4%BD%93%E9%AA%8C/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>前端体验<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="/img/covers/love-in-fluctuations.svg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/notes/agent-dev-simulation/"><img class="prev-cover" src="/img/covers/agent-dev-simulation.svg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">当 Agent 开始扮演 PM、前后端，我看见了真正的开发现场</div></div></a></div><div class="next-post pull-right"><a href="/opsmind/windows-segfault-native-load-order/"><img class="next-cover" src="/img/covers/windows-segfault-native-load-order.svg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/opsmind/ui-redesign-day1-upload-flow/" title="OpsMind UI 重构实录（一）：先把上传链路和宽表配置打通"><img class="cover" src="/img/covers/ui-redesign-day1-upload-flow.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-20</div><div class="title">OpsMind UI 重构实录（一）：先把上传链路和宽表配置打通</div></div></a></div><div><a href="/opsmind/ui-redesign-day2-theme-system/" title="OpsMind UI 重构实录（二）：设计 Token、暗色重构和双主题切换"><img class="cover" src="/img/covers/ui-redesign-day2-theme-system.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-21</div><div class="title">OpsMind UI 重构实录（二）：设计 Token、暗色重构和双主题切换</div></div></a></div><div><a href="/opsmind/kb-dll-conflict-bugfix/" title="知识库入库失败的真正元凶：一次 Windows DLL 冲突修复实录"><img class="cover" src="/img/covers/kb-dll-conflict-bugfix.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-11</div><div class="title">知识库入库失败的真正元凶：一次 Windows DLL 冲突修复实录</div></div></a></div><div><a href="/opsmind/windows-segfault-native-load-order/" title="Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗"><img class="cover" src="/img/covers/windows-segfault-native-load-order.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-22</div><div class="title">Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗</div></div></a></div><div><a href="/opsmind/json-schema-understanding/" title="从“让模型别乱说”开始：我对 JSON Schema 的理解"><img class="cover" src="/img/covers/json-schema-understanding.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-22</div><div class="title">从“让模型别乱说”开始：我对 JSON Schema 的理解</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src="/img/avatar/profile-avatar-square.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">持续记录 AI 开发、工程实践与学习笔记</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><h1 class="author-info__name">wwxdsg</h1><div class="author-info__desc">记录技术学习与生活思考的个人空间</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/okelekaf01-cmd" target="_blank" title="GitHub"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的个人博客，这里主要记录项目开发与技术思考。</div></div><div class="card-widget card-daily-quote" id="card-daily-quote"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-quote-left"></i><span>每日一言</span></div><div class="item-content"><div id="daily-quote" style="line-height:1.6;">加载中...</div>
+<div id="daily-quote-from" style="margin-top:8px;opacity:.7;font-size:.9em;"></div>
+</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E6%9C%80%E5%85%88%E5%8A%A8%E7%9A%84%E6%98%AF%E9%98%85%E8%AF%BB%E6%84%9F"><span class="toc-number">1.</span> <span class="toc-text">我最先动的是阅读感</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%A1%E8%A3%85-react-markdown%EF%BC%8C%E9%82%A3%E5%B0%B1%E8%87%AA%E5%B7%B1%E5%86%99%E4%B8%80%E4%B8%AA"><span class="toc-number">2.</span> <span class="toc-text">没装 react-markdown，那就自己写一个</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E5%85%89%E6%A0%87%E8%BF%99%E4%B8%AA%E7%BB%86%E8%8A%82%EF%BC%8C%E6%88%91%E6%9C%80%E5%90%8E%E4%B9%9F%E6%B2%A1%E6%94%BE%E8%BF%87"><span class="toc-number">3.</span> <span class="toc-text">流式光标这个细节，我最后也没放过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%A7%E8%BE%B9%E6%A0%8F%E7%BB%88%E4%BA%8E%E4%B8%8D%E5%86%8D%E5%83%8F%E4%B8%80%E4%B8%AA%E6%8B%A5%E6%8C%A4%E7%9A%84%E6%8A%BD%E5%B1%89"><span class="toc-number">4.</span> <span class="toc-text">侧边栏终于不再像一个拥挤的抽屉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB%E6%80%81%E3%80%81Hover-%E5%92%8C%E6%8C%89%E9%92%AE%E9%A3%8E%E6%A0%BC%E9%83%BD%E8%A6%81%E6%94%B6%E4%B8%80%E6%94%B6"><span class="toc-number">5.</span> <span class="toc-text">激活态、Hover 和按钮风格都要收一收</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%A0%8F%E5%92%8C%E8%BE%93%E5%85%A5%E6%A1%86%EF%BC%8C%E6%98%AF%E6%88%91%E6%9C%80%E6%BB%A1%E6%84%8F%E7%9A%84%E4%B8%A4%E5%9D%97%E5%B0%8F%E4%B8%9C%E8%A5%BF"><span class="toc-number">6.</span> <span class="toc-text">状态栏和输入框，是我最满意的两块小东西</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%A4%A9%E7%BB%93%E6%9D%9F%E6%97%B6%EF%BC%8C%E6%88%91%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E6%98%AF%E5%AE%83%E7%BB%88%E4%BA%8E%E6%9C%89%E2%80%9C%E8%87%AA%E5%B7%B1%E7%9A%84%E6%B0%94%E8%B4%A8%E2%80%9D"><span class="toc-number">7.</span> <span class="toc-text">第三天结束时，我最喜欢的是它终于有“自己的气质”</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/fragments/love-in-fluctuations/" title="在波动里学习去爱"><img src="/img/covers/love-in-fluctuations.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在波动里学习去爱"/></a><div class="content"><a class="title" href="/fragments/love-in-fluctuations/" title="在波动里学习去爱">在波动里学习去爱</a><time datetime="2026-03-22T05:30:00.000Z" title="发表于 2026-03-22 13:30:00">2026-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/opsmind/json-schema-understanding/" title="从“让模型别乱说”开始：我对 JSON Schema 的理解"><img src="/img/covers/json-schema-understanding.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从“让模型别乱说”开始：我对 JSON Schema 的理解"/></a><div class="content"><a class="title" href="/opsmind/json-schema-understanding/" title="从“让模型别乱说”开始：我对 JSON Schema 的理解">从“让模型别乱说”开始：我对 JSON Schema 的理解</a><time datetime="2026-03-22T04:00:00.000Z" title="发表于 2026-03-22 12:00:00">2026-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/notes/ai-pm-reviews-ai-engineers/" title="当 AI PM 给 AI 程序员做绩效复盘：一次令人不安地成熟的团队对话"><img src="/img/covers/ai-pm-reviews-ai-engineers.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当 AI PM 给 AI 程序员做绩效复盘：一次令人不安地成熟的团队对话"/></a><div class="content"><a class="title" href="/notes/ai-pm-reviews-ai-engineers/" title="当 AI PM 给 AI 程序员做绩效复盘：一次令人不安地成熟的团队对话">当 AI PM 给 AI 程序员做绩效复盘：一次令人不安地成熟的团队对话</a><time datetime="2026-03-22T02:00:00.000Z" title="发表于 2026-03-22 10:00:00">2026-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/opsmind/windows-segfault-native-load-order/" title="Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗"><img src="/img/covers/windows-segfault-native-load-order.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗"/></a><div class="content"><a class="title" href="/opsmind/windows-segfault-native-load-order/" title="Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗">Windows Segfault 诊断实录：一次 Native 库加载顺序的对抗</a><time datetime="2026-03-21T18:00:00.000Z" title="发表于 2026-03-22 02:00:00">2026-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/opsmind/ui-redesign-day3-chat-polish/" title="OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子"><img src="/img/covers/ui-redesign-day3-chat-polish.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子"/></a><div class="content"><a class="title" href="/opsmind/ui-redesign-day3-chat-polish/" title="OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子">OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子</a><time datetime="2026-03-21T18:00:00.000Z" title="发表于 2026-03-22 02:00:00">2026-03-22</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="anzhiyufont anzhiyu-icon-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">实习记录</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"><span class="card-category-list-name">技术文章</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD/"><span class="card-category-list-name">闲言碎语</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/"><span class="card-category-list-name">随笔</span><span class="card-category-list-count">3</span></a></li>
+            </ul></div><div class="card-widget"><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.05rem;">AI<sup>3</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 1.05rem;">Agent<sup>3</sup></a><a href="/tags/Bug%E5%AE%9A%E4%BD%8D/" style="font-size: 1.05rem;">Bug定位<sup>4</sup></a><a href="/tags/DeepSeek/" style="font-size: 1.05rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 1.05rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 1.05rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 1.05rem;">LLM<sup>2</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 1.05rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 1.05rem;">LLM应用<sup>2</sup></a><a href="/tags/OpsMind/" style="font-size: 1.05rem;">OpsMind<sup>6</sup></a><a href="/tags/Remotion/" style="font-size: 1.05rem;">Remotion<sup>2</sup></a><a href="/tags/SSE/" style="font-size: 1.05rem;">SSE<sup>1</sup></a><a href="/tags/Tool-Calling/" style="font-size: 1.05rem;">Tool Calling<sup>2</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 1.05rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">交互设计<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.05rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 1.05rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%8A%A8%E6%95%88%E7%B3%BB%E7%BB%9F/" style="font-size: 1.05rem;">动效系统<sup>2</sup></a><a href="/tags/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" style="font-size: 1.05rem;">实习记录<sup>2</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 1.05rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>3</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/" style="font-size: 1.05rem;">工程协作<sup>2</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 1.05rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 1.05rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 1.05rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 1.05rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%81%94%E8%B0%83/" style="font-size: 1.05rem;">接口联调<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 1.05rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">数据预处理<sup>2</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 1.05rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 1.05rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 1.05rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">架构设计<sup>3</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.05rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 1.05rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 1.05rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 1.05rem;">项目里程碑<sup>1</sup></a></div></div><hr/><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">12</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/02/"><span class="card-archive-list-date">二月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/><div class="card-webinfo"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-file-lines"></i><div class="item-name">文章总数 :</div></div><div class="item-count">20</div></div><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-stopwatch"></i><div class="item-name">建站天数 :</div></div><div class="item-count" id="runtimeshow" data-publishDate="2025-12-31T16:00:00.000Z"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></div></div><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-universal-access"></i><div class="item-name">总访客数 :</div></div><div class="item-count" id="busuanzi_value_site_uv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></div></div><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-square-poll-vertical"></i><div class="item-name">总访问量 :</div></div><div class="item-count" id="busuanzi_value_site_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></div></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="footer_custom_text">基于 Hexo 与 AnZhiYu 主题构建</div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2026 By <a class="footer-bar-link" href="/about/" title="wwxdsg" target="_blank">wwxdsg</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io" title="Hexo">Hexo</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">20</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">4</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fragments/"><i class="anzhiyufont anzhiyu-icon-quote faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 0.88rem;">AI<sup>3</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 0.88rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 0.88rem;">Agent<sup>3</sup></a><a href="/tags/Bug%E5%AE%9A%E4%BD%8D/" style="font-size: 0.88rem;">Bug定位<sup>4</sup></a><a href="/tags/DeepSeek/" style="font-size: 0.88rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 0.88rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 0.88rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 0.88rem;">LLM<sup>2</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 0.88rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 0.88rem;">LLM应用<sup>2</sup></a><a href="/tags/OpsMind/" style="font-size: 0.88rem;">OpsMind<sup>6</sup></a><a href="/tags/Remotion/" style="font-size: 0.88rem;">Remotion<sup>2</sup></a><a href="/tags/SSE/" style="font-size: 0.88rem;">SSE<sup>1</sup></a><a href="/tags/Tool-Calling/" style="font-size: 0.88rem;">Tool Calling<sup>2</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 0.88rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1/" style="font-size: 0.88rem;">交互设计<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 0.88rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 0.88rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%8A%A8%E6%95%88%E7%B3%BB%E7%BB%9F/" style="font-size: 0.88rem;">动效系统<sup>2</sup></a><a href="/tags/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" style="font-size: 0.88rem;">实习记录<sup>2</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 0.88rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 0.88rem;">工程化<sup>3</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/" style="font-size: 0.88rem;">工程协作<sup>2</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 0.88rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 0.88rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 0.88rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 0.88rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%81%94%E8%B0%83/" style="font-size: 0.88rem;">接口联调<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 0.88rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">数据预处理<sup>2</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 0.88rem;">方法论<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 0.88rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 0.88rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 0.88rem;">架构设计<sup>3</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 0.88rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 0.88rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 0.88rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 0.88rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;undefined&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://cdn.cbd.int/qrcodejs@1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="/js/custom.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

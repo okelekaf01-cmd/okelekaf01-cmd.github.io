@@ -1,0 +1,44 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="40" y1="20" x2="1560" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18181B"/>
+      <stop offset="1" stop-color="#A16207"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1188 190) rotate(14) scale(410 220)">
+      <stop stop-color="#FFF1C7" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#FFF1C7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow-theme" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#4A2F10" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 200H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
+  </g>
+  <text x="120" y="318" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Theme</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">System</text>
+  <text x="126" y="548" fill="#FFF5DB" font-size="46" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">Token / Dark Mode / Light Mode / FOUC</text>
+
+  <rect x="120" y="642" width="290" height="64" rx="32" fill="rgba(255,255,255,0.18)"/>
+  <text x="164" y="685" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Day Two</text>
+
+  <g filter="url(#shadow-theme)">
+    <rect x="1040" y="150" width="320" height="320" rx="56" fill="#FFFDFC"/>
+  </g>
+
+  <rect x="1090" y="204" width="98" height="220" rx="24" fill="#18181B"/>
+  <rect x="1212" y="204" width="98" height="220" rx="24" fill="#F8F8F8" stroke="#E4E4E7" stroke-width="6"/>
+
+  <circle cx="1140" cy="256" r="18" fill="#E4E4E7"/>
+  <circle cx="1260" cy="256" r="18" fill="#18181B"/>
+
+  <path d="M1114 324H1166" stroke="#71717A" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1114 358H1152" stroke="#A1A1AA" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1234 324H1286" stroke="#52525B" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1234 358H1272" stroke="#71717A" stroke-width="12" stroke-linecap="round"/>
+</svg>
