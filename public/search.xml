@@ -84,17 +84,50 @@
       
         <tags>
             
-            <tag> Agent </tag>
-            
-            <tag> 工程协作 </tag>
-            
             <tag> AI </tag>
             
+            <tag> Agent </tag>
+            
             <tag> OpsMind </tag>
+            
+            <tag> 工程协作 </tag>
             
             <tag> 项目管理 </tag>
             
             <tag> 复盘 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子</title>
+      <link href="//opsmind/ui-redesign-day3-chat-polish/"/>
+      <url>//opsmind/ui-redesign-day3-chat-polish/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/img/covers/ui-redesign-day3-chat-polish.svg" alt="OpsMind UI Redesign Day 3 Cover"></p><p>如果说前两天分别解决了“链路”和“体系”，那第三天终于轮到我最想做的那部分了：</p><p><strong>把这个聊天界面一点一点磨到我自己真心喜欢。</strong></p><p>这种喜欢不只是“它看起来更现代”，而是你会明显感觉到，页面终于开始顺手、顺眼，也顺逻辑。</p><p>很多改动单看都不算惊天动地：</p><ul><li>字号从 14px 改到 16px</li><li>对话区从 720px 放到 760px</li><li>消息间距从 16px 拉到 24px</li><li>侧边栏从 248px 调到 288px</li><li>输入框阴影、边框、圆角全部重做</li></ul><p>但 UI 这件事常常就是这样。<br>真正决定质感的，往往不是某一个“设计大招”，而是一堆你愿意认真对待的小地方。</p><h2 id="我最先动的是阅读感"><a href="#我最先动的是阅读感" class="headerlink" title="我最先动的是阅读感"></a>我最先动的是阅读感</h2><p>第三天里，我最确定的一件事是：消息区必须更像“能读很久的地方”，而不是一个把字堆进去的容器。</p><p>所以我直接把几个核心参数都抬了一档：</p><ul><li>AI 正文 14px → 16px</li><li>用户消息 14px → 16px</li><li>输入框字号 14px → 16px</li><li>行高 1.7 → 1.8</li><li>消息间距 16px → 24px</li><li>顶部留白 20px → 32px</li><li>对话区最大宽度 720px → 760px</li></ul><p>这些数字表面上只是微调，但组合起来，阅读感会一下子变得很不一样。</p><p>我尤其喜欢“外层滚动 + 内层居中约束”这个布局：</p><figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line">&lt;div style=&#123;&#123; <span class="attr">flex</span>: <span class="number">1</span>, <span class="attr">overflowY</span>: <span class="string">&#x27;auto&#x27;</span>, <span class="attr">padding</span>: <span class="string">&#x27;32px 24px 12px&#x27;</span> &#125;&#125;&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">maxWidth:</span> &#x27;<span class="attr">var</span>(<span class="attr">--chat-width</span>)&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">margin:</span> &#x27;<span class="attr">0</span> <span class="attr">auto</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">display:</span> &#x27;<span class="attr">flex</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">flexDirection:</span> &#x27;<span class="attr">column</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">gap:</span> &#x27;<span class="attr">24px</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  &#125;&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">    &#123;messages.map(...)&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><p>它会让聊天区域一下子从“铺满屏幕的内容区”变成“真正被设计过的阅读区”。</p><p>这种感觉很重要。<br>因为对话产品本质上是长时间阅读产品，不是单次扫一眼的运营页。</p><h2 id="没装-react-markdown，那就自己写一个"><a href="#没装-react-markdown，那就自己写一个" class="headerlink" title="没装 react-markdown，那就自己写一个"></a>没装 <code>react-markdown</code>，那就自己写一个</h2><p>第三天另一个特别有意思的部分，是我干脆手写了一个零依赖 Markdown 渲染器。</p><p>原因也很现实：项目依赖受保护，不能想加什么就加什么。<br>那与其卡在“没有库”，不如自己写一个够用而且可控的版本。</p><p>我最后支持的语法其实已经覆盖了聊天场景里最常见的部分：</p><ul><li>标题</li><li>有序 &#x2F; 无序列表</li><li>行内代码</li><li>代码块</li><li>粗体和斜体</li><li>分割线</li><li>段落空行</li></ul><p>实现方式也不是搞一个完整 parser，而是按聊天场景去做一套轻量状态机：</p><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">listBuffer</span>: &#123; <span class="attr">type</span>: <span class="string">&#x27;ul&#x27;</span> | <span class="string">&#x27;ol&#x27;</span>; <span class="attr">items</span>: <span class="built_in">string</span>[] &#125; | <span class="literal">null</span> = <span class="literal">null</span></span><br><span class="line"><span class="keyword">let</span> <span class="attr">codeBuffer</span>: <span class="built_in">string</span>[] | <span class="literal">null</span> = <span class="literal">null</span></span><br></pre></td></tr></table></figure><p>遇到多行列表和代码块时先缓存，再在合适时机统一 flush。</p><p>这种写法我很喜欢，因为它很朴素，也很贴场景。<br>它不是为了实现“世界上最标准的 Markdown”，而是为了让 AI 回复在这个产品里看起来足够自然。</p><h2 id="流式光标这个细节，我最后也没放过"><a href="#流式光标这个细节，我最后也没放过" class="headerlink" title="流式光标这个细节，我最后也没放过"></a>流式光标这个细节，我最后也没放过</h2><p>还有一个我特别想做好的点，是流式消息最后那个闪烁光标。</p><p>如果它单独占一行，会显得很笨；<br>如果它能嵌在最后一段文字末尾，整个流式过程就会顺很多。</p><p>所以最后是用 <code>cloneElement</code> 把光标塞回最后一个可渲染节点的 children 里。</p><p>这个细节用户可能不会单独注意到，但它确实会影响一种很微妙的感受：</p><p>系统到底是在“打印一段文字”，还是在“持续生成一句还没说完的话”。</p><p>我希望它更像后者。</p><h2 id="侧边栏终于不再像一个拥挤的抽屉"><a href="#侧边栏终于不再像一个拥挤的抽屉" class="headerlink" title="侧边栏终于不再像一个拥挤的抽屉"></a>侧边栏终于不再像一个拥挤的抽屉</h2><p>第三天我也把侧边栏认真收拾了一遍。</p><p>最直观的变化当然是宽度：248px 调到 288px。<br>但真正重要的不是它更宽了，而是它终于有空间呼吸了。</p><p>对话项的字号、padding、圆角、最小高度都往上调了一点，马上就从“能点”变成了“愿意点”。</p><p>同时我还修了一个很容易被忽略、但很影响观感的问题：<br><code>Sidebar.tsx</code> 宽了以后，<code>chat/layout.tsx</code> 里那三处历史宽度也得一起改。不然抽屉动画和推入布局会出现溢出，最后像一块侧边面板压到主内容上。</p><p>这种问题很像前端世界自己的冷笑话：</p><p>你以为自己在调美术，结果最后抓到的是三个埋了很久的 <code>260px</code>。</p><h2 id="激活态、Hover-和按钮风格都要收一收"><a href="#激活态、Hover-和按钮风格都要收一收" class="headerlink" title="激活态、Hover 和按钮风格都要收一收"></a>激活态、Hover 和按钮风格都要收一收</h2><p>我对侧边栏还有个很明确的偏好：<br>它不应该一直在抢主内容的戏。</p><p>所以会话项的激活态，我没有继续用很硬的 border，而是改成 Gemini 那种更轻的背景差分。</p><p>新建对话按钮也从实心品牌色改成 ghost 风格，尽量减少“侧边栏一打开先看到一大块醒目按钮”的感觉。</p><p>这次越做越觉得，一个成熟界面的克制感往往来自这种地方：</p><ul><li>激活态不吼</li><li>hover 不喧宾夺主</li><li>操作按钮只在需要时出现</li></ul><p>比如重命名 &#x2F; 删除按钮，我最后就只让它在 hover 或删除确认态里显示。<br>不是因为写不出来常驻，而是因为常驻真的很吵。</p><h2 id="状态栏和输入框，是我最满意的两块小东西"><a href="#状态栏和输入框，是我最满意的两块小东西" class="headerlink" title="状态栏和输入框，是我最满意的两块小东西"></a>状态栏和输入框，是我最满意的两块小东西</h2><p>原来的状态栏是三个带边框的卡片，信息不是不能看，但总有点“为了告诉你状态，专门搭了三块小牌子”的感觉。</p><p>我后来把它们改成三条很轻的 <code>dot + label + value</code>：</p><ul><li>绿点表示正常</li><li>灰点表示中性</li><li>黄点表示警告</li></ul><p>没有大边框，没有视觉噪音，信息却更清楚了。</p><p>它看起来像退了一步，实际是更成熟了一步。</p><p>输入框也是同样的思路。</p><p>这次我很想要那种更接近 Claude 的药丸感，所以把圆角直接抬到 <code>22px</code>，同时配上更柔和的边框和阴影，再让整个输入区和消息区使用同样的宽度约束。</p><p>更重要的是我把输入字号固定到了 16px。<br>这不仅是为了视觉统一，也是在顺手避开 iOS Safari 对小字号输入框的自动缩放。</p><p>这种“顺便把坑填了”的感觉特别好。<br>你知道自己改的不只是外观，而是把真实使用过程也一起照顾到了。</p><h2 id="第三天结束时，我最喜欢的是它终于有“自己的气质”"><a href="#第三天结束时，我最喜欢的是它终于有“自己的气质”" class="headerlink" title="第三天结束时，我最喜欢的是它终于有“自己的气质”"></a>第三天结束时，我最喜欢的是它终于有“自己的气质”</h2><p>前两天的工作更像是理性建设：</p><ul><li>修 bug</li><li>补接口</li><li>建 token</li><li>做主题</li></ul><p>到了第三天，整个界面才开始真正长出一点气质。</p><p>这种气质不是某个设计网站截图式的漂亮，而是：</p><ul><li>字看着舒服</li><li>层级是顺的</li><li>切主题不别扭</li><li>聊天区能一直读下去</li><li>侧边栏不吵</li><li>输入框有分量但不笨重</li></ul><p>我后来回头看这三天，最喜欢的其实就是第三天。<br>因为它最接近我一开始那个很模糊但很坚定的目标：</p><p><strong>把 OpsMind 从“功能可用”真的往“我自己也会喜欢的产品感”推一截。</strong></p><p>而这种喜欢，最后几乎都落在了细节上。</p><p>也许这就是 UI 工作里最让人上瘾的地方。<br>你花很多时间，不是为了做出一个“变化很大”的页面，而是为了把一个已经存在的界面，慢慢修到它终于开始像它自己。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 开发日志 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> OpsMind </tag>
+            
+            <tag> UI重构 </tag>
+            
+            <tag> 聊天界面 </tag>
+            
+            <tag> Markdown </tag>
+            
+            <tag> 前端体验 </tag>
             
         </tags>
       
@@ -138,39 +171,6 @@
     
     
     <entry>
-      <title>OpsMind UI 重构实录（三）：消息区、侧边栏和输入框，终于变成我喜欢的样子</title>
-      <link href="//opsmind/ui-redesign-day3-chat-polish/"/>
-      <url>//opsmind/ui-redesign-day3-chat-polish/</url>
-      
-        <content type="html"><![CDATA[<p><img src="/img/covers/ui-redesign-day3-chat-polish.svg" alt="OpsMind UI Redesign Day 3 Cover"></p><p>如果说前两天分别解决了“链路”和“体系”，那第三天终于轮到我最想做的那部分了：</p><p><strong>把这个聊天界面一点一点磨到我自己真心喜欢。</strong></p><p>这种喜欢不只是“它看起来更现代”，而是你会明显感觉到，页面终于开始顺手、顺眼，也顺逻辑。</p><p>很多改动单看都不算惊天动地：</p><ul><li>字号从 14px 改到 16px</li><li>对话区从 720px 放到 760px</li><li>消息间距从 16px 拉到 24px</li><li>侧边栏从 248px 调到 288px</li><li>输入框阴影、边框、圆角全部重做</li></ul><p>但 UI 这件事常常就是这样。<br>真正决定质感的，往往不是某一个“设计大招”，而是一堆你愿意认真对待的小地方。</p><h2 id="我最先动的是阅读感"><a href="#我最先动的是阅读感" class="headerlink" title="我最先动的是阅读感"></a>我最先动的是阅读感</h2><p>第三天里，我最确定的一件事是：消息区必须更像“能读很久的地方”，而不是一个把字堆进去的容器。</p><p>所以我直接把几个核心参数都抬了一档：</p><ul><li>AI 正文 14px → 16px</li><li>用户消息 14px → 16px</li><li>输入框字号 14px → 16px</li><li>行高 1.7 → 1.8</li><li>消息间距 16px → 24px</li><li>顶部留白 20px → 32px</li><li>对话区最大宽度 720px → 760px</li></ul><p>这些数字表面上只是微调，但组合起来，阅读感会一下子变得很不一样。</p><p>我尤其喜欢“外层滚动 + 内层居中约束”这个布局：</p><figure class="highlight tsx"><table><tr><td class="code"><pre><span class="line">&lt;div style=&#123;&#123; <span class="attr">flex</span>: <span class="number">1</span>, <span class="attr">overflowY</span>: <span class="string">&#x27;auto&#x27;</span>, <span class="attr">padding</span>: <span class="string">&#x27;32px 24px 12px&#x27;</span> &#125;&#125;&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">maxWidth:</span> &#x27;<span class="attr">var</span>(<span class="attr">--chat-width</span>)&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">margin:</span> &#x27;<span class="attr">0</span> <span class="attr">auto</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">display:</span> &#x27;<span class="attr">flex</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">flexDirection:</span> &#x27;<span class="attr">column</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">gap:</span> &#x27;<span class="attr">24px</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">  &#125;&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">    &#123;messages.map(...)&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><p>它会让聊天区域一下子从“铺满屏幕的内容区”变成“真正被设计过的阅读区”。</p><p>这种感觉很重要。<br>因为对话产品本质上是长时间阅读产品，不是单次扫一眼的运营页。</p><h2 id="没装-react-markdown，那就自己写一个"><a href="#没装-react-markdown，那就自己写一个" class="headerlink" title="没装 react-markdown，那就自己写一个"></a>没装 <code>react-markdown</code>，那就自己写一个</h2><p>第三天另一个特别有意思的部分，是我干脆手写了一个零依赖 Markdown 渲染器。</p><p>原因也很现实：项目依赖受保护，不能想加什么就加什么。<br>那与其卡在“没有库”，不如自己写一个够用而且可控的版本。</p><p>我最后支持的语法其实已经覆盖了聊天场景里最常见的部分：</p><ul><li>标题</li><li>有序 &#x2F; 无序列表</li><li>行内代码</li><li>代码块</li><li>粗体和斜体</li><li>分割线</li><li>段落空行</li></ul><p>实现方式也不是搞一个完整 parser，而是按聊天场景去做一套轻量状态机：</p><figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">listBuffer</span>: &#123; <span class="attr">type</span>: <span class="string">&#x27;ul&#x27;</span> | <span class="string">&#x27;ol&#x27;</span>; <span class="attr">items</span>: <span class="built_in">string</span>[] &#125; | <span class="literal">null</span> = <span class="literal">null</span></span><br><span class="line"><span class="keyword">let</span> <span class="attr">codeBuffer</span>: <span class="built_in">string</span>[] | <span class="literal">null</span> = <span class="literal">null</span></span><br></pre></td></tr></table></figure><p>遇到多行列表和代码块时先缓存，再在合适时机统一 flush。</p><p>这种写法我很喜欢，因为它很朴素，也很贴场景。<br>它不是为了实现“世界上最标准的 Markdown”，而是为了让 AI 回复在这个产品里看起来足够自然。</p><h2 id="流式光标这个细节，我最后也没放过"><a href="#流式光标这个细节，我最后也没放过" class="headerlink" title="流式光标这个细节，我最后也没放过"></a>流式光标这个细节，我最后也没放过</h2><p>还有一个我特别想做好的点，是流式消息最后那个闪烁光标。</p><p>如果它单独占一行，会显得很笨；<br>如果它能嵌在最后一段文字末尾，整个流式过程就会顺很多。</p><p>所以最后是用 <code>cloneElement</code> 把光标塞回最后一个可渲染节点的 children 里。</p><p>这个细节用户可能不会单独注意到，但它确实会影响一种很微妙的感受：</p><p>系统到底是在“打印一段文字”，还是在“持续生成一句还没说完的话”。</p><p>我希望它更像后者。</p><h2 id="侧边栏终于不再像一个拥挤的抽屉"><a href="#侧边栏终于不再像一个拥挤的抽屉" class="headerlink" title="侧边栏终于不再像一个拥挤的抽屉"></a>侧边栏终于不再像一个拥挤的抽屉</h2><p>第三天我也把侧边栏认真收拾了一遍。</p><p>最直观的变化当然是宽度：248px 调到 288px。<br>但真正重要的不是它更宽了，而是它终于有空间呼吸了。</p><p>对话项的字号、padding、圆角、最小高度都往上调了一点，马上就从“能点”变成了“愿意点”。</p><p>同时我还修了一个很容易被忽略、但很影响观感的问题：<br><code>Sidebar.tsx</code> 宽了以后，<code>chat/layout.tsx</code> 里那三处历史宽度也得一起改。不然抽屉动画和推入布局会出现溢出，最后像一块侧边面板压到主内容上。</p><p>这种问题很像前端世界自己的冷笑话：</p><p>你以为自己在调美术，结果最后抓到的是三个埋了很久的 <code>260px</code>。</p><h2 id="激活态、Hover-和按钮风格都要收一收"><a href="#激活态、Hover-和按钮风格都要收一收" class="headerlink" title="激活态、Hover 和按钮风格都要收一收"></a>激活态、Hover 和按钮风格都要收一收</h2><p>我对侧边栏还有个很明确的偏好：<br>它不应该一直在抢主内容的戏。</p><p>所以会话项的激活态，我没有继续用很硬的 border，而是改成 Gemini 那种更轻的背景差分。</p><p>新建对话按钮也从实心品牌色改成 ghost 风格，尽量减少“侧边栏一打开先看到一大块醒目按钮”的感觉。</p><p>这次越做越觉得，一个成熟界面的克制感往往来自这种地方：</p><ul><li>激活态不吼</li><li>hover 不喧宾夺主</li><li>操作按钮只在需要时出现</li></ul><p>比如重命名 &#x2F; 删除按钮，我最后就只让它在 hover 或删除确认态里显示。<br>不是因为写不出来常驻，而是因为常驻真的很吵。</p><h2 id="状态栏和输入框，是我最满意的两块小东西"><a href="#状态栏和输入框，是我最满意的两块小东西" class="headerlink" title="状态栏和输入框，是我最满意的两块小东西"></a>状态栏和输入框，是我最满意的两块小东西</h2><p>原来的状态栏是三个带边框的卡片，信息不是不能看，但总有点“为了告诉你状态，专门搭了三块小牌子”的感觉。</p><p>我后来把它们改成三条很轻的 <code>dot + label + value</code>：</p><ul><li>绿点表示正常</li><li>灰点表示中性</li><li>黄点表示警告</li></ul><p>没有大边框，没有视觉噪音，信息却更清楚了。</p><p>它看起来像退了一步，实际是更成熟了一步。</p><p>输入框也是同样的思路。</p><p>这次我很想要那种更接近 Claude 的药丸感，所以把圆角直接抬到 <code>22px</code>，同时配上更柔和的边框和阴影，再让整个输入区和消息区使用同样的宽度约束。</p><p>更重要的是我把输入字号固定到了 16px。<br>这不仅是为了视觉统一，也是在顺手避开 iOS Safari 对小字号输入框的自动缩放。</p><p>这种“顺便把坑填了”的感觉特别好。<br>你知道自己改的不只是外观，而是把真实使用过程也一起照顾到了。</p><h2 id="第三天结束时，我最喜欢的是它终于有“自己的气质”"><a href="#第三天结束时，我最喜欢的是它终于有“自己的气质”" class="headerlink" title="第三天结束时，我最喜欢的是它终于有“自己的气质”"></a>第三天结束时，我最喜欢的是它终于有“自己的气质”</h2><p>前两天的工作更像是理性建设：</p><ul><li>修 bug</li><li>补接口</li><li>建 token</li><li>做主题</li></ul><p>到了第三天，整个界面才开始真正长出一点气质。</p><p>这种气质不是某个设计网站截图式的漂亮，而是：</p><ul><li>字看着舒服</li><li>层级是顺的</li><li>切主题不别扭</li><li>聊天区能一直读下去</li><li>侧边栏不吵</li><li>输入框有分量但不笨重</li></ul><p>我后来回头看这三天，最喜欢的其实就是第三天。<br>因为它最接近我一开始那个很模糊但很坚定的目标：</p><p><strong>把 OpsMind 从“功能可用”真的往“我自己也会喜欢的产品感”推一截。</strong></p><p>而这种喜欢，最后几乎都落在了细节上。</p><p>也许这就是 UI 工作里最让人上瘾的地方。<br>你花很多时间，不是为了做出一个“变化很大”的页面，而是为了把一个已经存在的界面，慢慢修到它终于开始像它自己。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 开发日志 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> OpsMind </tag>
-            
-            <tag> UI重构 </tag>
-            
-            <tag> 聊天界面 </tag>
-            
-            <tag> Markdown </tag>
-            
-            <tag> 前端体验 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>当 Agent 开始扮演 PM、前后端，我看见了真正的开发现场</title>
       <link href="//notes/agent-dev-simulation/"/>
       <url>//notes/agent-dev-simulation/</url>
@@ -187,17 +187,17 @@
       
         <tags>
             
+            <tag> AI </tag>
+            
             <tag> Agent </tag>
             
-            <tag> 工程协作 </tag>
+            <tag> OpsMind </tag>
             
-            <tag> AI </tag>
+            <tag> 工程协作 </tag>
             
             <tag> 接口联调 </tag>
             
             <tag> SSE </tag>
-            
-            <tag> OpsMind </tag>
             
         </tags>
       
@@ -222,11 +222,11 @@
       
         <tags>
             
+            <tag> 设计系统 </tag>
+            
             <tag> OpsMind </tag>
             
             <tag> UI重构 </tag>
-            
-            <tag> 设计系统 </tag>
             
             <tag> Dark Mode </tag>
             
@@ -292,13 +292,13 @@
             
             <tag> 实习记录 </tag>
             
+            <tag> Remotion </tag>
+            
             <tag> 动效系统 </tag>
             
             <tag> Bug定位 </tag>
             
             <tag> 交互设计 </tag>
-            
-            <tag> Remotion </tag>
             
         </tags>
       
@@ -329,11 +329,11 @@
             
             <tag> 实习记录 </tag>
             
+            <tag> Remotion </tag>
+            
             <tag> 动效系统 </tag>
             
             <tag> Bug定位 </tag>
-            
-            <tag> Remotion </tag>
             
         </tags>
       
@@ -393,11 +393,11 @@
       
         <tags>
             
-            <tag> Agent </tag>
-            
             <tag> AI架构 </tag>
             
             <tag> 技术发现 </tag>
+            
+            <tag> Agent </tag>
             
             <tag> Tool Calling </tag>
             
@@ -591,11 +591,11 @@
       
         <tags>
             
-            <tag> 架构设计 </tag>
-            
             <tag> 数据可视化 </tag>
             
             <tag> LLM应用 </tag>
+            
+            <tag> 架构设计 </tag>
             
             <tag> OpsMind </tag>
             
@@ -622,9 +622,9 @@
       
         <tags>
             
-            <tag> AI </tag>
-            
             <tag> 架构设计 </tag>
+            
+            <tag> AI </tag>
             
             <tag> 技术模式 </tag>
             

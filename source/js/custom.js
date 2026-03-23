@@ -1,5 +1,5 @@
 (function () {
-  const HOME_WELCOME_SESSION_KEY = "home-welcome-dismissed-v4";
+  const HOME_WELCOME_SESSION_KEY = "home-welcome-dismissed-v6";
   const HOME_WELCOME_MESSAGES = [
     "欢迎光临，先别急着走，我这次真的写了点东西。",
     "来都来了，不如看看我最近又折腾出了什么。",

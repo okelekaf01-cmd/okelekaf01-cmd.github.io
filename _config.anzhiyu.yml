@@ -184,7 +184,8 @@ sidebar:
   display_mode: true
   nav_menu_project: false
 
-nav_music: false
+nav_music:
+  enable: false
 
 post_head_ai_description: false
 
