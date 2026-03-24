@@ -38,8 +38,8 @@
   map:
     title: 最近更想靠近的是
     StrengthenTitle: 清晰、松弛，还有一点点可爱的表达
-    background: /img/covers/internship-motion-library-day1-day2.svg
-    backgroundDark: /img/covers/studio-motion-devlog-2026-03-19.svg
+    background: /img/covers/about-personality-light.svg
+    backgroundDark: /img/covers/about-personality-dark.svg
   selfInfo:
     selfInfoTips1: 博客建立于
     selfInfoContentYear: 2026

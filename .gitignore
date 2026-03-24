@@ -2,3 +2,4 @@ node_modules/
 .deploy_git/
 db.json
 .DS_Store
+FRONTEND_DESIGN_REPRODUCTION.md
