@@ -1,50 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="50%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#334155"/>
+    <linearGradient id="bg" x1="40" y1="20" x2="1560" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
     </linearGradient>
-    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="100%" stop-color="#e2e8f0"/>
+    <linearGradient id="bg-inner-ragCard" x1="1074" y1="184" x2="1326" y2="436" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#38bdf8"/>
-    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 200) rotate(15) scale(400 220)">
+      <stop stop-color="#D6FAF4" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#D6FAF4" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow-ragCardBoard" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#1E3A5F" flood-opacity="0.22"/>
+    </filter>
   </defs>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 200H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
+  </g>
+  <text x="120" y="318" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">RAG</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Reading Notes</text>
+  <text x="126" y="548" fill="#E6F7FF" font-size="46" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">Retrieval / Memory / DPR / Sequence / Token</text>
 
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <circle cx="1030" cy="120" r="180" fill="#0ea5e9" opacity="0.12"/>
-  <circle cx="180" cy="520" r="220" fill="#22d3ee" opacity="0.10"/>
+  <rect x="120" y="642" width="292" height="64" rx="32" fill="rgba(255,255,255,0.18)"/>
+  <text x="164" y="685" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Paper Notes</text>
 
-  <rect x="120" y="95" width="960" height="440" rx="28" fill="#0b1220" opacity="0.72" stroke="#38bdf8" stroke-opacity="0.35"/>
+  <g filter="url(#shadow-ragCardBoard)">
+    <rect x="1040" y="150" width="320" height="320" rx="56" fill="#FFFDFC"/>
+  </g>
 
-  <rect x="170" y="170" width="220" height="300" rx="18" fill="#1f2937" stroke="#475569"/>
-  <rect x="200" y="205" width="160" height="20" rx="10" fill="url(#accent)"/>
-  <rect x="200" y="245" width="130" height="14" rx="7" fill="#94a3b8"/>
-  <rect x="200" y="275" width="150" height="14" rx="7" fill="#64748b"/>
-  <rect x="200" y="305" width="120" height="14" rx="7" fill="#64748b"/>
-  <rect x="200" y="345" width="90" height="90" rx="12" fill="#111827" stroke="#94a3b8"/>
-  <path d="M214 360h62v62h-62zM230 376h30v30h-30z" fill="#e2e8f0"/>
+  <rect x="1100" y="212" width="200" height="60" rx="18" fill="#0F766E"/>
+  <text x="1148" y="250" fill="#FFFFFF" font-size="26" font-family="Arial, Helvetica, sans-serif" font-weight="800">QUERY</text>
 
-  <rect x="450" y="165" width="560" height="315" rx="20" fill="url(#card)"/>
-  <text x="490" y="235" fill="#0f172a" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="700">
-    RAG Reading Notes
-  </text>
-  <text x="490" y="285" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="600">
-    Borrowing Card for AI
-  </text>
-  <text x="490" y="345" fill="#475569" font-family="Segoe UI, Arial, sans-serif" font-size="24">
-    Parametric + Non-parametric Memory
-  </text>
-  <text x="490" y="385" fill="#475569" font-family="Segoe UI, Arial, sans-serif" font-size="24">
-    Retrieval as Geometry, Not Keyword Match
-  </text>
-  <rect x="490" y="425" width="360" height="16" rx="8" fill="url(#accent)"/>
+  <rect x="1100" y="292" width="200" height="60" rx="18" fill="#1D4ED8"/>
+  <text x="1158" y="330" fill="#FFFFFF" font-size="26" font-family="Arial, Helvetica, sans-serif" font-weight="800">TOP-K</text>
 
-  <text x="120" y="585" fill="#bae6fd" font-family="Segoe UI, Arial, sans-serif" font-size="24">
-    wwxdsg blog · March 2026
-  </text>
+  <rect x="1100" y="372" width="200" height="60" rx="18" fill="#14B8A6"/>
+  <text x="1142" y="410" fill="#FFFFFF" font-size="26" font-family="Arial, Helvetica, sans-serif" font-weight="800">ANSWER</text>
+
+  <path d="M1300 242H1334" stroke="#94A3B8" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1300 322H1334" stroke="#94A3B8" stroke-width="10" stroke-linecap="round"/>
+
+  <circle cx="1336" cy="242" r="12" fill="#0F766E"/>
+  <circle cx="1336" cy="322" r="12" fill="#1D4ED8"/>
+  <circle cx="1336" cy="402" r="12" fill="#14B8A6"/>
 </svg>
