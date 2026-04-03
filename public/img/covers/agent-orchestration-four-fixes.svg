@@ -1,0 +1,54 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="40" y1="20" x2="1560" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+    <linearGradient id="bg-inner-orchestrationFix" x1="1074" y1="184" x2="1326" y2="436" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1190 200) rotate(15) scale(400 220)">
+      <stop stop-color="#D7F2FF" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#D7F2FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow-orchestrationFixBoard" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#1E3A5F" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 200H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
+  </g>
+  <text x="120" y="318" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Agent</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="128" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-5">Orchestration</text>
+  <text x="126" y="548" fill="#E6F7FF" font-size="46" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">Reliability / plan_id / refine_chart / heartbeat</text>
+
+  <rect x="120" y="642" width="246" height="64" rx="32" fill="rgba(255,255,255,0.18)"/>
+  <text x="164" y="685" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Fix Notes</text>
+
+  <g filter="url(#shadow-orchestrationFixBoard)">
+    <rect x="1040" y="150" width="320" height="320" rx="56" fill="#FFFDFC"/>
+  </g>
+
+  <rect x="1104" y="214" width="96" height="56" rx="16" fill="#1D4ED8"/>
+  <text x="1138" y="249" fill="#FFFFFF" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="800">1</text>
+
+  <rect x="1210" y="214" width="96" height="56" rx="16" fill="#0F766E"/>
+  <text x="1244" y="249" fill="#FFFFFF" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="800">2</text>
+
+  <rect x="1104" y="286" width="96" height="56" rx="16" fill="#2563EB"/>
+  <text x="1138" y="321" fill="#FFFFFF" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="800">3</text>
+
+  <rect x="1210" y="286" width="96" height="56" rx="16" fill="#14B8A6"/>
+  <text x="1244" y="321" fill="#FFFFFF" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="800">4</text>
+
+  <path d="M1108 378H1304" stroke="#E2E8F0" stroke-width="18" stroke-linecap="round"/>
+  <path d="M1108 378H1170" stroke="#1D4ED8" stroke-width="18" stroke-linecap="round"/>
+  <path d="M1188 378H1246" stroke="#0F766E" stroke-width="18" stroke-linecap="round"/>
+  <path d="M1262 378H1304" stroke="#14B8A6" stroke-width="18" stroke-linecap="round"/>
+</svg>
