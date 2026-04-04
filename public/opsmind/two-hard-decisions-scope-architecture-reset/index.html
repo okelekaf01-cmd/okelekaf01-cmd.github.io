@@ -1,0 +1,434 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>两个艰难决定：我在 OpsMind 上重做产品范围与核心架构 | wwxdsg的个人博客</title><meta name="keywords" content="架构设计,方法论,工程化,OpsMind,产品思维,代码执行"><meta name="author" content="wwxdsg"><meta name="copyright" content="wwxdsg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="两个艰难决定：我在 OpsMind 上重做产品范围与核心架构"><meta name="application-name" content="两个艰难决定：我在 OpsMind 上重做产品范围与核心架构"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="两个艰难决定：我在 OpsMind 上重做产品范围与核心架构"><meta property="og:url" content="https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/index.html"><meta property="og:site_name" content="wwxdsg的个人博客"><meta property="og:description" content="这篇文章记录我在 OpsMind 上做过的两次关键收缩：先砍掉并不属于 v1.0 的范围，再推翻“预猜式”分析架构，把注意力重新拉回核心体验。"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://okelekaf01-cmd.github.io/img/covers/two-hard-decisions-scope-architecture-reset.svg"><meta property="article:author" content="wwxdsg"><meta property="article:tag" content="[&quot;博客&quot;,&quot;技术博客&quot;,&quot;AI&quot;,&quot;Agent&quot;,&quot;Hugo&quot;,&quot;Hexo&quot;]"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://okelekaf01-cmd.github.io/img/covers/two-hard-decisions-scope-architecture-reset.svg"><meta name="description" content="这篇文章记录我在 OpsMind 上做过的两次关键收缩：先砍掉并不属于 v1.0 的范围，再推翻“预猜式”分析架构，把注意力重新拉回核心体验。"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: undefined,
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: false,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: wwxdsg","link":"链接: ","source":"来源: wwxdsg的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.2.0/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'wwxdsg的个人博客',
+  title: '两个艰难决定：我在 OpsMind 上重做产品范围与核心架构',
+  postAI: '',
+  pageFillDescription: '一、第一个决定：先砍范围再谈完整, 二、这次收缩让我重新理解了一件事, 三、第二个决定：推翻那套预猜式核心架构, 四、真正更合理的路径是让模型先执行再修正, 五、这件事真正提醒我的不只是架构而是提问方式, 六、这两个决定最后都指向同一件事, 1. 不要过早追求看起来完整, 2. 先确认核心路径成立再扩外围系统, 3. 有时候最贵的不是推翻而是舍不得推翻, 七、如果让我重来一次这篇文章想记录的不是某个功能终于做完了而是两次很痛但事后看都很值得的收缩一次是收缩产品范围一次是收缩架构幻想我后来才意识到这两个决定其实都在做同一件事把注意力从看起来完整拉回真正成立的核心路径一第一个决定先砍范围再谈完整三个月前我给列过一张很完整的能力清单聊天工作台知识库数据库直连报告导出扩展落地页当时我觉得这些能力缺一不可数据分析工具如果没有数据库直连好像就不够专业没有报告导出好像就留不住成果没有扩展好像未来也很难讲于是我真的开始把这些都往里做代码库里陆续出现了数据库连接报告生成技能注册这些模块架构文档也越来越像一个完整平台但问题也很快出现了数据库连接不是一个按钮而是一整套连接池权限密钥存储和方言差异报告导出不是一个导出接口而是一整套渲染分页字体和格式系统扩展也不是多加几个而是协议生命周期和调用边界每一个顺手补上的配套能力背后其实都是一个独立子系统结果是三个月过去了最应该打磨的核心体验反而还没稳上传文件提问看到一张可靠的图表我后来才承认自己当时并不是在做一个产品而是在做一个平台已经成熟的幻觉于是我做了第一个决定把从范围里拿掉先归档不继续投入那次提交一口气删掉了行代码删完之后我最明显的感受不是损失而是轻代码库变轻了任务边界变轻了我的注意力也终于回到了真正该先做对的地方二这次收缩让我重新理解了一件事功能不是天然的资产很多时候它首先是债务只要一段功能代码进入系统它就会自动带来后续成本要测试要维护要解释要兼容别的链路要让用户真正理解为什么存在如果用户还没走到需要它的阶段这些成本就不会转化成价值只会持续占用注意力这也是我后来越来越认同的一种区分先做完整再上线更像工程师本能先把最小成立路径做对再看用户真正缺什么更像产品判断这两种思路都没错但它们适合的阶段完全不同在还没有足够真实反馈之前开发者最容易高估的往往不是执行能力而是自己对需求的判断力我当时一直在假设用户需要直连但如果连第一个真实高频场景都还没跑出来我其实根本不知道用户更在意的到底是数据库接入还是先把上传分析这条链路做顺三第二个决定推翻那套预猜式核心架构如果说第一个决定是在砍功能范围那第二个决定就是在砍我已经投入最多时间的实现路径最初为了让自动生成图表我搭过一套自己以为很精细的流程决定图表类型推断列映射预设渲染器执行围绕这条链路我写了大量配套代码图表类型判断列名模糊匹配时间轴修正高基数列告警重试机制大量调优它在里不是不能用但真正让我开始警觉的是另一件事这套系统总是在修却从来没有修好了的感觉后来我才想明白问题不在也不在某一个判断分支而在架构前提本身在这套方案里负责先猜对哪张图更合适哪一列该做轴哪一列该做轴但执行环境里的很多关键信息它其实在猜的时候根本看不到某一列唯一值太多不适合饼图某一列空值率很高直接算比例会失真某一列的数据类型脏得比列名看起来复杂得多也就是说我一直在让模型对一个它还没真正接触到的执行现场做预判这不是的问题这是设计问题四真正更合理的路径是让模型先执行再修正后来我去看主流分析产品和代码执行产品的做法才慢慢意识到更稳的路径通常不是先猜对再执行而是写代码在真实环境里执行读取结果报错和图表再做下一轮修正这两种思路最大的差别不是实现细节而是学习来源预猜式架构里模型只能靠提示和历史经验去猜代码执行式架构里模型可以直接从真实结果里学习一个会直接暴露真实列名一张空图会直接暴露数据分布一次报错会直接告诉模型问题到底出在语法映射还是数据本身我后来接受了第二个决定推翻那套围绕预设渲染器堆出来的核心路径把核心体验重新收敛为上传文件对话分析代码执行返回图表与结论现在的代码执行沙箱用的是直接写在真实执行结果上迭代少了一层我替模型预先设计完整世界的执念系统反而更清楚了五这件事真正提醒我的不只是架构而是提问方式回头看那三个月里我并不是没有努力我写了很多代码我做了很多调优我也一直在和助手协作问题在于我问的问题一直不够对我当时更常问的是怎么把我现在这套方案继续优化下去但真正应该先问的问题其实是这个领域里更成熟的做法本来是什么这也是我后来对协作更警惕的一点很擅长沿着当前方向帮你补得更完整扩展函数增加兼容逻辑增加重试把局部实现做得更漂亮但如果方向本身是错的它也会非常高效地陪你把错误方向走得更深这不是的问题更准确地说是因为我当时把放在了帮我优化现有方案的位置却没有先把现有方案是否值得继续这个判断做掉六这两个决定最后都指向同一件事一个决定是砍功能一个决定是改架构表面上看它们发生在不同层面但如果把它们放在一起看本质上其实是同一种纠偏不要过早追求看起来完整范围太满会让产品失焦架构太满会让系统失真先确认核心路径成立再扩外围系统如果核心体验还不稳定外围能力越多系统越重如果执行路径前提就错了局部优化越多返工成本越高有时候最贵的不是推翻而是舍不得推翻真正让我后面轻松很多的不是前面三个月写过多少而是终于愿意承认现在停下来重做代价比继续在错误方向上推进更低七如果让我重来一次如果今天重新开始做我会更早做三件事先查清这个问题在行业里最常见最成熟的解法是什么在没有真实用户反馈之前对我觉得用户会需要的功能保持克制把判断标准从功能多不多换成核心路径稳不稳现在回头看的范围其实清楚很多了聊天工作台知识库上传文件后的对话式分析基于真实执行结果的图表生成没有数据库直连没有报告导出也暂时没有技能市场但我反而觉得它第一次更像一个产品了技术产品的成长不只是不断往上加能力很多时候它更依赖三种判断选择先做什么选择暂时不做什么选择在什么时候承认原来的方向不够对这三件事我在上各学了一次学费是三个月现在看付得不算亏',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-04-04 22:26:55',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.1.1"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/avatar/profile-avatar-square.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">wwxdsg的个人博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fragments/"><i class="anzhiyufont anzhiyu-icon-quote faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.05rem;">AI<sup>4</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 1.05rem;">Agent<sup>10</sup></a><a href="/tags/Bug%E5%AE%9A%E4%BD%8D/" style="font-size: 1.05rem;">Bug定位<sup>4</sup></a><a href="/tags/DeepSeek/" style="font-size: 1.05rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 1.05rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 1.05rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 1.05rem;">LLM<sup>3</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 1.05rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 1.05rem;">LLM应用<sup>3</sup></a><a href="/tags/OpsMind/" style="font-size: 1.05rem;">OpsMind<sup>24</sup></a><a href="/tags/Remotion/" style="font-size: 1.05rem;">Remotion<sup>2</sup></a><a href="/tags/SSE/" style="font-size: 1.05rem;">SSE<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 1.05rem;">Tool Calling<sup>2</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 1.05rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">交互设计<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.05rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 1.05rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%8A%A8%E6%95%88%E7%B3%BB%E7%BB%9F/" style="font-size: 1.05rem;">动效系统<sup>2</sup></a><a href="/tags/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" style="font-size: 1.05rem;">实习记录<sup>2</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 1.05rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>9</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/" style="font-size: 1.05rem;">工程协作<sup>4</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 1.05rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 1.05rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 1.05rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 1.05rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%81%94%E8%B0%83/" style="font-size: 1.05rem;">接口联调<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 1.05rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">数据预处理<sup>3</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 1.05rem;">方法论<sup>6</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 1.05rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 1.05rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">架构设计<sup>9</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.05rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 1.05rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 1.05rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 1.05rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/04/"><span class="card-archive-list-date">四月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">18</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/02/"><span class="card-archive-list-date">二月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>架构设计</span></a><a class="article-meta__tags" href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>方法论</span></a><a class="article-meta__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>工程化</span></a><a class="article-meta__tags" href="/tags/OpsMind/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>OpsMind</span></a><a class="article-meta__tags" href="/tags/%E4%BA%A7%E5%93%81%E6%80%9D%E7%BB%B4/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>产品思维</span></a><a class="article-meta__tags" href="/tags/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>代码执行</span></a></span></div></div><h1 class="post-title" itemprop="name headline">两个艰难决定：我在 OpsMind 上重做产品范围与核心架构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2026-04-04T06:45:00.000Z" title="发表于 2026-04-04 14:45:00">2026-04-04</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2026-04-04T14:26:55.640Z" title="更新于 2026-04-04 22:26:55">2026-04-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为中国"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>中国</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="/img/covers/two-hard-decisions-scope-architecture-reset.svg"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/"><header><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url">技术文章</a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" tabindex="-1" itemprop="url">架构设计</a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" tabindex="-1" itemprop="url">方法论</a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" tabindex="-1" itemprop="url">工程化</a><a href="/tags/OpsMind/" tabindex="-1" itemprop="url">OpsMind</a><a href="/tags/%E4%BA%A7%E5%93%81%E6%80%9D%E7%BB%B4/" tabindex="-1" itemprop="url">产品思维</a><a href="/tags/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" tabindex="-1" itemprop="url">代码执行</a><h1 id="CrawlerTitle" itemprop="name headline">两个艰难决定：我在 OpsMind 上重做产品范围与核心架构</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">wwxdsg</span><time itemprop="dateCreated datePublished" datetime="2026-04-04T06:45:00.000Z" title="发表于 2026-04-04 14:45:00">2026-04-04</time><time itemprop="dateCreated datePublished" datetime="2026-04-04T14:26:55.640Z" title="更新于 2026-04-04 22:26:55">2026-04-04</time></header><p><img src="/img/covers/two-hard-decisions-scope-architecture-reset.svg" alt="Two Hard Decisions Cover"></p>
+<p>这篇文章想记录的，不是某个功能终于做完了，而是两次很痛、但事后看都很值得的收缩。</p>
+<p>一次是收缩产品范围。<br>一次是收缩架构幻想。</p>
+<p>我后来才意识到，这两个决定其实都在做同一件事：</p>
+<p><strong>把注意力从“看起来完整”拉回“真正成立的核心路径”。</strong></p>
+<hr>
+<h2 id="一、第一个决定：先砍范围，再谈完整"><a href="#一、第一个决定：先砍范围，再谈完整" class="headerlink" title="一、第一个决定：先砍范围，再谈完整"></a>一、第一个决定：先砍范围，再谈完整</h2><p>三个月前，我给 OpsMind 列过一张很完整的能力清单：</p>
+<ul>
+<li>聊天工作台</li>
+<li>知识库</li>
+<li>数据库直连</li>
+<li>报告导出</li>
+<li>Skill 扩展</li>
+<li>落地页</li>
+</ul>
+<p>当时我觉得这些能力缺一不可。</p>
+<p>数据分析工具如果没有数据库直连，好像就不够专业；<br>没有报告导出，好像就留不住成果；<br>没有 Skill 扩展，好像未来也很难讲。</p>
+<p>于是我真的开始把这些都往里做。</p>
+<p>代码库里陆续出现了数据库连接、报告生成、技能注册这些模块，架构文档也越来越像一个“完整平台”。</p>
+<p>但问题也很快出现了。</p>
+<p>数据库连接不是一个按钮，而是一整套连接池、权限、密钥存储和方言差异。<br>报告导出不是一个导出接口，而是一整套渲染、分页、字体和格式系统。<br>Skill 扩展也不是多加几个 prompt，而是协议、生命周期和调用边界。</p>
+<p>每一个“顺手补上”的配套能力，背后其实都是一个独立子系统。</p>
+<p>结果是，三个月过去了，最应该打磨的核心体验反而还没稳：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">上传文件 -&gt; 提问 -&gt; 看到一张可靠的图表</span><br></pre></td></tr></table></figure>
+
+<p>我后来才承认，自己当时并不是在做一个产品，而是在做一个“平台已经成熟”的幻觉。</p>
+<p>于是我做了第一个决定：</p>
+<p>把 <code>db_connections</code>、<code>reports</code>、<code>skills</code>、<code>data-sources</code> 从 v1.0 范围里拿掉，先归档，不继续投入。</p>
+<p>那次提交一口气删掉了 3508 行代码。</p>
+<p>删完之后我最明显的感受不是“损失”，而是轻。</p>
+<p>代码库变轻了。<br>任务边界变轻了。<br>我的注意力也终于回到了真正该先做对的地方。</p>
+<hr>
+<h2 id="二、这次收缩让我重新理解了一件事"><a href="#二、这次收缩让我重新理解了一件事" class="headerlink" title="二、这次收缩让我重新理解了一件事"></a>二、这次收缩让我重新理解了一件事</h2><p><strong>功能不是天然的资产，很多时候它首先是债务。</strong></p>
+<p>只要一段功能代码进入系统，它就会自动带来后续成本：</p>
+<ul>
+<li>要测试</li>
+<li>要维护</li>
+<li>要解释</li>
+<li>要兼容别的链路</li>
+<li>要让用户真正理解为什么存在</li>
+</ul>
+<p>如果用户还没走到需要它的阶段，这些成本就不会转化成价值，只会持续占用注意力。</p>
+<p>这也是我后来越来越认同的一种区分：</p>
+<p>“先做完整再上线”，更像工程师本能。<br>“先把最小成立路径做对，再看用户真正缺什么”，更像产品判断。</p>
+<p>这两种思路都没错，但它们适合的阶段完全不同。</p>
+<p>在还没有足够真实反馈之前，开发者最容易高估的，往往不是执行能力，而是自己对需求的判断力。</p>
+<p>我当时一直在假设用户需要 MySQL 直连。<br>但如果连第一个真实高频场景都还没跑出来，我其实根本不知道，用户更在意的到底是数据库接入，还是先把 Excel 上传分析这条链路做顺。</p>
+<hr>
+<h2 id="三、第二个决定：推翻那套“预猜式”核心架构"><a href="#三、第二个决定：推翻那套“预猜式”核心架构" class="headerlink" title="三、第二个决定：推翻那套“预猜式”核心架构"></a>三、第二个决定：推翻那套“预猜式”核心架构</h2><p>如果说第一个决定是在砍功能范围，那第二个决定就是在砍我已经投入最多时间的实现路径。</p>
+<p>最初为了让 AI 自动生成图表，我搭过一套自己以为很精细的流程：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">LLM 决定图表类型</span><br><span class="line">  -&gt; LLM 推断列映射</span><br><span class="line">  -&gt; 预设渲染器执行</span><br></pre></td></tr></table></figure>
+
+<p>围绕这条链路，我写了大量配套代码：</p>
+<ul>
+<li>图表类型判断</li>
+<li>列名模糊匹配</li>
+<li>时间轴修正</li>
+<li>高基数列告警</li>
+<li>重试机制</li>
+<li>大量 prompt 调优</li>
+</ul>
+<p>它在 demo 里不是不能用。</p>
+<p>但真正让我开始警觉的是另一件事：</p>
+<p><strong>这套系统总是在修 bug，却从来没有“修好了”的感觉。</strong></p>
+<p>后来我才想明白，问题不在 prompt，也不在某一个判断分支，而在架构前提本身。</p>
+<p>在这套方案里，LLM 负责先猜对：</p>
+<ul>
+<li>哪张图更合适</li>
+<li>哪一列该做 X 轴</li>
+<li>哪一列该做 Y 轴</li>
+</ul>
+<p>但执行环境里的很多关键信息，它其实在“猜”的时候根本看不到：</p>
+<ul>
+<li>某一列唯一值太多，不适合饼图</li>
+<li>某一列空值率很高，直接算比例会失真</li>
+<li>某一列的数据类型脏得比列名看起来复杂得多</li>
+</ul>
+<p>也就是说，我一直在让模型对一个它还没真正接触到的执行现场做预判。</p>
+<p>这不是 prompt 的问题。<br>这是设计问题。</p>
+<hr>
+<h2 id="四、真正更合理的路径，是让模型先执行再修正"><a href="#四、真正更合理的路径，是让模型先执行再修正" class="headerlink" title="四、真正更合理的路径，是让模型先执行再修正"></a>四、真正更合理的路径，是让模型先执行再修正</h2><p>后来我去看主流 AI 分析产品和代码执行产品的做法，才慢慢意识到：</p>
+<p>更稳的路径通常不是“先猜对再执行”，而是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">LLM 写代码</span><br><span class="line">  -&gt; 在真实环境里执行</span><br><span class="line">  -&gt; LLM 读取结果、报错和图表</span><br><span class="line">  -&gt; 再做下一轮修正</span><br></pre></td></tr></table></figure>
+
+<p>这两种思路最大的差别，不是实现细节，而是学习来源。</p>
+<p>“预猜式”架构里，模型只能靠提示和历史经验去猜。<br>“代码执行式”架构里，模型可以直接从真实结果里学习。</p>
+<p>一个 <code>KeyError</code> 会直接暴露真实列名。<br>一张空图会直接暴露数据分布。<br>一次报错会直接告诉模型，问题到底出在语法、映射还是数据本身。</p>
+<p>我后来接受了第二个决定：</p>
+<p>推翻那套围绕预设渲染器堆出来的核心路径，把核心体验重新收敛为：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">上传文件 -&gt; 对话分析 -&gt; 代码执行 -&gt; 返回图表与结论</span><br></pre></td></tr></table></figure>
+
+<p>现在 OpsMind 的代码执行沙箱用的是 E2B，LLM 直接写 Python，在真实执行结果上迭代。</p>
+<p>少了一层“我替模型预先设计完整世界”的执念，系统反而更清楚了。</p>
+<hr>
+<h2 id="五、这件事真正提醒我的，不只是架构，而是提问方式"><a href="#五、这件事真正提醒我的，不只是架构，而是提问方式" class="headerlink" title="五、这件事真正提醒我的，不只是架构，而是提问方式"></a>五、这件事真正提醒我的，不只是架构，而是提问方式</h2><p>回头看，那三个月里我并不是没有努力。</p>
+<p>我写了很多代码。<br>我做了很多调优。<br>我也一直在和 AI 助手协作。</p>
+<p>问题在于，我问的问题一直不够对。</p>
+<p>我当时更常问的是：</p>
+<p><strong>“怎么把我现在这套方案继续优化下去？”</strong></p>
+<p>但真正应该先问的问题，其实是：</p>
+<p><strong>“这个领域里，更成熟的做法本来是什么？”</strong></p>
+<p>这也是我后来对 AI 协作更警惕的一点。</p>
+<p>AI 很擅长沿着当前方向帮你补得更完整：</p>
+<ul>
+<li>扩展函数</li>
+<li>增加兼容逻辑</li>
+<li>增加重试</li>
+<li>把局部实现做得更漂亮</li>
+</ul>
+<p>但如果方向本身是错的，它也会非常高效地陪你把错误方向走得更深。</p>
+<p>这不是 AI 的问题。</p>
+<p>更准确地说，是因为我当时把 AI 放在了“帮我优化现有方案”的位置，却没有先把“现有方案是否值得继续”这个判断做掉。</p>
+<hr>
+<h2 id="六、这两个决定，最后都指向同一件事"><a href="#六、这两个决定，最后都指向同一件事" class="headerlink" title="六、这两个决定，最后都指向同一件事"></a>六、这两个决定，最后都指向同一件事</h2><p>一个决定是砍功能。<br>一个决定是改架构。</p>
+<p>表面上看，它们发生在不同层面。</p>
+<p>但如果把它们放在一起看，本质上其实是同一种纠偏：</p>
+<h3 id="1-不要过早追求“看起来完整”"><a href="#1-不要过早追求“看起来完整”" class="headerlink" title="1. 不要过早追求“看起来完整”"></a>1. 不要过早追求“看起来完整”</h3><p>范围太满，会让产品失焦。<br>架构太满，会让系统失真。</p>
+<h3 id="2-先确认核心路径成立，再扩外围系统"><a href="#2-先确认核心路径成立，再扩外围系统" class="headerlink" title="2. 先确认核心路径成立，再扩外围系统"></a>2. 先确认核心路径成立，再扩外围系统</h3><p>如果核心体验还不稳定，外围能力越多，系统越重。<br>如果执行路径前提就错了，局部优化越多，返工成本越高。</p>
+<h3 id="3-有时候最贵的不是推翻，而是舍不得推翻"><a href="#3-有时候最贵的不是推翻，而是舍不得推翻" class="headerlink" title="3. 有时候最贵的不是推翻，而是舍不得推翻"></a>3. 有时候最贵的不是推翻，而是舍不得推翻</h3><p>真正让我后面轻松很多的，不是前面三个月写过多少，而是终于愿意承认：</p>
+<p><strong>现在停下来重做，代价比继续在错误方向上推进更低。</strong></p>
+<hr>
+<h2 id="七、如果让我重来一次"><a href="#七、如果让我重来一次" class="headerlink" title="七、如果让我重来一次"></a>七、如果让我重来一次</h2><p>如果今天重新开始做 OpsMind，我会更早做三件事：</p>
+<ol>
+<li>先查清这个问题在行业里最常见、最成熟的解法是什么。</li>
+<li>在没有真实用户反馈之前，对“我觉得用户会需要”的功能保持克制。</li>
+<li>把判断标准从“功能多不多”换成“核心路径稳不稳”。</li>
+</ol>
+<p>现在回头看，OpsMind 的 v1.0 范围其实清楚很多了：</p>
+<ul>
+<li>聊天工作台</li>
+<li>知识库</li>
+<li>上传文件后的对话式分析</li>
+<li>基于真实执行结果的图表生成</li>
+</ul>
+<p>没有数据库直连。<br>没有报告导出。<br>也暂时没有技能市场。</p>
+<p>但我反而觉得，它第一次更像一个产品了。</p>
+<hr>
+<p>技术产品的成长，不只是不断往上加能力。</p>
+<p>很多时候，它更依赖三种判断：</p>
+<ul>
+<li>选择先做什么</li>
+<li>选择暂时不做什么</li>
+<li>选择在什么时候承认原来的方向不够对</li>
+</ul>
+<p>这三件事，我在 OpsMind 上各学了一次。</p>
+<p>学费是三个月。</p>
+<p>现在看，付得不算亏。</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/about/" title="头像"><img class="post-copyright__author_img_back" src="/img/avatar/profile-avatar-square.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src="/img/avatar/profile-avatar-square.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">wwxdsg</div><div class="post-copyright__author_desc">记录技术学习与生活思考的个人空间</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/')">两个艰难决定：我在 OpsMind 上重做产品范围与核心架构</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=两个艰难决定：我在 OpsMind 上重做产品范围与核心架构&amp;url=https://okelekaf01-cmd.github.io/opsmind/two-hard-decisions-scope-architecture-reset/&amp;pic=/img/covers/two-hard-decisions-scope-architecture-reset.svg" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://okelekaf01-cmd.github.io" target="_blank">wwxdsg的个人博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>架构设计<span class="tagsPageCount">9</span></a><a class="post-meta__box__tags" href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>方法论<span class="tagsPageCount">6</span></a><a class="post-meta__box__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>工程化<span class="tagsPageCount">9</span></a><a class="post-meta__box__tags" href="/tags/OpsMind/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>OpsMind<span class="tagsPageCount">24</span></a><a class="post-meta__box__tags" href="/tags/%E4%BA%A7%E5%93%81%E6%80%9D%E7%BB%B4/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>产品思维<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>代码执行<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="/img/covers/two-hard-decisions-scope-architecture-reset.svg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/opsmind/chat-model-trap-agent-architecture/"><img class="prev-cover" src="/img/covers/chat-model-trap-agent-architecture.svg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">从 Chat 模型陷阱到真正的 Agent 架构：上下文污染与混合模型的工程实践</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/opsmind/agent-orchestration-evolution/" title="Agent 编排升级：从“能跑”到“能持续演化”"><img class="cover" src="/img/covers/agent-orchestration-evolution.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-24</div><div class="title">Agent 编排升级：从“能跑”到“能持续演化”</div></div></a></div><div><a href="/opsmind/intelligent-preprocess-agent-orchestration/" title="智能预处理与 Agent 编排：先把逻辑讲清楚，再让 AI 真正提速"><img class="cover" src="/img/covers/intelligent-preprocess-agent-orchestration.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-25</div><div class="title">智能预处理与 Agent 编排：先把逻辑讲清楚，再让 AI 真正提速</div></div></a></div><div><a href="/opsmind/agent-orchestration-four-fixes/" title="Agent 编排四项修复：从结构性问题到工程落地"><img class="cover" src="/img/covers/agent-orchestration-four-fixes.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-04-02</div><div class="title">Agent 编排四项修复：从结构性问题到工程落地</div></div></a></div><div><a href="/opsmind/context-memory-knowledge-architecture/" title="上下文、记忆与知识库：我在 OpsMind 里重新理解 LLM 产品的工程化边界"><img class="cover" src="/img/covers/context-memory-knowledge-architecture.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-03-24</div><div class="title">上下文、记忆与知识库：我在 OpsMind 里重新理解 LLM 产品的工程化边界</div></div></a></div><div><a href="/opsmind/blog2/" title="预设代码、Skill 与 MCP"><img class="cover" src="/img/covers/blog2-preset-skill-mcp.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-01-26</div><div class="title">预设代码、Skill 与 MCP</div></div></a></div><div><a href="/opsmind/blog3/" title="从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思"><img class="cover" src="/img/covers/blog3-chart-recommender.svg" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2026-01-31</div><div class="title">从脑补到实战：我的智能图表推荐器追问机制实现与翻车反思</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src="/img/avatar/profile-avatar-square.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">持续记录 AI 开发、工程实践与学习笔记</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><h1 class="author-info__name">wwxdsg</h1><div class="author-info__desc">记录技术学习与生活思考的个人空间</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/okelekaf01-cmd" target="_blank" title="GitHub"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的个人博客，这里主要记录项目开发与技术思考。</div></div><div class="card-widget card-daily-quote" id="card-daily-quote"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-quote-left"></i><span>每日一言</span></div><div class="item-content"><div id="daily-quote" style="line-height:1.6;">加载中...</div>
+<div id="daily-quote-from" style="margin-top:8px;opacity:.7;font-size:.9em;"></div>
+</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%86%B3%E5%AE%9A%EF%BC%9A%E5%85%88%E7%A0%8D%E8%8C%83%E5%9B%B4%EF%BC%8C%E5%86%8D%E8%B0%88%E5%AE%8C%E6%95%B4"><span class="toc-number">1.</span> <span class="toc-text">一、第一个决定：先砍范围，再谈完整</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%99%E6%AC%A1%E6%94%B6%E7%BC%A9%E8%AE%A9%E6%88%91%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E4%BA%86%E4%B8%80%E4%BB%B6%E4%BA%8B"><span class="toc-number">2.</span> <span class="toc-text">二、这次收缩让我重新理解了一件事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%86%B3%E5%AE%9A%EF%BC%9A%E6%8E%A8%E7%BF%BB%E9%82%A3%E5%A5%97%E2%80%9C%E9%A2%84%E7%8C%9C%E5%BC%8F%E2%80%9D%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">三、第二个决定：推翻那套“预猜式”核心架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%9C%9F%E6%AD%A3%E6%9B%B4%E5%90%88%E7%90%86%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%8C%E6%98%AF%E8%AE%A9%E6%A8%A1%E5%9E%8B%E5%85%88%E6%89%A7%E8%A1%8C%E5%86%8D%E4%BF%AE%E6%AD%A3"><span class="toc-number">4.</span> <span class="toc-text">四、真正更合理的路径，是让模型先执行再修正</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%BF%99%E4%BB%B6%E4%BA%8B%E7%9C%9F%E6%AD%A3%E6%8F%90%E9%86%92%E6%88%91%E7%9A%84%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%9E%B6%E6%9E%84%EF%BC%8C%E8%80%8C%E6%98%AF%E6%8F%90%E9%97%AE%E6%96%B9%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">五、这件事真正提醒我的，不只是架构，而是提问方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%86%B3%E5%AE%9A%EF%BC%8C%E6%9C%80%E5%90%8E%E9%83%BD%E6%8C%87%E5%90%91%E5%90%8C%E4%B8%80%E4%BB%B6%E4%BA%8B"><span class="toc-number">6.</span> <span class="toc-text">六、这两个决定，最后都指向同一件事</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8D%E8%A6%81%E8%BF%87%E6%97%A9%E8%BF%BD%E6%B1%82%E2%80%9C%E7%9C%8B%E8%B5%B7%E6%9D%A5%E5%AE%8C%E6%95%B4%E2%80%9D"><span class="toc-number">6.1.</span> <span class="toc-text">1. 不要过早追求“看起来完整”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%85%88%E7%A1%AE%E8%AE%A4%E6%A0%B8%E5%BF%83%E8%B7%AF%E5%BE%84%E6%88%90%E7%AB%8B%EF%BC%8C%E5%86%8D%E6%89%A9%E5%A4%96%E5%9B%B4%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.2.</span> <span class="toc-text">2. 先确认核心路径成立，再扩外围系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%9C%89%E6%97%B6%E5%80%99%E6%9C%80%E8%B4%B5%E7%9A%84%E4%B8%8D%E6%98%AF%E6%8E%A8%E7%BF%BB%EF%BC%8C%E8%80%8C%E6%98%AF%E8%88%8D%E4%B8%8D%E5%BE%97%E6%8E%A8%E7%BF%BB"><span class="toc-number">6.3.</span> <span class="toc-text">3. 有时候最贵的不是推翻，而是舍不得推翻</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%A6%82%E6%9E%9C%E8%AE%A9%E6%88%91%E9%87%8D%E6%9D%A5%E4%B8%80%E6%AC%A1"><span class="toc-number">7.</span> <span class="toc-text">七、如果让我重来一次</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/opsmind/two-hard-decisions-scope-architecture-reset/" title="两个艰难决定：我在 OpsMind 上重做产品范围与核心架构"><img src="/img/covers/two-hard-decisions-scope-architecture-reset.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="两个艰难决定：我在 OpsMind 上重做产品范围与核心架构"/></a><div class="content"><a class="title" href="/opsmind/two-hard-decisions-scope-architecture-reset/" title="两个艰难决定：我在 OpsMind 上重做产品范围与核心架构">两个艰难决定：我在 OpsMind 上重做产品范围与核心架构</a><time datetime="2026-04-04T06:45:00.000Z" title="发表于 2026-04-04 14:45:00">2026-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/opsmind/chat-model-trap-agent-architecture/" title="从 Chat 模型陷阱到真正的 Agent 架构：上下文污染与混合模型的工程实践"><img src="/img/covers/chat-model-trap-agent-architecture.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从 Chat 模型陷阱到真正的 Agent 架构：上下文污染与混合模型的工程实践"/></a><div class="content"><a class="title" href="/opsmind/chat-model-trap-agent-architecture/" title="从 Chat 模型陷阱到真正的 Agent 架构：上下文污染与混合模型的工程实践">从 Chat 模型陷阱到真正的 Agent 架构：上下文污染与混合模型的工程实践</a><time datetime="2026-04-02T06:00:00.000Z" title="发表于 2026-04-02 14:00:00">2026-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/opsmind/skill-standardization-openai-compatible/" title="Skill 标准化：从私有格式到 OpenAI 兼容的工程决策"><img src="/img/covers/skill-standardization-openai-compatible.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Skill 标准化：从私有格式到 OpenAI 兼容的工程决策"/></a><div class="content"><a class="title" href="/opsmind/skill-standardization-openai-compatible/" title="Skill 标准化：从私有格式到 OpenAI 兼容的工程决策">Skill 标准化：从私有格式到 OpenAI 兼容的工程决策</a><time datetime="2026-04-02T05:30:00.000Z" title="发表于 2026-04-02 13:30:00">2026-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/opsmind/agent-orchestration-four-fixes/" title="Agent 编排四项修复：从结构性问题到工程落地"><img src="/img/covers/agent-orchestration-four-fixes.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Agent 编排四项修复：从结构性问题到工程落地"/></a><div class="content"><a class="title" href="/opsmind/agent-orchestration-four-fixes/" title="Agent 编排四项修复：从结构性问题到工程落地">Agent 编排四项修复：从结构性问题到工程落地</a><time datetime="2026-04-02T05:00:00.000Z" title="发表于 2026-04-02 13:00:00">2026-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/notes/rag-paper-reading-library-card/" title="当模型拿到“借阅证”：重读 RAG 奠基论文的六点体会"><img src="/img/covers/rag-paper-reading-library-card.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="当模型拿到“借阅证”：重读 RAG 奠基论文的六点体会"/></a><div class="content"><a class="title" href="/notes/rag-paper-reading-library-card/" title="当模型拿到“借阅证”：重读 RAG 奠基论文的六点体会">当模型拿到“借阅证”：重读 RAG 奠基论文的六点体会</a><time datetime="2026-03-30T22:40:00.000Z" title="发表于 2026-03-31 06:40:00">2026-03-31</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="anzhiyufont anzhiyu-icon-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/"><span class="card-category-list-name">开发日志</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/"><span class="card-category-list-name">技术文章</span><span class="card-category-list-count">18</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/"><span class="card-category-list-name">随笔</span><span class="card-category-list-count">3</span></a></li>
+            </ul></div><div class="card-widget"><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.05rem;">AI<sup>4</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 1.05rem;">Agent<sup>10</sup></a><a href="/tags/Bug%E5%AE%9A%E4%BD%8D/" style="font-size: 1.05rem;">Bug定位<sup>4</sup></a><a href="/tags/DeepSeek/" style="font-size: 1.05rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 1.05rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 1.05rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 1.05rem;">LLM<sup>3</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 1.05rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 1.05rem;">LLM应用<sup>3</sup></a><a href="/tags/OpsMind/" style="font-size: 1.05rem;">OpsMind<sup>24</sup></a><a href="/tags/Remotion/" style="font-size: 1.05rem;">Remotion<sup>2</sup></a><a href="/tags/SSE/" style="font-size: 1.05rem;">SSE<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 1.05rem;">Tool Calling<sup>2</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 1.05rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">交互设计<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.05rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 1.05rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%8A%A8%E6%95%88%E7%B3%BB%E7%BB%9F/" style="font-size: 1.05rem;">动效系统<sup>2</sup></a><a href="/tags/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" style="font-size: 1.05rem;">实习记录<sup>2</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 1.05rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>9</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/" style="font-size: 1.05rem;">工程协作<sup>4</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 1.05rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 1.05rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 1.05rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 1.05rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 1.05rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%81%94%E8%B0%83/" style="font-size: 1.05rem;">接口联调<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 1.05rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">数据预处理<sup>3</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 1.05rem;">方法论<sup>6</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 1.05rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 1.05rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 1.05rem;">架构设计<sup>9</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.05rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 1.05rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 1.05rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 1.05rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 1.05rem;">项目里程碑<sup>1</sup></a></div></div><hr/><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/04/"><span class="card-archive-list-date">四月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">18</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/02/"><span class="card-archive-list-date">二月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">5</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">一月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/><div class="card-webinfo"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-file-lines"></i><div class="item-name">文章总数 :</div></div><div class="item-count">30</div></div><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-stopwatch"></i><div class="item-name">建站天数 :</div></div><div class="item-count" id="runtimeshow" data-publishDate="2025-12-31T16:00:00.000Z"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></div></div><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-universal-access"></i><div class="item-name">总访客数 :</div></div><div class="item-count" id="busuanzi_value_site_uv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></div></div><div class="webinfo-item"><div class="webinfo-item-title"><i class="anzhiyufont anzhiyu-icon-square-poll-vertical"></i><div class="item-name">总访问量 :</div></div><div class="item-count" id="busuanzi_value_site_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></div></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="footer_custom_text">基于 Hexo 与 AnZhiYu 主题构建</div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2026 By <a class="footer-bar-link" href="/about/" title="wwxdsg" target="_blank">wwxdsg</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io" title="Hexo">Hexo</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">75</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">3</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 导航</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/"><i class="anzhiyufont anzhiyu-icon-house faa-tada" style="font-size: 0.9em;"></i><span> 首页</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友链</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 专题</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/projects/"><i class="anzhiyufont anzhiyu-icon-code faa-tada" style="font-size: 0.9em;"></i><span> 项目</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/opsmind/"><i class="anzhiyufont anzhiyu-icon-robot faa-tada" style="font-size: 0.9em;"></i><span> OpsMind</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/notes/"><i class="anzhiyufont anzhiyu-icon-book faa-tada" style="font-size: 0.9em;"></i><span> 学习笔记</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fragments/"><i class="anzhiyufont anzhiyu-icon-quote faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/internship/"><i class="anzhiyufont anzhiyu-icon-briefcase faa-tada" style="font-size: 0.9em;"></i><span> 实习记录</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于我</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 0.88rem;">AI<sup>4</sup></a><a href="/tags/AI%E6%9E%B6%E6%9E%84/" style="font-size: 0.88rem;">AI架构<sup>1</sup></a><a href="/tags/Agent/" style="font-size: 0.88rem;">Agent<sup>10</sup></a><a href="/tags/Bug%E5%AE%9A%E4%BD%8D/" style="font-size: 0.88rem;">Bug定位<sup>4</sup></a><a href="/tags/DeepSeek/" style="font-size: 0.88rem;">DeepSeek<sup>1</sup></a><a href="/tags/GitHub-Pages/" style="font-size: 0.88rem;">GitHub Pages<sup>1</sup></a><a href="/tags/Hugo/" style="font-size: 0.88rem;">Hugo<sup>1</sup></a><a href="/tags/LLM/" style="font-size: 0.88rem;">LLM<sup>3</sup></a><a href="/tags/LLM%E5%A2%9E%E5%BC%BA/" style="font-size: 0.88rem;">LLM增强<sup>1</sup></a><a href="/tags/LLM%E5%BA%94%E7%94%A8/" style="font-size: 0.88rem;">LLM应用<sup>3</sup></a><a href="/tags/OpsMind/" style="font-size: 0.88rem;">OpsMind<sup>24</sup></a><a href="/tags/Remotion/" style="font-size: 0.88rem;">Remotion<sup>2</sup></a><a href="/tags/SSE/" style="font-size: 0.88rem;">SSE<sup>2</sup></a><a href="/tags/Tool-Calling/" style="font-size: 0.88rem;">Tool Calling<sup>2</sup></a><a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%8C%96/" style="font-size: 0.88rem;">UI组件化<sup>1</sup></a><a href="/tags/%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1/" style="font-size: 0.88rem;">交互设计<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 0.88rem;">代码分析<sup>1</sup></a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" style="font-size: 0.88rem;">代码质量<sup>1</sup></a><a href="/tags/%E5%8A%A8%E6%95%88%E7%B3%BB%E7%BB%9F/" style="font-size: 0.88rem;">动效系统<sup>2</sup></a><a href="/tags/%E5%AE%9E%E4%B9%A0%E8%AE%B0%E5%BD%95/" style="font-size: 0.88rem;">实习记录<sup>2</sup></a><a href="/tags/%E5%AE%BD%E8%A1%A8%E8%BD%AC%E6%8D%A2/" style="font-size: 0.88rem;">宽表转换<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 0.88rem;">工程化<sup>9</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/" style="font-size: 0.88rem;">工程协作<sup>4</sup></a><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/" style="font-size: 0.88rem;">意图识别<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%8F%91%E7%8E%B0/" style="font-size: 0.88rem;">技术发现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/" style="font-size: 0.88rem;">技术实现<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%8A%98%E8%85%BE/" style="font-size: 0.88rem;">技术折腾<sup>1</sup></a><a href="/tags/%E6%8A%80%E6%9C%AF%E6%A8%A1%E5%BC%8F/" style="font-size: 0.88rem;">技术模式<sup>1</sup></a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%81%94%E8%B0%83/" style="font-size: 0.88rem;">接口联调<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 0.88rem;">数据可视化<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">数据预处理<sup>3</sup></a><a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/" style="font-size: 0.88rem;">方法论<sup>6</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E6%8E%A8%E6%96%AD/" style="font-size: 0.88rem;">智能推断<sup>1</sup></a><a href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E8%90%A5/" style="font-size: 0.88rem;">智能运营<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 0.88rem;">架构设计<sup>9</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 0.88rem;">测试<sup>1</sup></a><a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" style="font-size: 0.88rem;">自然语言处理<sup>1</sup></a><a href="/tags/%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8/" style="font-size: 0.88rem;">配置驱动<sup>1</sup></a><a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 0.88rem;">重构<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91/" style="font-size: 0.88rem;">项目里程碑<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@6.1.6/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://cdn.cbd.int/qrcodejs@1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="/js/custom.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
