@@ -13,4 +13,5 @@ comments: false
 
 ### 当前文章
 
+- [营销的魅力时刻](/fragments/marketing-charisma-moment/)
 - [在波动里学习去爱](/fragments/love-in-fluctuations/)

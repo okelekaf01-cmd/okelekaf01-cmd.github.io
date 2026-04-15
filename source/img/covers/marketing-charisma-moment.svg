@@ -1,0 +1,60 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="70" y1="40" x2="1530" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.58" stop-color="#7C2D12"/>
+      <stop offset="1" stop-color="#FB923C"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1260 170) rotate(25) scale(420 230)">
+      <stop stop-color="#FFE5C2" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FFE5C2" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="spotlight" x1="1180" y1="110" x2="1180" y2="510" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF4D9" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#FFF4D9" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow-stage" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="20" flood-color="#2B1207" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+
+  <g opacity="0.10" stroke="#FFF7ED">
+    <path d="M0 190H1600"/>
+    <path d="M0 520H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M1120 0V900"/>
+  </g>
+
+  <text x="120" y="318" fill="#FFFFFF" font-size="122" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-4">Marketing</text>
+  <text x="120" y="446" fill="#FFFFFF" font-size="122" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-4">Magic Moment</text>
+  <text x="126" y="546" fill="#FFE7D1" font-size="44" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="790" lengthAdjust="spacingAndGlyphs">RAG / Hype / Demo / FOMO / Memory</text>
+
+  <rect x="120" y="640" width="246" height="64" rx="32" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="168" y="683" fill="#FFFFFF" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700">Tech Essay</text>
+
+  <g filter="url(#shadow-stage)">
+    <rect x="1018" y="138" width="350" height="358" rx="56" fill="#FFF7ED"/>
+  </g>
+
+  <path d="M1128 118L1276 118L1340 514L1064 514L1128 118Z" fill="url(#spotlight)"/>
+
+  <rect x="1082" y="190" width="150" height="54" rx="18" fill="#DC2626"/>
+  <text x="1122" y="225" fill="#FFFFFF" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="800">100%</text>
+
+  <text x="1082" y="312" fill="#111827" font-size="58" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-2">MEMORY</text>
+  <text x="1086" y="370" fill="#9A3412" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="2">REVOLUTION</text>
+
+  <rect x="1110" y="418" width="178" height="18" rx="9" fill="#FED7AA"/>
+  <rect x="1146" y="392" width="106" height="42" rx="14" fill="#0F172A"/>
+  <text x="1175" y="420" fill="#FFFFFF" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="800">RAG</text>
+
+  <circle cx="1184" cy="158" r="26" fill="#FFF7ED"/>
+  <circle cx="1184" cy="158" r="14" fill="#F59E0B"/>
+
+  <path d="M1054 548H1352" stroke="#FFD7AE" stroke-width="20" stroke-linecap="round" opacity="0.45"/>
+  <path d="M1060 548H1298" stroke="#FB923C" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="1308" cy="548" r="17" fill="#FFF7ED"/>
+</svg>
