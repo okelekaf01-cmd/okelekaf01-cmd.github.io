@@ -997,3 +997,16 @@ html.site-home-intro-leaving #home_top {
         font-size: 1rem;
     }
 }
+
+@media screen and (min-width: 1201px) {
+    #recent-posts > .recent-post-item .post_cover {
+        height: auto !important;
+        aspect-ratio: 16 / 9;
+    }
+
+    #recent-posts > .recent-post-item .post_cover img.post_bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
