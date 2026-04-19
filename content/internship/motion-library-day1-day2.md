@@ -1,7 +1,7 @@
 ---
 title: "两天实习复盘：动效系统架构设计与 Bug 定位实战"
 date: 2026-03-19T20:35:00+08:00
-draft: false
+published: false
 top_img: /img/covers/internship-motion-library-day1-day2.svg
 cover: /img/covers/internship-motion-library-day1-day2.svg
 tags: ["实习记录", "架构设计", "Bug定位", "Remotion", "动效系统", "工程化"]

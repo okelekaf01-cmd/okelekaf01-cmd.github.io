@@ -34,7 +34,7 @@
         color: "#f0a34b"
       - desc: 保持表达欲和好奇心
         color: "#e6709b"
-    img: /img/covers/studio-motion-devlog-2026-03-19.svg
+    img: /img/covers/dorm-mustang-harness-moment.svg
   map:
     title: 最近更想靠近的是
     StrengthenTitle: 清晰、松弛，还有一点点可爱的表达
@@ -70,25 +70,25 @@
     game_tips: 最近状态
     game_title: 慢慢把自己养顺
     game_uid: 在写博客，也在学着保留休息、音乐和一些无用但珍贵的时间
-    game_bg: /img/covers/studio-motion-devlog-2026-03-19.svg
+    game_bg: /img/covers/love-in-fluctuations.svg
   comic:
     comic_tips: 最近偏爱的内容
     comic_title: 最近会让我开心的东西
     comic_list:
       - name: 耳机里的夜晚
-        href: /notes/
-        cover: /img/covers/internship-motion-library-day1-day2.svg
+        href: /fragments/love-in-fluctuations/
+        cover: /img/covers/love-in-fluctuations.svg
       - name: 慢慢长大的博客
-        href: /internship/
-        cover: /img/covers/studio-motion-devlog-2026-03-19.svg
+        href: /opsmind/
+        cover: /img/covers/two-hard-decisions-scope-architecture-reset.svg
   music:
     music_tips: 还有别的我
     music_title: 去看一些更轻松的记录
     music_link: /notes/
     music_desc: 去翻翻那些不那么紧绷、也不那么像工作汇报的内容
-    music_bg: /img/covers/internship-motion-library-day1-day2.svg
+    music_bg: /img/covers/marketing-charisma-moment.svg
   like:
     like_tips: 现在最喜欢做的事
     like_title: 把复杂的东西讲清楚
     like_bottom: 也包括那些说不清楚的心情、偏好和生活里的细小瞬间
-    like_bg: /img/covers/studio-motion-devlog-2026-03-19.svg
+    like_bg: /img/covers/dorm-mustang-harness-moment.svg

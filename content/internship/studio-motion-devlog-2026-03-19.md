@@ -1,7 +1,7 @@
 ---
 title: "开发日志｜Studio 动效系统：从崩溃修复到定位交互重构"
 date: 2026-03-19T23:10:00+08:00
-draft: false
+published: false
 top_img: /img/covers/studio-motion-devlog-2026-03-19.svg
 cover: /img/covers/studio-motion-devlog-2026-03-19.svg
 tags: ["实习记录", "动效系统", "Bug定位", "交互设计", "Remotion", "工程化"]

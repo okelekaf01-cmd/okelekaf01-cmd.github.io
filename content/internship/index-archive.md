@@ -1,6 +1,7 @@
 ---
 title: 实习记录
 date: 2026-03-19 10:30:00
+published: false
 top_img: false
 comments: false
 ---
