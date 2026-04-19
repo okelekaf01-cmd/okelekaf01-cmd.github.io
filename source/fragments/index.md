@@ -13,5 +13,6 @@ comments: false
 
 ### 当前文章
 
+- [宿舍里的野马与马鞍：一个学生开发者的 AI 祛魅时刻](/fragments/dorm-mustang-harness-moment/)
 - [营销的魅力时刻](/fragments/marketing-charisma-moment/)
 - [在波动里学习去爱](/fragments/love-in-fluctuations/)
