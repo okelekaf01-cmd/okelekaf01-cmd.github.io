@@ -11,4 +11,5 @@ comments: false
 
 ### 当前文章
 
+- [别一上来就换模型：我现在给 Agent 调优的武器库](/notes/agent-tuning-playbook/)
 - [从 404 到成功上线：我的 Hugo 博客折腾记](/notes/first-post/)

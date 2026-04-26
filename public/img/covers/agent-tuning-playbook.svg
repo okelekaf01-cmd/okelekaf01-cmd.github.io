@@ -1,0 +1,67 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="86" y1="50" x2="1518" y2="846" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.52" stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#0F9D8E"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1228 182) rotate(20) scale(430 250)">
+      <stop stop-color="#DBEAFE" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#DBEAFE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="card" x1="1026" y1="148" x2="1372" y2="504" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#EAF6F3"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="20" flood-color="#08111F" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+
+  <g opacity="0.08" stroke="#E0F2FE">
+    <path d="M0 194H1600"/>
+    <path d="M0 526H1600"/>
+    <path d="M336 0V900"/>
+    <path d="M1124 0V900"/>
+  </g>
+
+  <text x="118" y="310" fill="#FFFFFF" font-size="118" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-4">Agent Tuning</text>
+  <text x="118" y="434" fill="#FFFFFF" font-size="118" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-4">Playbook</text>
+  <text x="124" y="532" fill="#DDEEFF" font-size="40" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="776" lengthAdjust="spacingAndGlyphs">Input / Rules / Review / Voting / ROI</text>
+
+  <rect x="118" y="624" width="232" height="62" rx="31" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="162" y="666" fill="#FFFFFF" font-size="32" font-family="Arial, Helvetica, sans-serif" font-weight="700">Method Notes</text>
+
+  <g filter="url(#shadow)">
+    <rect x="1026" y="148" width="346" height="358" rx="52" fill="url(#card)"/>
+  </g>
+
+  <rect x="1088" y="198" width="226" height="58" rx="20" fill="#1D4ED8"/>
+  <text x="1134" y="236" fill="#FFFFFF" font-size="26" font-family="Arial, Helvetica, sans-serif" font-weight="800">INPUT SIGNAL</text>
+
+  <rect x="1088" y="286" width="170" height="52" rx="18" fill="#0F766E"/>
+  <text x="1128" y="320" fill="#FFFFFF" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="800">RULES</text>
+
+  <rect x="1088" y="366" width="208" height="52" rx="18" fill="#F59E0B"/>
+  <text x="1124" y="400" fill="#0F172A" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="800">REVIEWER</text>
+
+  <rect x="1088" y="446" width="154" height="52" rx="18" fill="#111827"/>
+  <text x="1122" y="480" fill="#FFFFFF" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="800">VOTING</text>
+
+  <path d="M1268 225H1330" stroke="#94A3B8" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1214 312H1330" stroke="#94A3B8" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1298 392H1330" stroke="#94A3B8" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1244 472H1330" stroke="#94A3B8" stroke-width="12" stroke-linecap="round"/>
+
+  <circle cx="1342" cy="225" r="14" fill="#1D4ED8"/>
+  <circle cx="1342" cy="312" r="14" fill="#0F766E"/>
+  <circle cx="1342" cy="392" r="14" fill="#F59E0B"/>
+  <circle cx="1342" cy="472" r="14" fill="#111827"/>
+
+  <path d="M1068 560H1334" stroke="#BFDBFE" stroke-width="18" stroke-linecap="round" opacity="0.45"/>
+  <path d="M1082 560H1274" stroke="#60A5FA" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="1292" cy="560" r="16" fill="#FFFFFF"/>
+</svg>
