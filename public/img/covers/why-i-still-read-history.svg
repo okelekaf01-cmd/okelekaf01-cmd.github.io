@@ -1,0 +1,65 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="52" y1="58" x2="1542" y2="842" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="0.52" stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#C97316"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1204 194) rotate(28) scale(438 254)">
+      <stop stop-color="#FFF2D8" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#FFF2D8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="card-shadow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.28"/>
+    </filter>
+    <linearGradient id="book-sheen" x1="1020" y1="160" x2="1400" y2="478" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect width="1600" height="900" rx="38" fill="url(#glow)"/>
+
+  <g opacity="0.10" stroke="#FFFFFF">
+    <path d="M0 192H1600"/>
+    <path d="M0 526H1600"/>
+    <path d="M300 0V900"/>
+    <path d="M1080 0V900"/>
+  </g>
+
+  <text x="120" y="304" fill="#FFFFFF" font-size="118" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-4">Read History</text>
+  <text x="120" y="428" fill="#FFFFFF" font-size="112" font-family="Arial, Helvetica, sans-serif" font-weight="800" letter-spacing="-4">Keep Depth</text>
+  <text x="126" y="526" fill="#DBEAFE" font-size="42" font-family="Arial, Helvetica, sans-serif" font-weight="600" textLength="720" lengthAdjust="spacingAndGlyphs">Memory / Media / War / Zweig / Thinking</text>
+
+  <rect x="120" y="632" width="216" height="62" rx="31" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="162" y="674" fill="#FFFFFF" font-size="32" font-family="Arial, Helvetica, sans-serif" font-weight="700">Essay Notes</text>
+
+  <g filter="url(#card-shadow)">
+    <rect x="1008" y="156" width="370" height="340" rx="52" fill="#FFF7ED"/>
+    <rect x="1236" y="118" width="172" height="302" rx="36" fill="#0F172A"/>
+  </g>
+
+  <rect x="1050" y="202" width="220" height="22" rx="11" fill="#D97706" fill-opacity="0.22"/>
+  <rect x="1050" y="248" width="278" height="20" rx="10" fill="#1F2937" fill-opacity="0.84"/>
+  <rect x="1050" y="286" width="244" height="18" rx="9" fill="#1F2937" fill-opacity="0.26"/>
+  <rect x="1050" y="332" width="162" height="56" rx="16" fill="#E0E7FF"/>
+  <circle cx="1130" cy="360" r="44" fill="#FFFFFF"/>
+  <path d="M1116 338L1154 360L1116 382V338Z" fill="#2563EB"/>
+  <path d="M1274 156L1370 156L1370 262L1314 236L1274 262V156Z" fill="#F97316"/>
+
+  <rect x="1266" y="304" width="108" height="18" rx="9" fill="#FFFFFF" fill-opacity="0.18"/>
+  <rect x="1266" y="338" width="92" height="18" rx="9" fill="#60A5FA"/>
+  <rect x="1266" y="372" width="78" height="18" rx="9" fill="#FFFFFF" fill-opacity="0.18"/>
+
+  <path d="M1040 176H1340" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2"/>
+  <path d="M1040 474H1340" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="2"/>
+  <path d="M1142 520C1200 474 1278 468 1352 514" stroke="#FED7AA" stroke-width="18" stroke-linecap="round" opacity="0.44"/>
+  <path d="M1148 520C1202 488 1262 486 1320 508" stroke="#FB923C" stroke-width="18" stroke-linecap="round"/>
+
+  <circle cx="1328" cy="510" r="16" fill="#FFF7ED"/>
+  <rect x="1118" y="570" width="214" height="18" rx="9" fill="#DBEAFE" fill-opacity="0.28"/>
+  <rect x="1118" y="608" width="168" height="18" rx="9" fill="#FFFFFF" fill-opacity="0.22"/>
+
+  <path d="M1020 160L1386 160L1386 492L1020 492Z" fill="url(#book-sheen)"/>
+</svg>
